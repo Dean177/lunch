@@ -1,0 +1,27 @@
+@import './AutosuggestTheme';
+
+.Landing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  h1, button {
+    display: inline-block;
+  }
+
+  button {
+    margin-left: 1em;
+  }
+
+  .borderless {
+    max-width: 10em;
+    text-align: center;
+    border: none;
+    display: inline;
+    border-bottom: 0.03em solid black;
+    &:focus {
+      outline: none;
+    }
+  }
+}
