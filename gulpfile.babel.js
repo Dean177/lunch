@@ -6,7 +6,7 @@ import mocha from 'gulp-mocha';
 import nodemon from 'gulp-nodemon';
 
 
-gulp.task('dev-server', ['build', 'watch', 'app-server']);
+gulp.task('start', ['build', 'watch', 'app-server']);
 
 gulp.task('app-server', () => {
   nodemon({ script: 'out/server/index.js', ignore: ['src/client/**/*.js']});

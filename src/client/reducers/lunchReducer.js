@@ -4,7 +4,7 @@ import { AddLunchOption, ChooseLunchOption, EnterLunchOptionName, ToggleEnterNew
 
 const initialState = {
   optionName: '',
-  selectedOptionId: 'Tesco',
+  selectedOptionId: '1',
   enteringNewOption: false,
   lunchOptions: [
     { id: 0, name: 'Tesco'},
@@ -13,12 +13,12 @@ const initialState = {
     { id: 3, name: 'Chinese'},
   ],
   peopleChoices: [
-    { person: { id: 0, name: 'Badger'}, choice: { id: 0, name: 'Tesco'} },
-    { person: { id: 1, name: 'Shrew'}, choice: { id: 3, name: 'Chinese'} },
-    { person: { id: 2, name: 'Aardvark'}, choice: { id: 3, name: 'Chinese'} },
-    { person: { id: 3, name: 'Cat'}, choice: { id: 1, name: 'Boots'} },
-    { person: { id: 4, name: 'Alpaca'}, choice: { id: 2, name: 'Market'} },
-    { person: { id: 5, name: 'Brown Bear'}, choice: { id: 1, name: 'Boots'} },
+    { person: { id: 0, name: 'Badger'}, choice: { id: 0 } },
+    { person: { id: 1, name: 'Shrew'}, choice: { id: 3 } },
+    { person: { id: 2, name: 'Aardvark'}, choice: { id: 3 } },
+    { person: { id: 3, name: 'Cat'}, choice: { id: 1 } },
+    { person: { id: 4, name: 'Alpaca'}, choice: { id: 2 } },
+    { person: { id: 5, name: 'Brown Bear'}, choice: { id: 1 } },
   ],
 };
 

@@ -1,6 +1,7 @@
 import { AddLunchOption, ChooseLunchOption, EnterLunchOptionName, ToggleEnterNewLunchOption } from '../../shared/constants/actionTypes';
 import { socket } from '../App';
 
+//TODO create a decorator to pass an event over the socket
 export function addLunchOption(name) {
   const action = {
     type: AddLunchOption,
@@ -12,11 +13,15 @@ export function addLunchOption(name) {
   return action;
 }
 
-export function chooseLunchOption(name) {
-  return {
+export function chooseLunchOption(id) {
+  const action = {
     type: ChooseLunchOption,
-    name,
+    id,
   };
+
+  socket.emit(ChooseLunchOption, action);
+
+  return action;
 }
 
 export function enterOptionName(name) {

@@ -1,3 +1,4 @@
 # Lunch
 
-`npm install`
+`npm install` && `gulp start` 
+Will get you started.
