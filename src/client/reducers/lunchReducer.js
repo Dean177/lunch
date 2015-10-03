@@ -25,6 +25,7 @@ const initialState = {
 const lunchReducer = createReducer(initialState, {
   [AddLunchOption](state, action) {
     let lunchOptions;
+    let lunchOption;
     let selectedOptionId;
     const option = find(state.lunchOptions, ({ name }) => name === action.name);
     if (option) {
