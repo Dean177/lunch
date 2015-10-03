@@ -1,5 +1,6 @@
 import express from 'express';
 import { Server } from 'http';
+import favicon from 'serve-favicon';
 import socketIo from 'socket.io';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
@@ -13,6 +14,7 @@ const http = new Server(app);
 const io = socketIo(http);
 const compiler = webpack(config);
 
+app.use(favicon(`${__dirname}/favicon.ico`));
 app.use(webpackHotMiddleware(compiler));
 app.use(webpackDevMiddleware(compiler, {
   noInfo: true,

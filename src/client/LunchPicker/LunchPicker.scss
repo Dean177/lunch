@@ -1,0 +1,30 @@
+.LunchPicker {
+  width: 100%;
+}
+
+.OptionColumns {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  margin-bottom: 1em;
+
+  .OptionColumn {
+    flex-basis: 12em;
+    padding-right: 1em;
+    button {
+      width: 100%;
+    }
+  }
+}
+
+.PeopleChoices {
+  width: 100%;
+}
+
+.PersonChoice {
+  padding: 0.5em;
+  position: absolute;
+  border: 1px solid black;
+  border-radius: 4px;
+}

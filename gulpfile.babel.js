@@ -5,19 +5,24 @@ import util from 'gulp-util';
 import mocha from 'gulp-mocha';
 import nodemon from 'gulp-nodemon';
 
-
 gulp.task('start', ['build', 'watch', 'app-server']);
+
+gulp.task('run-tests', ['build', 'test']);
+
+gulp.task('test', () => {
+  return gulp.src(['out/tests/**/*.js'], {read: false}).pipe(mocha());
+});
 
 gulp.task('app-server', () => {
   nodemon({ script: 'out/server/index.js', ignore: ['src/client/**/*.js']});
 });
 
 gulp.task('watch', () => {
-  gulp.watch(['src/server/**/*.js', 'stc/shared/**/*.js'], ['build']);
+  gulp.watch(['src/server/**/*.js', 'src/tests/**/*.js', 'stc/shared/**/*.js'], ['build']);
 });
 
-gulp.task('build', ['html', 'lint'], () => {
-  gulp.src(['src/server/index.js', 'src/shared/**/*.js'], { base: './src' })
+gulp.task('build', ['static-assets', 'lint'], () => {
+  gulp.src(['src/server/**/*.js', 'src/shared/**/*.js', 'src/tests/**/*.js'], { base: './src' })
     .pipe(babel({
       "stage": 0,
       "env": {
@@ -41,8 +46,9 @@ gulp.task('build', ['html', 'lint'], () => {
     .pipe(gulp.dest('out'));
 });
 
-gulp.task('html', () => {
-  gulp.src('src/server/index.html').pipe(gulp.dest('out/server'))
+gulp.task('static-assets', () => {
+  gulp.src(['src/server/index.html', 'src/server/favicon.ico'])
+    .pipe(gulp.dest('out/server'));
 });
 
 gulp.task('lint', () => {

@@ -1,10 +1,12 @@
+import { v4 as uuid } from 'node-uuid';
 import { AddLunchOption, ChooseLunchOption, EnterLunchOptionName, ToggleEnterNewLunchOption } from '../../shared/constants/actionTypes';
 import { socket } from '../App';
 
-//TODO create a decorator to pass an event over the socket
+// TODO create a decorator to pass an event over the socket
 export function addLunchOption(name) {
   const action = {
     type: AddLunchOption,
+    id: uuid(),
     name,
   };
 

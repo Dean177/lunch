@@ -13,12 +13,12 @@ const initialState = {
     { id: 3, name: 'Chinese'},
   ],
   peopleChoices: [
-    { person: { id: 0, name: 'Badger'}, choice: { id: 0 } },
-    { person: { id: 1, name: 'Shrew'}, choice: { id: 3 } },
-    { person: { id: 2, name: 'Aardvark'}, choice: { id: 3 } },
-    { person: { id: 3, name: 'Cat'}, choice: { id: 1 } },
-    { person: { id: 4, name: 'Alpaca'}, choice: { id: 2 } },
-    { person: { id: 5, name: 'Brown Bear'}, choice: { id: 1 } },
+    { person: { id: 0, name: 'Badger'}, choiceId: 0 },
+    { person: { id: 1, name: 'Shrew'}, choiceId: 3 },
+    { person: { id: 2, name: 'Aardvark'}, choiceId: 3 },
+    { person: { id: 3, name: 'Cat'}, choiceId: 1  },
+    { person: { id: 4, name: 'Alpaca'}, choiceId: 2 },
+    { person: { id: 5, name: 'Brown Bear'}, choiceId: 1 },
   ],
 };
 
@@ -31,12 +31,11 @@ const lunchReducer = createReducer(initialState, {
       selectedOptionId = option.id;
       lunchOptions = state.lunchOptions;
     } else {
-      const newId = state.lunchOptions.length;
-      selectedOptionId = newId;
+      selectedOptionId = action.id;
       lunchOptions = [
         ...state.lunchOptions,
         {
-          id: newId,
+          id: action.id,
           name: action.name,
         },
       ];
