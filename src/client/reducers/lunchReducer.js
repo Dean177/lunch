@@ -1,49 +1,60 @@
-import createReducer from './../util/createReducer';
+import createStateMergeReducer from '../util/createStateMergeReducer';
 import { find } from 'underscore';
-import { AddLunchOption, ChooseLunchOption, EnterLunchOptionName, ToggleEnterNewLunchOption } from '../../shared/constants/actionTypes';
+import upsert from '../../shared/util/upsert';
+import {
+  AddLunchOption,
+  ChooseLunchOption,
+  EnterLunchOptionName,
+  ToggleEnterNewLunchOption,
+  OptionChoices,
+  UserLunchChoice,
+  RemoteLunchChoice,
+} from '../../shared/constants/actionTypes';
+
 
 const initialState = {
   optionName: '',
-  selectedOptionId: '1',
+  selectedOptionId: '',
   enteringNewOption: false,
-  lunchOptions: [
-    { id: 0, name: 'Tesco'},
-    { id: 1, name: 'Boots'},
-    { id: 2, name: 'Market'},
-    { id: 3, name: 'Chinese'},
-  ],
-  peopleChoices: [
-    { person: { id: 0, name: 'Badger'}, choiceId: 0 },
-    { person: { id: 1, name: 'Shrew'}, choiceId: 3 },
-    { person: { id: 2, name: 'Aardvark'}, choiceId: 3 },
-    { person: { id: 3, name: 'Cat'}, choiceId: 1  },
-    { person: { id: 4, name: 'Alpaca'}, choiceId: 2 },
-    { person: { id: 5, name: 'Brown Bear'}, choiceId: 1 },
-  ],
+  lunchOptions: [],
+  peopleChoices: [],
 };
 
-const lunchReducer = createReducer(initialState, {
-  [AddLunchOption](state, action) {
+
+const lunchReducer = createStateMergeReducer(initialState, {
+  [OptionChoices](state, { payload: { peopleChoices, lunchOptions } }) {
+    return { lunchOptions, peopleChoices };
+  },
+
+  [UserLunchChoice]({ peopleChoices }, { payload: { user, choiceId } } ) {
+    const newPeopleChoices = upsert(
+      peopleChoices,
+      (personChoice) => (personChoice.user.id === user.id),
+      { person: user, choiceId }
+    );
+
+    return { peopleChoices: newPeopleChoices };
+  },
+
+  [AddLunchOption](state, { payload }) {
     let lunchOptions;
-    let lunchOption;
     let selectedOptionId;
-    const option = find(state.lunchOptions, ({ name }) => name === action.name);
+    const option = find(state.lunchOptions, ({ name }) => name === payload.name);
     if (option) {
       selectedOptionId = option.id;
       lunchOptions = state.lunchOptions;
     } else {
-      selectedOptionId = action.id;
+      selectedOptionId = payload.id;
       lunchOptions = [
         ...state.lunchOptions,
         {
-          id: action.id,
-          name: action.name,
+          id: payload.id,
+          name: payload.name,
         },
       ];
     }
 
     return {
-      ...state,
       lunchOptions,
       selectedOptionId,
       optionName: '',
@@ -51,25 +62,25 @@ const lunchReducer = createReducer(initialState, {
     };
   },
 
-  [ChooseLunchOption](state, action) {
+  [ChooseLunchOption](state, { payload, meta }) {
+    return { selectedOptionId: payload.id };
+  },
+
+  [RemoteLunchChoice](state, action) {
+    const { person, choiceId } = action.payload;
+    const newPeopleChoice = upsert(state.peopleChoices, (personChoice) => personChoice.person.id === action.person.id, { person, choiceId });
     return {
       ...state,
-      selectedOptionId: action.id,
+      peopleChoices: newPeopleChoice,
     };
   },
 
   [ToggleEnterNewLunchOption](state) {
-    return {
-      ...state,
-      enteringNewOption: !state.enteringNewOption,
-    };
+    return { enteringNewOption: !state.enteringNewOption };
   },
 
-  [EnterLunchOptionName](state, action) {
-    return {
-      ...state,
-      optionName: action.name,
-    };
+  [EnterLunchOptionName](state, { payload }) {
+    return { optionName: payload.name };
   },
 });
 

@@ -3,7 +3,9 @@ import { ChangeName } from '../../shared/constants/actionTypes';
 export function changeName(id, name) {
   return  {
     type: ChangeName,
-    id,
-    name,
+    payload: {
+      id,
+      name,
+    }
   };
 }

@@ -4,27 +4,40 @@ import { Provider } from 'react-redux';
 import { Route } from 'react-router';
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import { ReduxRouter } from 'redux-router';
-import io from 'socket.io-client';
 import configureStore from './util/configureStore';
+import { AddLunchOption, ChooseLunchOption, OptionChoices, RemoteLunchChoice, NewUser } from '../shared/constants/actionTypes';
 import Landing from './Landing/Landing';
 import ChooseLunch from './ChooseLunch';
+import RouteContainer from './RouteContainer';
+import { socket } from './util/socket';
 
-const store = configureStore();
-export const socket = io.connect(`http://${window.location.hostname}:3000`);
+
+const routes = (
+  <Route path="" component={RouteContainer}>
+    <Route path="/" component={Landing} />
+    <Route path="/lunch" component={ChooseLunch} />
+  </Route>
+);
+
+const store = configureStore(routes);
+socket.on('message', store.dispatch);
+
+
+socket.on(NewUser, store.dispatch);
+socket.on(OptionChoices, (optionChoices) => { store.dispatch({type: OptionChoices, ...optionChoices}); });
+socket.on(AddLunchOption, store.dispatch);
+socket.on(RemoteLunchChoice, store.dispatch);
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <Provider store={store}>
-          <ReduxRouter>
-            <Route path="/" component={Landing} />
-            <Route path="/lunch" component={ChooseLunch} />
-          </ReduxRouter>
-        </Provider>
-        <DebugPanel top right bottom>
-          <DevTools store={store} monitor={LogMonitor} visibleOnLoad={false}/>
-        </DebugPanel>
+      <div>
+      <Provider store={store}>
+        <ReduxRouter>{routes}</ReduxRouter>
+      </Provider>
+      <DebugPanel top right bottom>
+        <DevTools store={store} monitor={LogMonitor} visibleOnLoad={false} />
+      </DebugPanel>
       </div>
     );
   }

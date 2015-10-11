@@ -6,26 +6,35 @@ import mocha from 'gulp-mocha';
 import sequence from 'gulp-sequence';
 import nodemon from 'gulp-nodemon';
 
-gulp.task('start', sequence(['build', 'watch', 'app-server']));
+gulp.task('start', sequence(['static-assets', 'build', 'watch', 'app-server']));
 
 gulp.task('run-tests', sequence(['build', 'test', 'lint']));
 
 gulp.task('test', () => {
-  return gulp.src(['out/tests/**/*.spec.js'], {read: false}).pipe(mocha());
+  return gulp.src(['out/tests/**/*.spec.js'], { read: false }).pipe(mocha());
 });
 
 gulp.task('app-server', () => {
-  nodemon({ script: 'out/server/index.js', ignore: ['src/client/**/*.js', 'src/tests/**/*.js']});
+  nodemon({
+    script: 'out/server/index.js',
+    ext: 'js',
+    "verbose": false,
+    "watch": ["out/server/**/*", "out/shared/**/*"],
+    "ignore": [
+      "out/client/**/*",
+      "src/"
+    ],
+  });
 });
 
 gulp.task('watch', () => {
-  gulp.watch(['src/**/*.js'], ['build', 'lint', 'test']);
+  gulp.watch(['src/server/**/*.js', 'src/tests/**/*.js'], ['build', 'lint', 'test']);
 });
 
-gulp.task('build', ['static-assets'], () => {
+gulp.task('build', () => {
   gulp.src(['src/server/**/*.js', 'src/shared/**/*.js', 'src/tests/**/*.js'], { base: './src' })
     .pipe(babel({
-      "stage": 0,
+      "stage": 1,
       "env": {
         "development": {
           "plugins": ["react-transform"],

@@ -16,6 +16,7 @@ class Landing extends Component {
   constructor(props) {
     super(props);
     const { dispatch } = this.props;
+
     this.onSubmit = (event) => {
       event.preventDefault();
 
@@ -23,7 +24,9 @@ class Landing extends Component {
         dispatch(addLunchOption(this.props.optionName));
       }
 
-      dispatch(pushState(null, '/lunch'));
+      const stateNav = pushState(null, '/lunch');
+      console.log(stateNav);
+      dispatch(stateNav);
     };
 
     this.onChange = (value) => {
@@ -60,19 +63,18 @@ class Landing extends Component {
     };
 
     const autoSuggestInput = (
-      <Autosuggest suggestions={this.getSuggestions}
+      <Autosuggest suggestions={ this.getSuggestions }
                    ref="optionText"
-                   value={this.props.optionName}
-                   showWhen={input => input.trim().length >= 2}
-                   inputAttributes={inputAttributes}
-                   theme={theme}
+                   value={ this.props.optionName }
+                   showWhen={ input => input.trim().length >= 2 }
+                   inputAttributes={ inputAttributes }
+                   theme={ theme }
       />
     );
 
     return (
-      <form onSubmit={this.onSubmit} className="Landing">
-        <h1> I want {autoSuggestInput} for lunch </h1>
-
+      <form onSubmit={ this.onSubmit } className="Landing">
+        <h1> I want { autoSuggestInput } for lunch </h1>
         <button className="btn btn-primary-outline btn-lg" type="submit">Go</button>
       </form>
     );

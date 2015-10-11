@@ -25,8 +25,8 @@ class LunchPicker extends Component {
     },
   };
 
-  onOptionSelected(id) {
-    this.props.dispatch(LunchActionCreators.chooseLunchOption(id));
+  onOptionSelected(choiceId) {
+    this.props.dispatch(LunchActionCreators.chooseLunchOption(this.props.user, choiceId));
   }
 
   getChooserCount(peopleChoices, personId, userChoiceId) {
@@ -41,7 +41,6 @@ class LunchPicker extends Component {
       .map(({ id }) => (id))
       .indexOf(choiceId);
   };
-
 
   render() {
     const {
@@ -98,6 +97,9 @@ class LunchPicker extends Component {
             </div>
           </Measure>
         </div>
+        <pre>
+          {JSON.stringify(choices, null, 2)}
+        </pre>
 
         <Spring endValue={choices}>
           {

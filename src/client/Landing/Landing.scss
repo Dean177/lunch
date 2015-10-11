@@ -24,7 +24,16 @@
       outline: none;
     }
   }
+
+  .autosuggest-wrapper {
+    display: inline;
+  }
+
   .react-autosuggest {
     display: inline;
+
+    ul {
+      left: 0;
+    }
   }
 }

@@ -15,7 +15,7 @@ import LunchPicker from './LunchPicker/LunchPicker'
   } = appState.lunch;
 
   return {
-    user: appState.user,
+    user: { id: appState.user.id, name: appState.user.name },
     enteringNewOption,
     optionName,
     selectedOptionId,

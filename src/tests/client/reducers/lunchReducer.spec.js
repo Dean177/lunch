@@ -1,32 +1,52 @@
 import { expect } from 'chai';
-import { AddLunchOption, ChooseLunchOption, EnterLunchOptionName, ToggleEnterNewLunchOption } from '../../../../src/shared/constants/actionTypes';
+import { AddLunchOption, ChooseLunchOption, EnterLunchOptionName, ToggleEnterNewLunchOption, OptionChoices, RemoteLunchChoice } from '../../../../src/shared/constants/actionTypes';
 import lunchReducer from '../../../../src/client/reducers/lunchReducer';
 
 const initialState = {
   optionName: 'Name for the new option',
   selectedOptionId: '',
   enteringNewOption: false,
-  lunchOptions: [ { id: 0, name: 'Tesco'} ],
+  lunchOptions: [ { id: '0', name: 'Tesco'} ],
   peopleChoices: [ ],
 };
 
 describe('lunchReducer', () => {
 
+  describe(OptionChoices, () => {
+    it('Sets the lunch options and people choices', () => {
+      const peopleChoicesAction = {
+        type: OptionChoices,
+        payload: {
+          lunchOptions: [ { id: '0', name: 'Market'}, { id: '0', name: 'Chinese'}],
+          peopleChoices: [ { person: { id: '0', name: 'Boar'}, choiceId: '0' }],
+        },
+      };
+      const newState = lunchReducer(initialState, peopleChoicesAction);
+
+      expect(newState.lunchOptions).to.deep.equal(peopleChoicesAction.payload.lunchOptions);
+      expect(newState.peopleChoices).to.deep.equal(peopleChoicesAction.payload.peopleChoices);
+    })
+  });
+
   describe(ChooseLunchOption, () => {
-    const chooseLunchOptionAction = { type: ChooseLunchOption, id: 'iiii-chos-eyou' };
+    const chooseLunchOptionAction = { type: ChooseLunchOption, payload: { id: 'iiii-chos-eyou' } };
     const newState = lunchReducer(initialState, chooseLunchOptionAction);
 
     it('Sets the users selected id', () => {
-      expect(newState.selectedOptionId).to.equal(chooseLunchOptionAction.id);
+      expect(newState.selectedOptionId).to.equal(chooseLunchOptionAction.payload.id);
     });
   });
+
+  describe(RemoteLunchChoice, () => {});
 
   describe(AddLunchOption, () => {
     const lunchOption =  { id: 'uuuu-uuuu-iiii-dddd', name: 'No 1 Harbourside' };
     const addLunchOption = {
       type: AddLunchOption,
-      id: lunchOption.id,
-      name: lunchOption.name,
+      payload: {
+        id: lunchOption.id,
+        name: lunchOption.name,
+      },
     };
     const newState = lunchReducer(initialState, addLunchOption);
 
@@ -63,11 +83,13 @@ describe('lunchReducer', () => {
     it('Sets the optionName text', () => {
       const enterLunchOptionNameAction = {
         type: EnterLunchOptionName,
-        name: 'some name',
+        payload: {
+          name: 'some name',
+        },
       };
       const newState = lunchReducer(initialState, enterLunchOptionNameAction);
 
-      expect(newState.optionName).to.equal(enterLunchOptionNameAction.name);
+      expect(newState.optionName).to.equal(enterLunchOptionNameAction.payload.name);
     });
   });
 });

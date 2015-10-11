@@ -1,40 +1,29 @@
 import { v4 as uuid } from 'node-uuid';
 import { AddLunchOption, ChooseLunchOption, EnterLunchOptionName, ToggleEnterNewLunchOption } from '../../shared/constants/actionTypes';
-import { socket } from '../App';
 
-// TODO create a decorator to pass an event over the socket
 export function addLunchOption(name) {
-  const action = {
+  return {
     type: AddLunchOption,
-    id: uuid(),
-    name,
+    payload: {
+      id: uuid(),
+      name,
+    },
+    meta: { isServerAction: true },
   };
-
-  socket.emit(AddLunchOption, action);
-
-  return action;
 }
 
-export function chooseLunchOption(id) {
-  const action = {
+export function chooseLunchOption(user, choiceId) {
+  return {
     type: ChooseLunchOption,
-    id,
+    payload: { id: choiceId },
+    meta: { isServerAction: true },
   };
-
-  socket.emit(ChooseLunchOption, action);
-
-  return action;
 }
 
 export function enterOptionName(name) {
-  return {
-    type: EnterLunchOptionName,
-    name,
-  };
+  return { type: EnterLunchOptionName, payload: { name } };
 }
 
 export function toggleNewOption() {
-  return {
-    type: ToggleEnterNewLunchOption,
-  };
+  return { type: ToggleEnterNewLunchOption, payload: {} };
 }
