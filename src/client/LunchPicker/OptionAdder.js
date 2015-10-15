@@ -1,9 +1,12 @@
+import OptionAutosuggest from '../components/OptionAutosuggest';
 import React, { Component, PropTypes } from 'react';
 
 class OptionAdder extends Component {
   static propTypes = {
+    user: PropTypes.object.isRequired,
     isAdding: PropTypes.bool.isRequired,
     optionName: PropTypes.string.isRequired,
+    lunchOptions: PropTypes.array.isRequired,
     toggleNewOption: PropTypes.func.isRequired,
     addLunchOption: PropTypes.func.isRequired,
     enterOptionName: PropTypes.func.isRequired,
@@ -11,50 +14,29 @@ class OptionAdder extends Component {
 
   constructor(props) {
     super(props);
-
-    const {
-      toggleNewOption,
-      addLunchOption,
-      enterOptionName,
-    } = props;
-
-    this.enterNewOption = () => {
-      toggleNewOption();
-    };
+    const { addLunchOption } = props;
 
     this.onNewOption = (event) => {
       event.preventDefault();
-      addLunchOption(this.props.optionName);
+      addLunchOption(this.props.user, this.props.optionName);
     };
 
-    this.onLunchNameText = ({ target: { value }}) => {
-      enterOptionName(value);
+    this.getSuggestions = (input, callback) => {
+      const regex = new RegExp(`^${input}`, 'i');
+      const suggestions = this.props.lunchOptions.filter(option => regex.test(option.name));
+      callback(null, suggestions);
     };
-
-    this.onBlur = () => {
-      toggleNewOption();
-    };
-  }
-
-  componentDidUpdate() {
-    if (this.props.isAdding) {
-      this.refs.optionTextInput.focus();
-    }
   }
 
   render() {
     let childElement;
     if (!this.props.isAdding) {
-      childElement = (<button className="btn btn-primary" type="button" onClick={this.enterNewOption}>+</button>);
+      childElement = (<button className="btn btn-primary" type="button" onClick={this.props.toggleNewOption}>+</button>);
     } else {
       childElement = (
         <form onSubmit={this.onNewOption}>
           <div className="input-group">
-            <input type="text" className="form-control" placeholder=""
-                   ref="optionTextInput"
-                   value={this.props.optionName}
-                   onChange={this.onLunchNameText}
-                   onBlur={this.onBlur} />
+            <OptionAutosuggest value={this.props.optionName} onChange={this.props.enterOptionName} getSuggestions={this.getSuggestions} onBlur={this.props.toggleNewOption}/>
             <span className="input-group-btn">
               <button className="btn btn-primary" type="submit" onClick={this.onNewOption}>Go!</button>
             </span>

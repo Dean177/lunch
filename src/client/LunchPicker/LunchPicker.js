@@ -1,19 +1,19 @@
 import './LunchPicker.scss';
 import React, { Component, PropTypes } from 'react';
 import Measure from 'react-measure';
-import { Spring } from 'react-motion';
+import { Motion, spring } from 'react-motion';
 import { bindActionCreators } from 'redux';
 import * as LunchActionCreators from '../actionCreators/lunchActionCreators';
-import OptionAdder from './OptionAdder';
+import OptionAdder from './OptionAdder'
+import { difference } from 'underscore';
 
 class LunchPicker extends Component {
   static propTypes = {
     user: PropTypes.object.isRequired,
     enteringNewOption: PropTypes.bool.isRequired,
     optionName: PropTypes.string.isRequired,
-    selectedOptionId: PropTypes.node.isRequired,
-    lunchOptions: PropTypes.array,
-    peopleChoices: PropTypes.array,
+    lunchOptions: PropTypes.array.isRequired,
+    peopleChoices: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired,
   };
 
@@ -44,17 +44,13 @@ class LunchPicker extends Component {
 
   render() {
     const {
-      user,
       enteringNewOption,
-      selectedOptionId,
       optionName,
       peopleChoices,
       lunchOptions,
       dispatch,
-      } = this.props;
-
-    const userChoice = { person: user, choiceId: selectedOptionId };
-    const peopleChoicesWithUserChoice = [userChoice, ...peopleChoices];
+      user,
+    } = this.props;
 
     const {
       buttonWidth,
@@ -64,19 +60,22 @@ class LunchPicker extends Component {
       },
     } = this.state;
 
-    const choices = {
-      choices: peopleChoicesWithUserChoice.map(({ person, choiceId }) => {
+    const choices = peopleChoices
+      .filter(({choiceId}) => !!choiceId)
+      .map(({ person, choiceId }) => {
         const xPos = width * this.getChoiceIndex(lunchOptions, choiceId);
-        const yPos = (height + 15) * this.getChooserCount(peopleChoicesWithUserChoice, person.id, choiceId);
+        const yPos = (height + 15) * this.getChooserCount(peopleChoices, person.id, choiceId);
 
         return {
           id: person.id,
           name: person.name,
-          xPos: {val: xPos},
-          yPos: {val: yPos},
+          xPos,
+          yPos,
         };
-      })
-    };
+    });
+
+    const previousDaysLunchOptions = [...lunchOptions, { id: '23', name: 'zzzzz'}];
+    const autoSuggestOptions = difference(previousDaysLunchOptions, lunchOptions);
 
     return (
       <div className="LunchPicker">
@@ -90,6 +89,8 @@ class LunchPicker extends Component {
             <div className="OptionColumn">
               <Measure whitelist={['width']} onChange={ ({ width }) =>  this.setState({ buttonWidth: width }) }>
                 <OptionAdder
+                  user={user}
+                  lunchOptions={autoSuggestOptions}
                   isAdding={enteringNewOption}
                   optionName={optionName}
                   {...bindActionCreators(LunchActionCreators, dispatch)} />
@@ -97,28 +98,21 @@ class LunchPicker extends Component {
             </div>
           </Measure>
         </div>
-        <pre>
-          {JSON.stringify(choices, null, 2)}
-        </pre>
-
-        <Spring endValue={choices}>
-          {
-            ({ choices: currentChoices }) =>
-              <div className="PeopleChoices">
-                {currentChoices.map(({ id, name, xPos, yPos}) =>
-                  <div key={id}
-                       className="PersonChoice"
-                       style={{
-                          width: buttonWidth,
-                          transform: `translate3d(${xPos.val}px, ${yPos.val}px, 0)`,
-                          zIndex: yPos,
-                        }}>
-                    {name}
-                  </div>
-                )}
-              </div>
-          }
-        </Spring>
+        <div className="PeopleChoices">
+          {choices.map(({ id, name, xPos, yPos }) =>
+            <Motion key={id} style={{id, name, xPos: spring(xPos), yPos: spring(yPos)}}>
+              {(interpolatedChoice) =>
+                <div className="PersonChoice" style={{
+                    width: buttonWidth,
+                    transform: `translate3d(${interpolatedChoice.xPos}px, ${interpolatedChoice.yPos}px, 0)`,
+                    zIndex: interpolatedChoice.yPos,
+                  }}>
+                  {name}
+                </div>
+              }
+            </Motion>
+          )}
+        </div>
       </div>
     );
   }

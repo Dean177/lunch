@@ -1,21 +1,25 @@
 import { v4 as uuid } from 'node-uuid';
-import { AddLunchOption, ChooseLunchOption, EnterLunchOptionName, ToggleEnterNewLunchOption } from '../../shared/constants/actionTypes';
+import { AddLunchOption, UserLunchChoice, EnterLunchOptionName, ToggleEnterNewLunchOption } from '../../shared/constants/actionTypes';
 
-export function addLunchOption(name) {
+export function addLunchOption(person, name) {
   return {
     type: AddLunchOption,
     payload: {
       id: uuid(),
+      person,
       name,
     },
     meta: { isServerAction: true },
   };
 }
 
-export function chooseLunchOption(user, choiceId) {
+export function chooseLunchOption(person, choiceId) {
   return {
-    type: ChooseLunchOption,
-    payload: { id: choiceId },
+    type: UserLunchChoice,
+    payload: {
+      person,
+      choiceId
+    },
     meta: { isServerAction: true },
   };
 }

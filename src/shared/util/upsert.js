@@ -4,7 +4,7 @@ import { findIndex } from 'underscore';
 // If not, add the value to the collection.
 // Does not mutate the original collection
 export default function upsert(collection, predicate, value) {
-  const valueIndex = findIndex(collection, (predVal) => { return predicate(predVal); });
+  const valueIndex = findIndex(collection, predicate);
   if (valueIndex == -1) {
     return [...collection, value];
   } else {

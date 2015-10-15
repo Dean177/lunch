@@ -6,6 +6,6 @@ describe('actionTypes', () => {
   it('Should have no constant with the same value', () => {
     const constantValues = values(applicationConstants);
 
-    expect(constantValues.length).to.be(uniq(constantValues).length);
+    expect(constantValues).to.deep.equal(uniq(constantValues));
   });
 });

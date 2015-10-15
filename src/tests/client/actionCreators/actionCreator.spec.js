@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect } from 'chai';
 import { mapObject } from 'underscore';
 import * as userActionCreators  from '../../../../src/client/actionCreators/userActionCreator';
 import * as lunchActionCreators from '../../../../src/client/actionCreators/lunchActionCreators';

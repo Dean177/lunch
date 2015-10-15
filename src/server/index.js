@@ -9,9 +9,8 @@ import { serverPort } from '../shared/constants/config';
 import webpackConfig from '../../webpack.config.dev.js';
 import { find } from 'underscore';
 import upsert from '../shared/util/upsert';
-import { OptionChoices, AddLunchOption, ChooseLunchOption, UserLunchChoice, RemoteLunchChoice } from '../shared/constants/actionTypes';
+import { OptionChoices, AddLunchOption, UserLunchChoice } from '../shared/constants/actionTypes';
 import config from '../../webpack.config.dev.js';
-
 
 const app = express();
 const http = new Server(app);
@@ -20,10 +19,7 @@ const compiler = webpack(webpackConfig);
 
 app.use(favicon(`${__dirname}/favicon.ico`));
 app.use(webpackHotMiddleware(compiler));
-app.use(webpackDevMiddleware(compiler, {
-  noInfo: true,
-  publicPath: webpackConfig.output.publicPath,
-}));
+app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
 
 app.get('*', (req, res) => {
   res.sendFile('/index.html', { root: __dirname });
@@ -32,8 +28,9 @@ app.get('*', (req, res) => {
 let lunchOptions = [ { id: '1', name: 'Boots'}, { id: '3', name: 'Chinese'}];
 let peopleChoices = [];
 
-
 io.on('connection', (socket) => {
+  socket.on('error', console.error);
+
   // Send current state to the client
   socket.send({
     type: OptionChoices,
@@ -44,7 +41,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('message', (action) => {
-    if (! action.type || !action.payload || !action.meta) {
+    if (! action.type || !action.payload || !action.meta || !action.meta.user) {
       console.error('Potentially malformed action received', action);
     }
 
@@ -52,30 +49,30 @@ io.on('connection', (socket) => {
 
     switch (type) {
       case AddLunchOption:
-        const { id, name } = payload;
-        lunchOptions = upsert(lunchOptions, lunchOption => lunchOption.id === id, payload);
-
-        const option = find(lunchOptions, ({ name }) => name === action.name);
-        if (!option) {
-          lunchOptions.push({ id: action.id, name: action.name });
-          // TODO
-          socket.broadcast.send(action);
+        const { user } = meta;
+        const option = find(lunchOptions, ({ name }) => name === payload.name);
+        if (option) {
+          peopleChoices = upsert(
+            peopleChoices,
+            (personChoice) => (personChoice.person.id === user.id),
+            { person: user, choiceId: option.id }
+          );
+        } else {
+          lunchOptions = [ ...lunchOptions, { id: payload.id, name: payload.name }, ];
+          peopleChoices = upsert(
+            peopleChoices,
+            (personChoice) => (personChoice.person.id === user.id),
+            { person: user, choiceId: payload.id }
+          );
         }
 
-        peopleChoices = upsert(peopleChoices, ({ person }) => person.id === action.person.id, { person: action.person, choiceId: action.choiceId});
-        socket.broadcast.send({ ...action, type: RemoteLunchChoice });
+        socket.broadcast.send({ type: OptionChoices, payload: { lunchOptions, peopleChoices } });
         break;
 
-      case ChooseLunchOption:
-        const newPersonChoice = {
-          person: meta.user,
-          choiceId: payload.id,
-        };
-        peopleChoices = upsert(peopleChoices, (personChoice => personChoice.user.id === meta.user.id), newPersonChoice);
-        socket.broadcast.send({
-          type: UserLunchChoice,
-          payload: newPersonChoice,
-        });
+      case UserLunchChoice:
+        const { person, choiceId } = payload;
+        peopleChoices = upsert(peopleChoices, (personChoice => personChoice.person.id === person.id), { person, choiceId });
+        socket.broadcast.send({ type: OptionChoices, payload: { peopleChoices, lunchOptions } });
         break;
 
       default:
@@ -83,7 +80,5 @@ io.on('connection', (socket) => {
     }
   });
 });
-
-io.on('error', console.error);
 
 http.listen(serverPort, () => { console.log('Lunch listening'); });

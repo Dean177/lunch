@@ -1,14 +1,19 @@
 import babel from 'gulp-babel';
+import del from 'del';
 import eslint from 'gulp-eslint';
 import gulp from 'gulp';
-import util from 'gulp-util';
+import util, { PluginError } from 'gulp-util';
 import mocha from 'gulp-mocha';
 import sequence from 'gulp-sequence';
 import nodemon from 'gulp-nodemon';
+import webpack from 'webpack';
+import webpackProdConfig from './webpack.config.prod';
 
-gulp.task('start', sequence(['static-assets', 'build', 'watch', 'app-server']));
+gulp.task('make', sequence(['clean', 'static-assets', 'make-server', 'prod-webpack']));
 
-gulp.task('run-tests', sequence(['build', 'test', 'lint']));
+gulp.task('start', sequence(['static-assets', 'make-server', 'watch', 'app-server']));
+
+gulp.task('run-tests', sequence(['make-server', 'test', 'lint']));
 
 gulp.task('test', () => {
   return gulp.src(['out/tests/**/*.spec.js'], { read: false }).pipe(mocha());
@@ -28,10 +33,10 @@ gulp.task('app-server', () => {
 });
 
 gulp.task('watch', () => {
-  gulp.watch(['src/server/**/*.js', 'src/tests/**/*.js'], ['build', 'lint', 'test']);
+  gulp.watch(['src/server/**/*.js', 'src/tests/**/*.js'], ['make-server', 'lint', 'test']);
 });
 
-gulp.task('build', () => {
+gulp.task('make-server', () => {
   gulp.src(['src/server/**/*.js', 'src/shared/**/*.js', 'src/tests/**/*.js'], { base: './src' })
     .pipe(babel({
       "stage": 1,
@@ -44,9 +49,6 @@ gulp.task('build', () => {
                 "transform": "react-transform-hmr",
                 "imports": ["react"],
                 "locals": ["module"]
-              }, {
-                "transform": "react-transform-catch-errors",
-                "imports": ["react", "redbox-react"]
               }]
             }
           }
@@ -66,3 +68,13 @@ gulp.task('lint', () => {
     .pipe(eslint())
     .pipe(eslint.format())
 });
+
+gulp.task('prod-webpack', (done) => {
+  webpack(webpackProdConfig, (err, stats) => {
+    if (err) throw  new PluginError('webpack', err);
+    util.log('[webpack]', stats.toString());
+    done();
+  })
+});
+
+gulp.task('clean', () => del(['out/**']));

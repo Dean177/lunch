@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { AddLunchOption, ChooseLunchOption, EnterLunchOptionName, ToggleEnterNewLunchOption, OptionChoices, RemoteLunchChoice } from '../../../../src/shared/constants/actionTypes';
+import { find } from 'underscore';
+import { AddLunchOption, UserLunchChoice, EnterLunchOptionName, ToggleEnterNewLunchOption, OptionChoices } from '../../../../src/shared/constants/actionTypes';
 import lunchReducer from '../../../../src/client/reducers/lunchReducer';
 
 const initialState = {
@@ -28,25 +29,32 @@ describe('lunchReducer', () => {
     })
   });
 
-  describe(ChooseLunchOption, () => {
-    const chooseLunchOptionAction = { type: ChooseLunchOption, payload: { id: 'iiii-chos-eyou' } };
-    const newState = lunchReducer(initialState, chooseLunchOptionAction);
+  describe(UserLunchChoice, () => {
+    const egret = { id: 4, name: 'Egret'};
+    const choiceId = 'iiii-chos-eyou';
+    const chooseLunchOptionAction = { type: UserLunchChoice, payload: { choiceId, person: egret } };
+    const firstChoiceState = lunchReducer(initialState, chooseLunchOptionAction);
 
-    it('Sets the users selected id', () => {
-      expect(newState.selectedOptionId).to.equal(chooseLunchOptionAction.payload.id);
+    it('Adds the lunchChoice when the person has made no previous selection', () => {
+      const personChoice = find(firstChoiceState.peopleChoices, (personChoice) => personChoice.person.id === egret.id);
+      expect(firstChoiceState.peopleChoices).not.to.be.empty;
+      expect(personChoice.choiceId).to.equal(choiceId);
+    });
+
+    it('Updates the choiceId when person has already made a choice', () => {
+      const secondChoice = { type: UserLunchChoice, payload: { choiceId: '0', person: egret }};
+      const secondChoiceState = lunchReducer(firstChoiceState, secondChoice);
+      expect(secondChoiceState.peopleChoices.length).to.equal(firstChoiceState.peopleChoices.length);
+      expect(secondChoiceState.peopleChoices[0].choiceId).to.equal('0');
     });
   });
 
-  describe(RemoteLunchChoice, () => {});
-
   describe(AddLunchOption, () => {
     const lunchOption =  { id: 'uuuu-uuuu-iiii-dddd', name: 'No 1 Harbourside' };
+    const ferret = { id: 'ferr', name: 'Ferret' };
     const addLunchOption = {
       type: AddLunchOption,
-      payload: {
-        id: lunchOption.id,
-        name: lunchOption.name,
-      },
+      payload: { id: lunchOption.id, name: lunchOption.name, person: ferret},
     };
     const newState = lunchReducer(initialState, addLunchOption);
 
@@ -55,7 +63,9 @@ describe('lunchReducer', () => {
     });
 
     it('Selects the newly added lunch option', () => {
-      expect(newState.selectedOptionId).to.equal(lunchOption.id);
+      expect(newState.peopleChoices.length).to.equal(initialState.peopleChoices.length + 1);
+      const personChoice = find(newState.peopleChoices, (personChoice) => personChoice.person.id === ferret.id);
+      expect(personChoice.choiceId).to.equal(lunchOption.id);
     });
 
     it('Clears the text used to store the name', () => {
@@ -63,7 +73,7 @@ describe('lunchReducer', () => {
     });
 
     it('Will not add an option if it already exists', () => {
-      const sameNameLunchOption =  { id: 'newu-uuuu-iiii-dddd', name: 'No 1 Harbourside' };
+      const sameNameLunchOption =  { payload: { id: 'newu-uuuu-iiii-dddd', name: 'No 1 Harbourside', person: ferret } };
       const nextState = lunchReducer(newState, sameNameLunchOption);
 
       expect(nextState.lunchOptions.length).to.equal(newState.lunchOptions.length);

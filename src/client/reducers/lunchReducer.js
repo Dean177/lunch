@@ -3,18 +3,15 @@ import { find } from 'underscore';
 import upsert from '../../shared/util/upsert';
 import {
   AddLunchOption,
-  ChooseLunchOption,
   EnterLunchOptionName,
-  ToggleEnterNewLunchOption,
   OptionChoices,
+  ToggleEnterNewLunchOption,
   UserLunchChoice,
-  RemoteLunchChoice,
 } from '../../shared/constants/actionTypes';
 
 
 const initialState = {
   optionName: '',
-  selectedOptionId: '',
   enteringNewOption: false,
   lunchOptions: [],
   peopleChoices: [],
@@ -26,25 +23,22 @@ const lunchReducer = createStateMergeReducer(initialState, {
     return { lunchOptions, peopleChoices };
   },
 
-  [UserLunchChoice]({ peopleChoices }, { payload: { user, choiceId } } ) {
+  [UserLunchChoice]({ peopleChoices }, { payload: { person, choiceId } } ) {
     const newPeopleChoices = upsert(
       peopleChoices,
-      (personChoice) => (personChoice.user.id === user.id),
-      { person: user, choiceId }
+      (personChoice) => (personChoice.person.id === person.id),
+      { person, choiceId }
     );
 
     return { peopleChoices: newPeopleChoices };
   },
 
-  [AddLunchOption](state, { payload }) {
+  [AddLunchOption](state, { payload, meta }) {
     let lunchOptions;
-    let selectedOptionId;
     const option = find(state.lunchOptions, ({ name }) => name === payload.name);
     if (option) {
-      selectedOptionId = option.id;
       lunchOptions = state.lunchOptions;
     } else {
-      selectedOptionId = payload.id;
       lunchOptions = [
         ...state.lunchOptions,
         {
@@ -54,24 +48,17 @@ const lunchReducer = createStateMergeReducer(initialState, {
       ];
     }
 
+    const newPeopleChoices = upsert(
+      state.peopleChoices,
+      (personChoice) => (personChoice.person.id === payload.person.id),
+      { person: payload.person, choiceId: payload.id }
+    );
+
     return {
       lunchOptions,
-      selectedOptionId,
       optionName: '',
       enteringNewOption: false,
-    };
-  },
-
-  [ChooseLunchOption](state, { payload, meta }) {
-    return { selectedOptionId: payload.id };
-  },
-
-  [RemoteLunchChoice](state, action) {
-    const { person, choiceId } = action.payload;
-    const newPeopleChoice = upsert(state.peopleChoices, (personChoice) => personChoice.person.id === action.person.id, { person, choiceId });
-    return {
-      ...state,
-      peopleChoices: newPeopleChoice,
+      peopleChoices: newPeopleChoices
     };
   },
 

@@ -3,9 +3,7 @@ import webpack, { optimize, DefinePlugin} from 'webpack';
 
 const config  = {
   devtool: 'source-map',
-  entry: [
-    './src/client/index'
-  ],
+  entry: ['./src/client/index'],
   output: {
     path: path.join(__dirname, 'out/client'),
     filename: 'bundle.js',
@@ -13,16 +11,8 @@ const config  = {
   },
   plugins: [
     new optimize.OccurenceOrderPlugin(),
-    new DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
-    }),
-    new optimize.UglifyJsPlugin({
-      compressor: {
-        warnings: false
-      }
-    })
+    new DefinePlugin({ 'process.env': { 'NODE_ENV': 'production' } }),
+    new optimize.UglifyJsPlugin({ compressor: { warnings: false } })
   ],
   module: {
     loaders: [

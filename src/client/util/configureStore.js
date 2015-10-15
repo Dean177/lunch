@@ -7,12 +7,15 @@ import { logger, serverEvent, actionFormatValidator } from './middleware';
 
 export default function configureStore(routes, initialState) {
   const createStoreFinal = compose(
-    applyMiddleware(logger, serverEvent, actionFormatValidator),
+    applyMiddleware(
+      logger,
+      serverEvent,
+      actionFormatValidator),
     reduxReactRouter({
       routes,
       createHistory,
-    }),
-    devTools()
+    })
+    //,devTools()
   )(createStore);
 
   const store = createStoreFinal(rootReducer, initialState);
