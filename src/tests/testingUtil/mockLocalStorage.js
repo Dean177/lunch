@@ -1,10 +1,12 @@
-const localStorage = {
-  setItem(key, val) {
-    this[key] = val + '';
-  },
-  getItem(key) {
-    return this[key];
-  },
+const MockLocalStorage = () => {
+  return {
+    setItem(key, val) {
+      this[key] = val + '';
+    },
+    getItem(key) {
+      return this[key];
+    },
+  };
 };
 
-export default localStorage;
+export default MockLocalStorage;

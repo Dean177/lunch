@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import mockStorage from '../../testingUtil/mockLocalStorage';
+import MockStorage from '../../testingUtil/MockLocalStorage';
 import createUserReducer from '../../../../src/client/reducers/createUserReducer';
 import { changeName } from '../../../../src/client/actionCreators/userActionCreator';
 
@@ -9,7 +9,7 @@ const initialState = {
 };
 
 describe('createUserReducer', () => {
-  const userReducer = createUserReducer(mockStorage);
+  const userReducer = createUserReducer(new MockStorage());
 
   it('Can change the users name', () => {
     const changeNameAction = changeName(initialState.id, 'Alpaca');

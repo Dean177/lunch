@@ -1,4 +1,4 @@
-import { createLocalStorageMergeReducer } from '../util/createStateMergeReducer';
+import createLocalStorageMergeReducer from '../util/createLocalStorageMergeReducer';
 import { ChangeName } from '../../shared/constants/actionTypes';
 import { v4 as uuid } from 'node-uuid';
 

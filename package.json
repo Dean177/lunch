@@ -2,10 +2,9 @@
   "name": "lunch",
   "version": "0.0.1",
   "description": "Get some lunch",
-  "main": "index.js",
   "scripts": {
-    "start": "SET NODE_ENV=production gulp make && node out/server/index.js",
-    "test": "gulp run-testss"
+    "start": "gulp start-production",
+    "test": "gulp run-tests"
   },
   "author": "Dean Merchant <deanmerchant@gmail.com>",
   "repository": {

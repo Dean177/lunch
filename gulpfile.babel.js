@@ -9,46 +9,58 @@ import nodemon from 'gulp-nodemon';
 import webpack from 'webpack';
 import webpackProdConfig from './webpack.config.prod';
 
-gulp.task('make', sequence('clean', ['make-server', 'static-assets', 'prod-webpack']));
+gulp.task('start-production', sequence('make', 'production-server'));
 
-gulp.task('start', sequence('static-assets', 'make-server', 'watch', 'app-server'));
+gulp.task('make', sequence('clean', ['build', 'static-assets', 'prod-webpack']));
 
-gulp.task('run-tests', sequence('make-server', 'test', 'lint'));
+gulp.task('production-server', () => {
+  nodemon({
+    env: { 'NODE_ENV': JSON.stringify('production') },
+    script: 'out/server/index.js',
+    verbose: false,
+    ignore: ['*'],
+  });
+});
+
+gulp.task('start', sequence('static-assets', 'build', 'watch', 'dev-server'));
+
+gulp.task('run-tests', sequence('build', 'test', 'lint'));
 
 gulp.task('test', () => {
   return gulp.src(['out/tests/**/*.spec.js'], { read: false }).pipe(mocha());
 });
 
-gulp.task('app-server', () => {
+gulp.task('dev-server', () => {
   nodemon({
+    env: { 'DEBUG': 'lunch:*' },
     script: 'out/server/index.js',
     ext: 'js',
-    "verbose": false,
-    "watch": ["out/server/**/*", "out/shared/**/*"],
-    "ignore": [
-      "out/client/**/*",
-      "src/"
+    verbose: true,
+    watch: ['out/server/**/*', 'out/shared/**/*'],
+    ignore: [
+      'out/client/**/*',
+      'src/'
     ],
   });
 });
 
 gulp.task('watch', () => {
-  gulp.watch(['src/server/**/*.js', 'src/tests/**/*.js'], ['make-server', 'lint', 'test']);
+  gulp.watch(['src/**/*.js'], ['build', 'lint', 'test']);
 });
 
-gulp.task('make-server', () => {
-  return gulp.src(['src/server/**/*.js', 'src/shared/**/*.js', 'src/tests/**/*.js'], { base: './src' })
+gulp.task('build', () => {
+  return gulp.src(['src/**/*.js'], { base: './src' })
     .pipe(babel({
-      "stage": 1,
-      "env": {
-        "development": {
-          "plugins": ["react-transform"],
-          "extra": {
+      stage: 0,
+      env: {
+        development: {
+          plugins: ['react-transform'],
+          extra: {
             "react-transform": {
-              "transforms": [{
-                "transform": "react-transform-hmr",
-                "imports": ["react"],
-                "locals": ["module"]
+              transforms: [{
+                transform: 'react-transform-hmr',
+                imports: ['react'],
+                locals: ['module']
               }]
             }
           }
