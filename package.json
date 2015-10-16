@@ -4,9 +4,8 @@
   "description": "Get some lunch",
   "main": "index.js",
   "scripts": {
-    "start": "gulp start",
-    "start-prod": "gulp make && node out/server/index.js",
-    "test": "gulp run-tests"
+    "start": "SET NODE_ENV=production gulp make && node out/server/index.js",
+    "test": "gulp run-testss"
   },
   "author": "Dean Merchant <deanmerchant@gmail.com>",
   "repository": {

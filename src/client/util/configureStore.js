@@ -10,18 +10,15 @@ export default function configureStore(routes, initialState) {
   if (__DEVELOPMENT__) {
     const { devTools } = require('redux-devtools');
     createStoreFinal = compose(
-      applyMiddleware(
-        logger,
-        serverEvent,
-        actionFormatValidator),
-      reduxReactRouter({
-        routes,
-        createHistory,
-      }),
+      applyMiddleware(logger, serverEvent, actionFormatValidator),
+      reduxReactRouter({ routes, createHistory }),
       devTools()
     )(createStore);
   } else {
-    createStoreFinal = applyMiddleware(serverEvent, actionFormatValidator)(createStore);
+    createStoreFinal = compose(
+      applyMiddleware(serverEvent, actionFormatValidator),
+      reduxReactRouter({ routes, createHistory })
+    )(createStore);
   }
 
   const store = createStoreFinal(rootReducer, initialState);

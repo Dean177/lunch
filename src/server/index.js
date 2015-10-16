@@ -11,16 +11,21 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import { OptionChoices, AddLunchOption, UserLunchChoice } from '../shared/constants/actionTypes';
 import debug from 'debug';
-const dBug = debug('lunch:server');
 
+const dBug = debug('lunch:server');
 const app = express();
 const http = new Server(app);
 const io = socketIo(http);
-const compiler = webpack(webpackConfig);
 
 app.use(favicon(`${__dirname}/favicon.ico`));
-app.use(webpackHotMiddleware(compiler));
-app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
+
+if (process.env.NODE_ENV === JSON.stringify('production')) {
+  app.use('/assets', express.static('../client'));
+} else {
+  const compiler = webpack(webpackConfig);
+  app.use(webpackHotMiddleware(compiler));
+  app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
+}
 
 app.get('*', (req, res) => {
   res.sendFile('/index.html', { root: __dirname });
