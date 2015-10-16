@@ -9,11 +9,11 @@ import nodemon from 'gulp-nodemon';
 import webpack from 'webpack';
 import webpackProdConfig from './webpack.config.prod';
 
-gulp.task('make', sequence(['clean', 'static-assets', 'make-server', 'prod-webpack']));
+gulp.task('make', sequence('clean', ['make-server', 'static-assets', 'prod-webpack']));
 
-gulp.task('start', sequence(['static-assets', 'make-server', 'watch', 'app-server']));
+gulp.task('start', sequence('static-assets', 'make-server', 'watch', 'app-server'));
 
-gulp.task('run-tests', sequence(['make-server', 'test', 'lint']));
+gulp.task('run-tests', sequence('make-server', 'test', 'lint'));
 
 gulp.task('test', () => {
   return gulp.src(['out/tests/**/*.spec.js'], { read: false }).pipe(mocha());
@@ -37,7 +37,7 @@ gulp.task('watch', () => {
 });
 
 gulp.task('make-server', () => {
-  gulp.src(['src/server/**/*.js', 'src/shared/**/*.js', 'src/tests/**/*.js'], { base: './src' })
+  return gulp.src(['src/server/**/*.js', 'src/shared/**/*.js', 'src/tests/**/*.js'], { base: './src' })
     .pipe(babel({
       "stage": 1,
       "env": {
@@ -59,14 +59,14 @@ gulp.task('make-server', () => {
 });
 
 gulp.task('static-assets', () => {
-  gulp.src(['src/server/index.html', 'src/server/favicon.ico'])
+  return gulp.src(['src/server/index.html', 'src/server/favicon.ico'])
     .pipe(gulp.dest('out/server'));
 });
 
 gulp.task('lint', () => {
-  gulp.src(['src/**/*.js', 'test/**/*.js'])
+  return gulp.src(['src/**/*.js', 'test/**/*.js'])
     .pipe(eslint())
-    .pipe(eslint.format())
+    .pipe(eslint.format());
 });
 
 gulp.task('prod-webpack', (done) => {

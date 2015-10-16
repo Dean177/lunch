@@ -1,9 +1,7 @@
 import './ChooseLunch.scss';
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as LunchActionCreators from './actionCreators/lunchActionCreators';
-import LunchPicker from './LunchPicker/LunchPicker'
+import LunchPicker from './LunchPicker/LunchPicker';
 
 @connect(appState => {
   const {
@@ -21,7 +19,7 @@ import LunchPicker from './LunchPicker/LunchPicker'
     selectedOptionId,
     lunchOptions,
     peopleChoices,
-  }
+  };
 })
 class ChooseLunch extends Component {
   render() {

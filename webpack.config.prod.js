@@ -10,9 +10,10 @@ const config  = {
     publicPath: '/assets/'
   },
   plugins: [
-    new optimize.OccurenceOrderPlugin(),
-    new DefinePlugin({ 'process.env': { 'NODE_ENV': 'production' } }),
-    new optimize.UglifyJsPlugin({ compressor: { warnings: false } })
+    new DefinePlugin({
+      __DEVELOPMENT__: false,
+      'process.env': { 'NODE_ENV': JSON.stringify('production') }
+    }),
   ],
   module: {
     loaders: [

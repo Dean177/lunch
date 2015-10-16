@@ -33,7 +33,7 @@ const lunchReducer = createStateMergeReducer(initialState, {
     return { peopleChoices: newPeopleChoices };
   },
 
-  [AddLunchOption](state, { payload, meta }) {
+  [AddLunchOption](state, { payload }) {
     let lunchOptions;
     const option = find(state.lunchOptions, ({ name }) => name === payload.name);
     if (option) {
@@ -58,7 +58,7 @@ const lunchReducer = createStateMergeReducer(initialState, {
       lunchOptions,
       optionName: '',
       enteringNewOption: false,
-      peopleChoices: newPeopleChoices
+      peopleChoices: newPeopleChoices,
     };
   },
 

@@ -1,29 +1,34 @@
 import { createStore, compose, applyMiddleware } from 'redux';
-import { devTools } from 'redux-devtools';
 import { reduxReactRouter } from 'redux-router';
 import createHistory from 'history/lib/createBrowserHistory';
 import rootReducer from '../reducers/index';
 import { logger, serverEvent, actionFormatValidator } from './middleware';
 
 export default function configureStore(routes, initialState) {
-  const createStoreFinal = compose(
-    applyMiddleware(
-      logger,
-      serverEvent,
-      actionFormatValidator),
-    reduxReactRouter({
-      routes,
-      createHistory,
-    })
-    //,devTools()
-  )(createStore);
+  let createStoreFinal;
+
+  if (__DEVELOPMENT__) {
+    const { devTools } = require('redux-devtools');
+    createStoreFinal = compose(
+      applyMiddleware(
+        logger,
+        serverEvent,
+        actionFormatValidator),
+      reduxReactRouter({
+        routes,
+        createHistory,
+      }),
+      devTools()
+    )(createStore);
+  } else {
+    createStoreFinal = applyMiddleware(serverEvent, actionFormatValidator)(createStore);
+  }
 
   const store = createStoreFinal(rootReducer, initialState);
 
-  if (module.hot) {
-    module.hot.accept('../reducers', () => {
-      const nextRootReducer = require('../reducers/index');
-      store.replaceReducer(nextRootReducer);
+  if (__DEVELOPMENT__ && module.hot) {
+    module.hot.accept('../reducers/index', () => {
+      store.replaceReducer(require('../reducers/index'));
     });
   }
 

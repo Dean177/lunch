@@ -14,7 +14,7 @@ describe('upsert', () => {
 
     expect(replacedArray).to.deep.equal([ant, bear, donkey]);
   });
-  
+
   it('Should add the value to the array when no match is found', () => {
     const animals = [ant, camel, donkey];
     const replacedArray = upsert(animals, (animal) => animal.id === echinda.id, echinda);

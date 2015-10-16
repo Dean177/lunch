@@ -1,8 +1,8 @@
-import { extend } from 'underscore';
+/* eslint no-console:0, no-unused-vars: 0 */
 import send from './socket';
 
 export const logger = store => next => action => {
-  let result = next(action);
+  const result = next(action);
   console.log('action', action, 'next state', store.getState());
   return result;
 };

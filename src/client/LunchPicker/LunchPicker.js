@@ -4,7 +4,7 @@ import Measure from 'react-measure';
 import { Motion, spring } from 'react-motion';
 import { bindActionCreators } from 'redux';
 import * as LunchActionCreators from '../actionCreators/lunchActionCreators';
-import OptionAdder from './OptionAdder'
+import OptionAdder from './OptionAdder';
 import { difference } from 'underscore';
 
 class LunchPicker extends Component {
@@ -31,7 +31,7 @@ class LunchPicker extends Component {
 
   getChooserCount(peopleChoices, personId, userChoiceId) {
     return peopleChoices
-      .filter(({ person, choiceId }) => (choiceId === userChoiceId))
+      .filter(({ choiceId }) => (choiceId === userChoiceId))
       .map(({ person }) => (person.id))
       .indexOf(personId);
   }
@@ -40,7 +40,7 @@ class LunchPicker extends Component {
     return lunchOptions
       .map(({ id }) => (id))
       .indexOf(choiceId);
-  };
+  }
 
   render() {
     const {
@@ -54,17 +54,14 @@ class LunchPicker extends Component {
 
     const {
       buttonWidth,
-      columnDimensions: {
-        width,
-        height,
-      },
+      columnDimensions,
     } = this.state;
 
     const choices = peopleChoices
       .filter(({choiceId}) => !!choiceId)
       .map(({ person, choiceId }) => {
-        const xPos = width * this.getChoiceIndex(lunchOptions, choiceId);
-        const yPos = (height + 15) * this.getChooserCount(peopleChoices, person.id, choiceId);
+        const xPos = columnDimensions.width * this.getChoiceIndex(lunchOptions, choiceId);
+        const yPos = (columnDimensions.height + 15) * this.getChooserCount(peopleChoices, person.id, choiceId);
 
         return {
           id: person.id,
@@ -72,7 +69,7 @@ class LunchPicker extends Component {
           xPos,
           yPos,
         };
-    });
+      });
 
     const previousDaysLunchOptions = [...lunchOptions, { id: '23', name: 'zzzzz'}];
     const autoSuggestOptions = difference(previousDaysLunchOptions, lunchOptions);
@@ -85,9 +82,9 @@ class LunchPicker extends Component {
               <button className="btn btn-primary" type="button">{ name }</button>
             </div>
           )}
-          <Measure whitelist={['width', 'height']} onChange={ (columnDimensions) =>  this.setState({ columnDimensions }) }>
+          <Measure whitelist={['width', 'height']} onChange={ (dimensions) => this.setState({ columnDimensions: dimensions }) }>
             <div className="OptionColumn">
-              <Measure whitelist={['width']} onChange={ ({ width }) =>  this.setState({ buttonWidth: width }) }>
+              <Measure whitelist={['width']} onChange={ ({ width }) => this.setState({ buttonWidth: width }) }>
                 <OptionAdder
                   user={user}
                   lunchOptions={autoSuggestOptions}
@@ -103,10 +100,10 @@ class LunchPicker extends Component {
             <Motion key={id} style={{id, name, xPos: spring(xPos), yPos: spring(yPos)}}>
               {(interpolatedChoice) =>
                 <div className="PersonChoice" style={{
-                    width: buttonWidth,
-                    transform: `translate3d(${interpolatedChoice.xPos}px, ${interpolatedChoice.yPos}px, 0)`,
-                    zIndex: interpolatedChoice.yPos,
-                  }}>
+                  width: buttonWidth,
+                  transform: `translate3d(${interpolatedChoice.xPos}px, ${interpolatedChoice.yPos}px, 0)`,
+                  zIndex: interpolatedChoice.yPos,
+                }}>
                   {name}
                 </div>
               }

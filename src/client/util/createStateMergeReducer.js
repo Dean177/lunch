@@ -14,16 +14,15 @@ export default function createMergeReducer(initialState, handlers) {
 export function createLocalStorageMergeReducer(storageKey, initialState, handlers) {
   return function createReducer(localStorage) {
     const savedState = localStorage.getItem(storageKey);
-    const reducerInitialState =  (typeof savedState === 'object') && savedState != null && savedState != undefined ? JSON.parse(savedState) : initialState;
+    const reducerInitialState = (typeof savedState === 'object') && savedState !== null && savedState !== undefined ? JSON.parse(savedState) : initialState;
 
     return function reducer(state = reducerInitialState, action) {
+      let newState = state;
       if (handlers.hasOwnProperty(action.type)) {
-        const newState = Object.assign({}, state, handlers[action.type](state, action));
+        newState = Object.assign({}, state, handlers[action.type](state, action));
         localStorage.setItem(storageKey, JSON.stringify(newState));
-        return newState;
-      } else {
-        return state;
       }
+      return newState;
     };
-  }
+  };
 }

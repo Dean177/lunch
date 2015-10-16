@@ -18,7 +18,7 @@ export function chooseLunchOption(person, choiceId) {
     type: UserLunchChoice,
     payload: {
       person,
-      choiceId
+      choiceId,
     },
     meta: { isServerAction: true },
   };

@@ -10,6 +10,10 @@ class OptionAutosuggest extends Component {
     onBlur: PropTypes.func,
   };
 
+  componentDidMount() {
+    this.refs.optionText.refs.input.focus();
+  }
+
   theme = {
     root: 'react-autosuggest',
     suggestions: 'react-autosuggest__suggestions',
@@ -19,11 +23,6 @@ class OptionAutosuggest extends Component {
     sectionName: 'react-autosuggest__suggestions-section-name',
     sectionSuggestions: 'react-autosuggest__suggestions-section-suggestions',
   };
-
-  componentDidMount() {
-    this.refs.optionText.refs.input.focus();
-  }
-
 
   render() {
     const inputAttributes = {
@@ -36,7 +35,7 @@ class OptionAutosuggest extends Component {
 
     return (
       <Autosuggest suggestions={ this.props.getSuggestions }
-                   suggestionRenderer={(lunchOption, input) => lunchOption.name}
+                   suggestionRenderer={(lunchOption) => lunchOption.name}
                    suggestionValue={(lunchOption) => lunchOption.name}
                    ref="optionText"
                    value={ this.props.value }

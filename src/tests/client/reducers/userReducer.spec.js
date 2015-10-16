@@ -17,5 +17,5 @@ describe('createUserReducer', () => {
 
     expect(newState.name).to.equal('Alpaca');
     expect(newState.id).to.equal(initialState.id);
-  })
+  });
 });

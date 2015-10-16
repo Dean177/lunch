@@ -1,9 +1,9 @@
 const localStorage = {
-  setItem: function (key, val) {
+  setItem(key, val) {
     this[key] = val + '';
   },
-  getItem: function (key) {
-   return this[key];
+  getItem(key) {
+    return this[key];
   },
 };
 
