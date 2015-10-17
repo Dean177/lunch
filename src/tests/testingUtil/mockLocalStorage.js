@@ -1,4 +1,4 @@
-const MockLocalStorage = () => {
+const mockLocalStorage = () => {
   return {
     setItem(key, val) {
       this[key] = val + '';
@@ -9,4 +9,4 @@ const MockLocalStorage = () => {
   };
 };
 
-export default MockLocalStorage;
+export default mockLocalStorage;

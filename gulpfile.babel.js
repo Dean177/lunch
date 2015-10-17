@@ -35,7 +35,7 @@ gulp.task('dev-server', () => {
     env: { 'DEBUG': 'lunch:*' },
     script: 'out/server/index.js',
     ext: 'js',
-    verbose: true,
+    verbose: false,
     watch: ['out/server/**/*', 'out/shared/**/*'],
     ignore: [
       'out/client/**/*',
@@ -45,7 +45,7 @@ gulp.task('dev-server', () => {
 });
 
 gulp.task('watch', () => {
-  gulp.watch(['src/**/*.js'], ['build', 'lint', 'test']);
+  gulp.watch(['src/**/*.js'], ['run-tests']);
 });
 
 gulp.task('build', () => {
