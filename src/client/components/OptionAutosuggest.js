@@ -7,6 +7,7 @@ class OptionAutosuggest extends Component {
     value: PropTypes.string.isRequired,
     getSuggestions: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
+    inputClass: PropTypes.string,
     onBlur: PropTypes.func,
   };
 
@@ -26,7 +27,7 @@ class OptionAutosuggest extends Component {
 
   render() {
     const inputAttributes = {
-      className: 'autoSuggest borderless',
+      className: this.props.inputClass,
       onBlur: this.props.onBlur,
       onChange: this.props.onChange,
       placeholder: this.props.placeholder || '',

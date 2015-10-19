@@ -1,4 +1,7 @@
+@import '../colours';
+
 .LunchPicker {
+  margin-top: 2em;
   width: 100%;
 }
 
@@ -23,8 +26,8 @@
 }
 
 .PersonChoice {
+  color: $black;
   padding: 0.5em;
   position: absolute;
-  border: 1px solid black;
-  border-radius: 4px;
+  border: 1px solid $black;
 }

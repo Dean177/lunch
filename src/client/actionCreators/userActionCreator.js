@@ -7,5 +7,6 @@ export function changeName(id, name) {
       id,
       name,
     },
+    meta: { isServerAction: true },
   };
 }

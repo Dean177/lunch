@@ -46,7 +46,11 @@ class Landing extends Component {
 
   render() {
     const autoSuggestInput = (
-      <OptionAutosuggest value={ this.props.optionName } placeholder="Food..." onChange={this.onChange} getSuggestions={this.getSuggestions} />
+      <OptionAutosuggest value={ this.props.optionName }
+                         placeholder="Food..."
+                         onChange={this.onChange}
+                         getSuggestions={this.getSuggestions}
+                         inputClass="borderless"/>
     );
 
     return (

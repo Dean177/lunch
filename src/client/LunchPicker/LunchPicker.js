@@ -75,7 +75,7 @@ class LunchPicker extends Component {
     const autoSuggestOptions = difference(previousDaysLunchOptions, lunchOptions);
 
     return (
-      <div className="LunchPicker">
+      <div className="LunchPicker container">
         <div className="OptionColumns">
           {lunchOptions.map(({id, name}) =>
             <div className="OptionColumn" key={id} onClick={this.onOptionSelected.bind(this, id)}>

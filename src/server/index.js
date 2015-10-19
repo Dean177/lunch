@@ -9,7 +9,7 @@ import webpack from 'webpack';
 import webpackConfig from '../../webpack.config.dev.js';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import { OptionChoices, AddLunchOption, UserLunchChoice } from '../shared/constants/actionTypes';
+import { OptionChoices, AddLunchOption, UserLunchChoice, ChangeName } from '../shared/constants/actionTypes';
 import debug from 'debug';
 
 const dBug = debug('lunch:server');
@@ -78,6 +78,13 @@ io.on('connection', (socket) => {
     case UserLunchChoice:
       const { person, choiceId } = payload;
       peopleChoices = upsert(peopleChoices, (personChoice) => (personChoice.person.id === person.id), { person, choiceId });
+      socket.broadcast.send({ type: OptionChoices, payload: { peopleChoices, lunchOptions } });
+      break;
+
+    case ChangeName:
+      const { id, name } = payload;
+      const personChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === id));
+      peopleChoices = upsert(peopleChoices, (pChoice) => (pChoice.person.id === id), { person: { id, name }, choiceId: personChoice.choiceId });
       socket.broadcast.send({ type: OptionChoices, payload: { peopleChoices, lunchOptions } });
       break;
 

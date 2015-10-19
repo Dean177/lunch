@@ -1,5 +1,6 @@
 import path from 'path';
 import webpack, { optimize, DefinePlugin} from 'webpack';
+import babelConfig from './babelConfig.json';
 
 const config  = {
   devtool: 'source-map',
@@ -19,7 +20,8 @@ const config  = {
     loaders: [
       {
         test: /\.js$/,
-        loaders: ['babel?stage=0'],
+        loader: 'babel',
+        query: babelConfig,
         include: [
           path.join(__dirname, 'src', 'client'),
           path.join(__dirname, 'src', 'shared')

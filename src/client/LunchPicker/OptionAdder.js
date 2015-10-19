@@ -1,3 +1,4 @@
+import './OptionAdder.scss';
 import OptionAutosuggest from '../components/OptionAutosuggest';
 import React, { Component, PropTypes } from 'react';
 
@@ -31,12 +32,16 @@ class OptionAdder extends Component {
   render() {
     let childElement;
     if (!this.props.isAdding) {
-      childElement = (<button className="btn btn-primary" type="button" onClick={this.props.toggleNewOption}>+</button>);
+      childElement = (<button className="btn btn-primary" type="button" onClick={this.props.toggleNewOption}><strong>+</strong></button>);
     } else {
       childElement = (
         <form onSubmit={this.onNewOption}>
           <div className="input-group">
-            <OptionAutosuggest value={this.props.optionName} onChange={this.props.enterOptionName} getSuggestions={this.getSuggestions} onBlur={this.props.toggleNewOption}/>
+            <OptionAutosuggest value={this.props.optionName}
+                               onChange={this.props.enterOptionName}
+                               getSuggestions={this.getSuggestions}
+                               onBlur={() => {}}
+                               inputClass="form-control"/>
             <span className="input-group-btn">
               <button className="btn btn-primary" type="submit" onClick={this.onNewOption}>Go!</button>
             </span>

@@ -1,4 +1,3 @@
-import './ChooseLunch.scss';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import LunchPicker from './LunchPicker/LunchPicker';
@@ -24,8 +23,7 @@ import LunchPicker from './LunchPicker/LunchPicker';
 class ChooseLunch extends Component {
   render() {
     return (
-      <div className="ChooseLunch container">
-        <h2>Lunchtime</h2>
+      <div className="ChooseLunch">
         <LunchPicker {...this.props}/>
       </div>
     );

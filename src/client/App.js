@@ -1,3 +1,5 @@
+import 'bootstrap/scss/bootstrap-flex.scss';
+import 'font-awesome/scss/font-awesome.scss';
 import './App.scss';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
@@ -6,6 +8,7 @@ import { ReduxRouter } from 'redux-router';
 import configureStore from './util/configureStore';
 import Landing from './Landing/Landing';
 import ChooseLunch from './ChooseLunch';
+import UserConfig from './UserConfig/UserConfig';
 import RouteContainer from './RouteContainer';
 import { socket } from './util/socket';
 
@@ -14,6 +17,7 @@ const routes = (
   <Route path="" component={RouteContainer}>
     <Route path="/" component={Landing} />
     <Route path="/lunch" component={ChooseLunch} />
+    <Route path="/user" component={UserConfig} />
   </Route>
 );
 

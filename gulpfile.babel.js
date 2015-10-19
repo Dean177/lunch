@@ -7,9 +7,12 @@ import mocha from 'gulp-mocha';
 import sequence from 'gulp-sequence';
 import nodemon from 'gulp-nodemon';
 import webpack from 'webpack';
+import babelConfig from './babelConfig.json';
 import webpackProdConfig from './webpack.config.prod';
 
 gulp.task('start-production', sequence('make', 'production-server'));
+
+gulp.task('start', sequence('static-assets', 'build', ['watch-client', 'watch-server'], 'dev-server'));
 
 gulp.task('make', sequence('clean', ['build', 'static-assets', 'prod-webpack']));
 
@@ -22,51 +25,58 @@ gulp.task('production-server', () => {
   });
 });
 
-gulp.task('start', sequence('static-assets', 'build', 'watch', 'dev-server'));
-
-gulp.task('run-tests', sequence('build', 'test', 'lint'));
-
-gulp.task('test', () => {
-  return gulp.src(['out/tests/**/*.spec.js'], { read: false }).pipe(mocha());
-});
-
 gulp.task('dev-server', () => {
   nodemon({
     env: { 'DEBUG': 'lunch:*' },
+    delay: 10,
     script: 'out/server/index.js',
     ext: 'js',
     verbose: false,
     watch: ['out/server/**/*', 'out/shared/**/*'],
     ignore: [
       'out/client/**/*',
-      'src/'
+      'src/**/*'
     ],
   });
 });
 
-gulp.task('watch', () => {
-  gulp.watch(['src/**/*.js'], ['run-tests']);
+gulp.task('run-tests', sequence('build', 'test', 'lint'));
+
+gulp.task('run-tests-client', (done) => {
+  return sequence('build-client', 'test-min', 'lint')(done);
 });
 
-gulp.task('build', () => {
-  return gulp.src(['src/**/*.js'], { base: './src' })
-    .pipe(babel({
-      stage: 0,
-      env: {
-        development: {
-          plugins: ['react-transform'],
-          extra: {
-            "react-transform": {
-              transforms: [{
-                transform: 'react-transform-hmr',
-                imports: ['react'],
-                locals: ['module']
-              }]
-            }
-          }
-        }
-      }
-    }))
+gulp.task('run-tests-server', (done) => {
+  return sequence('build-server', 'test-min', 'lint')(done);
+});
+
+gulp.task('test', () => {
+  return gulp.src(['out/tests/**/*.spec.js'], { read: false }).pipe(mocha());
+});
+
+gulp.task('test-min', () => {
+  return gulp.src(['out/tests/**/*.spec.js'], { read: false }).pipe(mocha({ reporter: 'min' }));
+});
+
+gulp.task('watch-client', () => {
+  gulp.watch(['src/client/**/*.js'], ['run-tests-client']);
+});
+
+gulp.task('watch-server', () => {
+  gulp.watch(['src/server/**/*.js', 'src/shared/**/*.js'], ['run-tests-server']);
+});
+
+gulp.task('build', ['build-client', 'build-server']);
+
+gulp.task('build-client', () => {
+  return gulp.src(['src/client/**/*.js'], { base: './src' })
+    .pipe(babel(babelConfig))
+    .pipe(gulp.dest('out'));
+});
+
+gulp.task('build-server', () => {
+  return gulp.src(['src/server/**/*.js', 'src/shared/**/*.js'], { base: './src' })
+    .pipe(babel(babelConfig))
     .pipe(gulp.dest('out'));
 });
 
@@ -76,7 +86,7 @@ gulp.task('static-assets', () => {
 });
 
 gulp.task('lint', () => {
-  return gulp.src(['src/**/*.js', 'test/**/*.js'])
+  return gulp.src(['src/**/*.js'])
     .pipe(eslint())
     .pipe(eslint.format());
 });
