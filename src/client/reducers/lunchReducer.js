@@ -51,7 +51,7 @@ const lunchReducer = createStateMergeReducer(initialState, {
     const newPeopleChoices = upsert(
       state.peopleChoices,
       (personChoice) => (personChoice.person.id === payload.person.id),
-      { person: payload.person, choiceId: payload.id }
+      { person: payload.person, choiceId: option ? option.id : payload.id }
     );
 
     return {
