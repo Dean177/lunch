@@ -33,21 +33,17 @@ class OptionAdder extends Component {
     let childElement;
     if (!this.props.isAdding) {
       childElement = (
-        <button className="btn btn-primary" type="button" onClick={this.props.toggleNewOption}><strong>+</strong></button>
+        <button className="btn btn-primary add-button" type="button" onClick={this.props.toggleNewOption}>+</button>
       );
     } else {
       childElement = (
-        <form onSubmit={this.onNewOption}>
-          <div className="input-group">
+        <form className="AddOptionForm" onSubmit={this.onNewOption}>
             <OptionAutosuggest value={this.props.optionName}
                                onChange={this.props.enterOptionName}
                                getSuggestions={this.getSuggestions}
-                               onBlur={() => {}}
-                               inputClass="form-control"/>
-            <span className="input-group-btn">
-              <button className="btn btn-primary" type="submit" onClick={this.onNewOption}>Go!</button>
-            </span>
-          </div>
+                               onBlur={()=>{}}
+                               inputClass="option-input"/>
+            <button className="go-button" type="submit" onClick={this.onNewOption}>Go!</button>
       </form>
       );
     }
