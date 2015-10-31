@@ -32,7 +32,9 @@ class OptionAdder extends Component {
   render() {
     let childElement;
     if (!this.props.isAdding) {
-      childElement = (<button className="btn btn-primary" type="button" onClick={this.props.toggleNewOption}><strong>+</strong></button>);
+      childElement = (
+        <button className="btn btn-primary" type="button" onClick={this.props.toggleNewOption}><strong>+</strong></button>
+      );
     } else {
       childElement = (
         <form onSubmit={this.onNewOption}>

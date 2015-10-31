@@ -1,8 +1,8 @@
 @import 'colours';
 
 @font-face {
-  font-family: 'Circle';
-  src: url('./CicleSemi.ttf') format('truetype');
+  font-family: 'Signika';
+  src: url('./Signika-Regular.ttf') format('truetype');
 }
 
 .App {
@@ -11,15 +11,16 @@
 }
 
 * {
-  font-family: 'Circle', sans-serif;
+  font-family: 'Signika', sans-serif;
+  color: $black;
   padding: 0;
   margin: 0;
   -webkit-user-select: none;
 }
 
 .btn {
-  border-radius: 0;
-  box-shadow: 0px 0px 20px 0px rgba(64,64,64,0.4);
+  border-radius: 3px;
+  box-shadow: 0px 0px 5px 0px rgba(64,64,64,0.4);
 
   &.btn-primary {
     border: none;

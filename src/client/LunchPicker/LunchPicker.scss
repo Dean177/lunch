@@ -1,33 +1,17 @@
 @import '../colours';
 
 .LunchPicker {
-  margin-top: 2em;
-  width: 100%;
-}
-
-.OptionColumns {
+  padding-top: 3em;
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  margin-bottom: 1em;
 
-  .OptionColumn {
-    flex-basis: 12em;
+  .LunchOptions {
+    display: flex;
     padding-right: 1em;
-    button {
-      width: 100%;
-    }
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
   }
-}
 
-.PeopleChoices {
-  width: 100%;
-}
-
-.PersonChoice {
-  color: $black;
-  padding: 0.5em;
-  position: absolute;
-  border: 1px solid $black;
+  .PeopleChoices {
+  }
 }

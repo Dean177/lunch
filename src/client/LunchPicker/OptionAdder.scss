@@ -1,7 +1,12 @@
 .OptionAdder {
-  box-shadow: 0px 0px 20px 0px rgba(64,64,64,0.4);
+  align-self: flex-end;
+  height: 4em;
   .input-group-btn:last-child > .btn {
     box-shadow: none;
     margin-left: 0;
+  }
+
+  form {
+    height: 100%;
   }
 }

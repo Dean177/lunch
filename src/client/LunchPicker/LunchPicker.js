@@ -5,6 +5,8 @@ import { Motion, spring } from 'react-motion';
 import { bindActionCreators } from 'redux';
 import * as LunchActionCreators from '../actionCreators/lunchActionCreators';
 import OptionAdder from './OptionAdder';
+import LunchOption from './LunchOption';
+import PersonSquare from './PersonSquare';
 import { difference } from 'underscore';
 
 class LunchPicker extends Component {
@@ -18,11 +20,7 @@ class LunchPicker extends Component {
   };
 
   state = {
-    buttonWidth: 0,
-    columnDimensions: {
-      width: 0,
-      height: 0,
-    },
+    squareDimension: 0,
   };
 
   onOptionSelected(choiceId) {
@@ -52,16 +50,13 @@ class LunchPicker extends Component {
       user,
     } = this.props;
 
-    const {
-      buttonWidth,
-      columnDimensions,
-    } = this.state;
+    const { squareDimension } = this.state;
 
     const choices = peopleChoices
-      .filter(({choiceId}) => !!choiceId)
+      .filter(({ choiceId }) => !!choiceId)
       .map(({ person, choiceId }) => {
-        const xPos = columnDimensions.width * this.getChoiceIndex(lunchOptions, choiceId);
-        const yPos = (columnDimensions.height + 15) * this.getChooserCount(peopleChoices, person.id, choiceId);
+        const xPos = squareDimension * this.getChooserCount(peopleChoices, person.id, choiceId);
+        const yPos = squareDimension * this.getChoiceIndex(lunchOptions, choiceId);
 
         return {
           id: person.id,
@@ -76,22 +71,21 @@ class LunchPicker extends Component {
 
     return (
       <div className="LunchPicker container">
-        <div className="OptionColumns">
+        <div className="LunchOptions">
           {lunchOptions.map(({id, name}) =>
-            <div className="OptionColumn" key={id} onClick={this.onOptionSelected.bind(this, id)}>
-              <button className="btn btn-primary" type="button">{ name }</button>
-            </div>
+            <LunchOption optionName={name}
+                         choiceCount={18}
+                         key={id}
+                         onChosen={this.onOptionSelected.bind(this, id)} />
           )}
-          <Measure whitelist={['width', 'height']} onChange={ (dimensions) => this.setState({ columnDimensions: dimensions }) }>
-            <div className="OptionColumn">
-              <Measure whitelist={['width']} onChange={ ({ width }) => this.setState({ buttonWidth: width }) }>
-                <OptionAdder
-                  user={user}
-                  lunchOptions={autoSuggestOptions}
-                  isAdding={enteringNewOption}
-                  optionName={optionName}
-                  {...bindActionCreators(LunchActionCreators, dispatch)} />
-              </Measure>
+          <Measure whitelist={['height']} onChange={ (dimensions) => this.setState({ squareDimension: dimensions.height }) }>
+            <div className="OptionRow">
+              <OptionAdder
+                user={user}
+                lunchOptions={autoSuggestOptions}
+                isAdding={enteringNewOption}
+                optionName={optionName}
+                {...bindActionCreators(LunchActionCreators, dispatch)} />
             </div>
           </Measure>
         </div>
@@ -99,13 +93,10 @@ class LunchPicker extends Component {
           {choices.map(({ id, name, xPos, yPos }) =>
             <Motion key={id} style={{id, name, xPos: spring(xPos), yPos: spring(yPos)}}>
               {(interpolatedChoice) =>
-                <div className="PersonChoice" style={{
-                  width: buttonWidth,
+                <PersonSquare name={name} style={{
                   transform: `translate3d(${interpolatedChoice.xPos}px, ${interpolatedChoice.yPos}px, 0)`,
                   zIndex: interpolatedChoice.yPos,
-                }}>
-                  {name}
-                </div>
+                }} />
               }
             </Motion>
           )}

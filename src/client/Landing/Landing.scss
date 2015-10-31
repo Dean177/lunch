@@ -1,10 +1,12 @@
 @import './AutosuggestTheme';
+@import '../colours';
 
 .Landing {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
+  font-size: 1.2em;
 
   h1, button {
     display: inline-block;
@@ -15,6 +17,7 @@
   }
 
   .borderless {
+    background-color: $grey;
     max-width: 10em;
     text-align: center;
     border: none;
