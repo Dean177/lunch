@@ -59,23 +59,31 @@ gulp.task('test-min', () => {
 });
 
 gulp.task('watch-client', () => {
-  gulp.watch(['src/client/**/*.js'], ['run-tests-client']);
+  gulp.watch(['src/client/**/*.js', 'src/tests/client/**/*.js'], ['run-tests-client']);
 });
 
 gulp.task('watch-server', () => {
-  gulp.watch(['src/server/**/*.js', 'src/shared/**/*.js'], ['run-tests-server']);
+  gulp.watch([
+    'src/server/**/*.js',
+    'src/shared/**/*.js',
+    'src/tests/**/*.js',
+  ], ['run-tests-server']);
 });
 
 gulp.task('build', ['build-client', 'build-server']);
 
 gulp.task('build-client', () => {
-  return gulp.src(['src/client/**/*.js'], { base: './src' })
+  return gulp.src(['src/client/**/*.js', 'src/tests/**/*.js'], { base: './src' })
     .pipe(babel(babelConfig))
     .pipe(gulp.dest('out'));
 });
 
 gulp.task('build-server', () => {
-  return gulp.src(['src/server/**/*.js', 'src/shared/**/*.js'], { base: './src' })
+  return gulp.src([
+      'src/server/**/*.js',
+      'src/shared/**/*.js',
+      'src/tests/**/*.js',
+  ], { base: './src' })
     .pipe(babel(babelConfig))
     .pipe(gulp.dest('out'));
 });
