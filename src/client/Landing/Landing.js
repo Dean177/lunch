@@ -34,7 +34,7 @@ class Landing extends Component {
       dispatch(stateNav);
     };
 
-    this.onChange = compose(dispatch, enterOptionName);
+    this.onNameChange = compose(dispatch, enterOptionName);
 
     this.getSuggestions = (input, callback) => {
       const regex = new RegExp(`^${input}`, 'i');
@@ -48,7 +48,7 @@ class Landing extends Component {
     const autoSuggestInput = (
       <OptionAutosuggest value={ this.props.optionName }
                          placeholder="Food..."
-                         onChange={this.onChange}
+                         onChange={this.onNameChange}
                          getSuggestions={this.getSuggestions}
                          inputClass="borderless"/>
     );

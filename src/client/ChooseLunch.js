@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import LunchPicker from './LunchPicker/LunchPicker';
 
 @connect(appState => {
@@ -24,7 +25,10 @@ class ChooseLunch extends Component {
   render() {
     return (
       <div className="ChooseLunch">
-        <LunchPicker {...this.props}/>
+        <Link to="/user" className="main-nav-link">
+          <i className="fa fa-bars" />
+        </Link>
+        <LunchPicker {...this.props} />
       </div>
     );
   }

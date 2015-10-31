@@ -4,18 +4,22 @@
   font-family: 'Signika';
   src: url('./Signika-Regular.ttf') format('truetype');
 }
+* {
+  -webkit-user-select: none;
+}
 
 .App {
   background-color: $grey;
   height: 100%;
-}
-
-* {
   font-family: 'Signika', sans-serif;
   color: $black;
   padding: 0;
   margin: 0;
-  -webkit-user-select: none;
+}
+
+.main-nav-link {
+  padding: 0.5em;
+  font-size: 2em;
 }
 
 .btn {

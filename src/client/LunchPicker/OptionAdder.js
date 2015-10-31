@@ -41,7 +41,7 @@ class OptionAdder extends Component {
             <OptionAutosuggest value={this.props.optionName}
                                onChange={this.props.enterOptionName}
                                getSuggestions={this.getSuggestions}
-                               onBlur={()=>{}}
+                               onBlur={this.props.toggleNewOption}
                                inputClass="option-input"/>
             <button className="go-button" type="submit" onClick={this.onNewOption}>Go!</button>
       </form>

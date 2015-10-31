@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import * as LunchActionCreators from '../actionCreators/lunchActionCreators';
 import OptionAdder from './OptionAdder';
 import LunchOption from './LunchOption';
-import PersonSquare from './PersonSquare';
+import PersonSquare from './../components/PersonSquare/PersonSquare';
 import { difference } from 'underscore';
 
 class LunchPicker extends Component {
@@ -59,8 +59,7 @@ class LunchPicker extends Component {
         const yPos = squareDimension * this.getChoiceIndex(lunchOptions, choiceId);
 
         return {
-          id: person.id,
-          name: person.name,
+          person,
           xPos,
           yPos,
         };
@@ -79,21 +78,19 @@ class LunchPicker extends Component {
                          onChosen={this.onOptionSelected.bind(this, id)} />
           )}
           <Measure whitelist={['height']} onChange={ (dimensions) => this.setState({ squareDimension: dimensions.height }) }>
-            <div className="OptionRow">
-              <OptionAdder
-                user={user}
-                lunchOptions={autoSuggestOptions}
-                isAdding={enteringNewOption}
-                optionName={optionName}
-                {...bindActionCreators(LunchActionCreators, dispatch)} />
-            </div>
+            <OptionAdder
+              user={user}
+              lunchOptions={autoSuggestOptions}
+              isAdding={enteringNewOption}
+              optionName={optionName}
+              {...bindActionCreators(LunchActionCreators, dispatch)} />
           </Measure>
         </div>
         <div className="PeopleChoices">
-          {choices.map(({ id, name, xPos, yPos }) =>
-            <Motion key={id} style={{id, name, xPos: spring(xPos), yPos: spring(yPos)}}>
+          {choices.map(({ person, xPos, yPos }) =>
+            <Motion key={person.id} style={{person, xPos: spring(xPos), yPos: spring(yPos)}}>
               {(interpolatedChoice) =>
-                <PersonSquare name={name} style={{
+                <PersonSquare person={person} style={{
                   transform: `translate3d(${interpolatedChoice.xPos}px, ${interpolatedChoice.yPos}px, 0)`,
                   zIndex: interpolatedChoice.yPos,
                 }} />

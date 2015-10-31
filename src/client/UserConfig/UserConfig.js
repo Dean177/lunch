@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { changeName } from '../actionCreators/userActionCreator';
+import { changeName, changeImageUrl } from '../actionCreators/userActionCreator';
+import PersonSquare from '../components/PersonSquare/PersonSquare';
+import { Link } from 'react-router';
 
 
 @connect(appState => ({ user: appState.user }))
@@ -17,21 +19,40 @@ class LunchPicker extends Component {
       event.preventDefault();
     };
 
-    this.onChange = (event) => {
+    this.onNameChange = (event) => {
       this.props.dispatch(changeName(this.props.user.id, event.target.value));
+    };
+
+    this.onImageChange = (event) => {
+      this.props.dispatch(changeImageUrl(this.props.user.id, event.target.value));
     };
   }
 
   render() {
+    const { user } = this.props;
+
     return (
       <div className="UserConfig">
-        <h1>Settings</h1>
-        <form className="form-inline" onSubmit={this.onSubmit}>
-          <div className="form-group">
-            <label>Name</label>
-            <input onChange={this.onChange} value={this.props.user.name} type="text"/>
-          </div>
-        </form>
+        <Link to="/lunch" className="main-nav-link">
+          <i className="fa fa-square-o" />
+        </Link>
+        <div className="container">
+          <h1>Settings</h1>
+
+          <form onSubmit={this.onSubmit}>
+            <div className="form-group">
+              <label>Name</label>
+              <input onChange={this.onNameChange} value={user.name} type="text" className="form-control"></input>
+            </div>
+
+            <div className="form-group">
+              <label>Image Url</label>
+              <input onChange={this.onImageChange} value={user.imageUrl} type="text" className="form-control"></input>
+            </div>
+
+            <PersonSquare person={user} />
+          </form>
+        </div>
       </div>
     );
   }
