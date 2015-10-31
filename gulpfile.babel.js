@@ -4,11 +4,21 @@ import eslint from 'gulp-eslint';
 import gulp from 'gulp';
 import util, { PluginError } from 'gulp-util';
 import mocha from 'gulp-mocha';
+import sourcemaps from 'gulp-sourcemaps';
 import sequence from 'gulp-sequence';
 import nodemon from 'gulp-nodemon';
 import webpack from 'webpack';
+import path from 'path';
 import babelConfig from './babelConfig.json';
 import webpackProdConfig from './webpack.config.prod';
+
+const sourceMapConfig = {
+  debug: true,
+  includeContent: false,
+  sourceRoot: function(file) {
+    return path.join(path.relative(file.path, path.join(__dirname, '/src/')), '/src/');
+  }
+};
 
 gulp.task('start-production', sequence('make', 'production-server'));
 
@@ -70,11 +80,13 @@ gulp.task('watch-server', () => {
   ], ['run-tests-server']);
 });
 
-gulp.task('build', ['build-client', 'build-server']);
+gulp.task('build', ['static-assets', 'build-client', 'build-server']);
 
 gulp.task('build-client', () => {
   return gulp.src(['src/client/**/*.js', 'src/tests/**/*.js'], { base: './src' })
+    .pipe(sourcemaps.init())
     .pipe(babel(babelConfig))
+    .pipe(sourcemaps.write('.', sourceMapConfig))
     .pipe(gulp.dest('out'));
 });
 
@@ -84,7 +96,9 @@ gulp.task('build-server', () => {
       'src/shared/**/*.js',
       'src/tests/**/*.js',
   ], { base: './src' })
+    .pipe(sourcemaps.init())
     .pipe(babel(babelConfig))
+    .pipe(sourcemaps.write('.', sourceMapConfig))
     .pipe(gulp.dest('out'));
 });
 
