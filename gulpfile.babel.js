@@ -51,7 +51,7 @@ gulp.task('dev-server', () => {
 });
 
 gulp.task('run-tests', (done) => {
-  return sequence('build', 'lint', 'test')(done);
+  return sequence('clean', 'build', 'lint', 'test')(done);
 });
 
 gulp.task('run-tests-client', (done) => {
@@ -63,7 +63,7 @@ gulp.task('run-tests-server', (done) => {
 });
 
 gulp.task('test', () => {
-  return gulp.src(['out/tests/**/*.spec.js'], { read: false }).pipe(mocha()).once('end', process.exit);
+  return gulp.src(['out/tests/**/*.spec.js'], { read: false }).pipe(mocha());
 });
 
 gulp.task('test-min', () => {
