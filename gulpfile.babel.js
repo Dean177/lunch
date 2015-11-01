@@ -37,7 +37,10 @@ gulp.task('production-server', () => {
 
 gulp.task('dev-server', () => {
   nodemon({
-    env: { 'DEBUG': 'lunch:*' },
+    env: {
+      'NODE_ENV': JSON.stringify('development'),
+      'DEBUG': 'lunch:*',
+    },
     delay: 10,
     script: 'out/server/index.js',
     ext: 'js',

@@ -1,8 +1,7 @@
 import debug from 'debug';
 import { serverPort } from '../shared/constants/config';
-import { start } from './lunch-server';
+import lunchServer from './lunch-server';
 
-start(
-  serverPort,
+lunchServer.listen(serverPort,
   () => { debug('lunch:index')(`Lunch listening on port ${serverPort}`); }
 );
