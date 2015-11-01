@@ -50,7 +50,9 @@ gulp.task('dev-server', () => {
   });
 });
 
-gulp.task('run-tests', sequence('build', 'test', 'lint'));
+gulp.task('run-tests', (done) => {
+  return sequence('build', 'lint', 'test')(done);
+});
 
 gulp.task('run-tests-client', (done) => {
   return sequence('build-client', 'test-min', 'lint')(done);
@@ -61,7 +63,7 @@ gulp.task('run-tests-server', (done) => {
 });
 
 gulp.task('test', () => {
-  return gulp.src(['out/tests/**/*.spec.js'], { read: false }).pipe(mocha());
+  return gulp.src(['out/tests/**/*.spec.js'], { read: false }).pipe(mocha()).once('end', process.exit);
 });
 
 gulp.task('test-min', () => {
