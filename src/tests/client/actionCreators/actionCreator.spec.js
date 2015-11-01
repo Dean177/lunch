@@ -1,8 +1,8 @@
 /* eslint no-unused-expressions: 0 */
 import { expect } from 'chai';
 import { mapObject } from 'underscore';
-import * as userActionCreators from '../../../../src/client/actionCreators/userActionCreator';
-import * as lunchActionCreators from '../../../../src/client/actionCreators/lunchActionCreators';
+import * as userActionCreators from '../../../client/actionCreators/userActionCreator';
+import * as lunchActionCreators from '../../../client/actionCreators/lunchActionCreators';
 
 describe('actionCreators should produce an action which has a payload and a type.', () => {
   const actionCreators = Object.assign({}, userActionCreators, lunchActionCreators);

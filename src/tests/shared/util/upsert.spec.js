@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import upsert from '../../../../src/shared/util/upsert';
+import upsert from '../../../shared/util/upsert';
 
 describe('upsert', () => {
   const ant = { id: 0, name: 'ant' };
