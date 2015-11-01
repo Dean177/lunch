@@ -77,7 +77,7 @@ class LunchPicker extends Component {
                          key={id}
                          onChosen={this.onOptionSelected.bind(this, id)} />
           )}
-          <Measure whitelist={['height']} onChange={ (dimensions) => this.setState({ squareDimension: dimensions.height }) }>
+          <Measure whitelist={['height']} onMeasure={ (dimensions) => this.setState({ squareDimension: dimensions.height }) }>
             <OptionAdder
               user={user}
               lunchOptions={autoSuggestOptions}
