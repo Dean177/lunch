@@ -11,3 +11,6 @@
 
 ## Deployment
 `npm start` will create a production build of the client and start the server 
+
+## Troubleshooting
+- If you see an error along the lines of `Failed to load external module babel-core/register` ensure you have a recent version of Gulp installed, and have run `npm install` as per [https://github.com/yeoman/generator-gulp-webapp/issues/356](https://github.com/yeoman/generator-gulp-webapp/issues/356) 
