@@ -10,28 +10,29 @@ import sequence from 'gulp-sequence';
 import nodemon from 'gulp-nodemon';
 import webpack from 'webpack';
 import path from 'path';
-import babelConfig from './babelConfig.json';
+import babelConfig from './babelConfig.dev.json';
 import webpackProdConfig from './webpack.config.prod';
 
 const buildArtifactsOut = './build-artifacts';
-const lintSources = ['src/**/*.js', 'gulpfile.babel.js', 'webpack.config.dev.js', 'webpack.config.prod.js'];
+const lintSources = ['src/**/*.js', 'gulpfile.babel.js', 'webpack.config.prod.js'];
 const sourceMapConfig = {
   debug: true,
   includeContent: false,
-  sourceRoot: function(file) {
-    return path.join(path.relative(file.path, path.join(__dirname, '/src/')), '/src/');
-  }
+  sourceRoot: (file) => { return path.join(path.relative(file.path, path.join(__dirname, '/src/')), '/src/'); },
 };
 
 gulp.task('start-production', sequence('make', 'production-server'));
 
-gulp.task('start', sequence('static-assets', 'build', ['watch-client', 'watch-server'], 'dev-server'));
+gulp.task('start', sequence('build', ['watch-client', 'watch-server'], 'dev-server'));
 
-gulp.task('make', sequence('clean', ['build', 'static-assets', 'prod-webpack']));
+gulp.task('make', sequence('clean', ['build-server', 'static-assets', 'prod-webpack']));
 
 gulp.task('production-server', () => {
   nodemon({
-    env: { 'NODE_ENV': JSON.stringify('production') },
+    env: {
+      'NODE_ENV': JSON.stringify('production'),
+      'DEBUG': 'lunch:*',
+    },
     script: 'out/server/index.js',
     verbose: false,
     ignore: ['*'],
@@ -42,7 +43,8 @@ gulp.task('dev-server', () => {
   nodemon({
     env: {
       'NODE_ENV': JSON.stringify('development'),
-      'DEBUG': 'lunch:*', },
+      'DEBUG': 'lunch:*',
+    },
     delay: 10,
     script: 'out/server/index.js',
     ext: 'js',
@@ -50,7 +52,7 @@ gulp.task('dev-server', () => {
     watch: ['out/server/**/*', 'out/shared/**/*'],
     ignore: [
       'out/client/**/*',
-      'src/**/*'
+      'src/**/*',
     ],
   });
 });
@@ -60,11 +62,11 @@ gulp.task('run-tests', (done) => {
 });
 
 gulp.task('test:client', (done) => {
-  return sequence('build-client', 'test-min', 'lint:console')(done);
+  return sequence('build-client', ['test-min', 'lint:console'])(done);
 });
 
 gulp.task('test:server', (done) => {
-  return sequence('build-server', 'test-min', 'lint:console')(done);
+  return sequence('build-server', ['test-min', 'lint:console'])(done);
 });
 
 gulp.task('test:junit', () => {
@@ -72,8 +74,8 @@ gulp.task('test:junit', () => {
     .pipe(mocha({
       reporter: 'mocha-junit-reporter',
       reporterOptions: {
-        mochaFile: `${buildArtifactsOut}/tests.xml`
-      }
+        mochaFile: `${buildArtifactsOut}/tests.xml`,
+      },
     }));
 });
 
@@ -110,9 +112,9 @@ gulp.task('build-client', () => {
 
 gulp.task('build-server', () => {
   return gulp.src([
-      'src/server/**/*.js',
-      'src/shared/**/*.js',
-      'src/tests/**/*.js',
+    'src/server/**/*.js',
+    'src/shared/**/*.js',
+    'src/tests/**/*.js',
   ], { base: './src' })
     .pipe(sourcemaps.init())
     .pipe(babel(babelConfig))
@@ -133,15 +135,14 @@ gulp.task('lint:file', () => {
   return gulp.src(lintSources)
     .pipe(eslint())
     .pipe(eslint.format('checkstyle', fs.createWriteStream(`${buildArtifactsOut}/codestyle.xml`)));
-
 });
 
 gulp.task('prod-webpack', (done) => {
   webpack(webpackProdConfig, (err, stats) => {
-    if (err) throw  new PluginError('webpack', err);
+    if (err) throw new PluginError('webpack', err);
     util.log('[webpack]', stats.toString());
     done();
-  })
+  });
 });
 
 gulp.task('clean', () => del(['out/**', 'build-artifacts']));
