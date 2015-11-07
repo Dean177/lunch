@@ -10,7 +10,7 @@ class PersonSquare extends Component {
   };
 
   render() {
-    const url = this.props.person.imageUrl || '';
+    const url = this.props.person.imageUrl || 'http://png-4.findicons.com/files/icons/2770/ios_7_icons/512/user_male.png';
     return (
       <img {...this.props}
            className="PersonSquare"

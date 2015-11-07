@@ -80,11 +80,12 @@ export default function configureWebsocket(httpServer) {
           person: {id, name},
           choiceId: personChoice.choiceId,
         });
-        socket.broadcast.send({type: OptionChoices, payload: {peopleChoices, lunchOptions}});
+        io.emit('message', {type: OptionChoices, payload: {peopleChoices, lunchOptions}});
         break;
       }
 
       case ChangeImageUrl: {
+        dBug(`${payload.id} changed their user image.`);
         const personChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === payload.id));
         peopleChoices = upsert(peopleChoices, (pChoice) => (pChoice.person.id === payload.id), {
           person: {
@@ -93,7 +94,8 @@ export default function configureWebsocket(httpServer) {
           },
           choiceId: personChoice.choiceId,
         });
-        socket.broadcast.send({type: OptionChoices, payload: {peopleChoices, lunchOptions}});
+
+        io.emit('message', {type: OptionChoices, payload: {peopleChoices, lunchOptions}});
         break;
       }
 

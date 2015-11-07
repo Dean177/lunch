@@ -30,4 +30,6 @@ describe('websocketHandler', () => {
       done();
     });
   });
+
+  it('Should broadcast to all clients when a user changes their image');
 });
