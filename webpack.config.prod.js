@@ -1,5 +1,6 @@
 import path from 'path';
-import { DefinePlugin} from 'webpack';
+import { DefinePlugin, optimize } from 'webpack';
+
 
 const config = {
   entry: ['./src/client/index'],
@@ -13,6 +14,8 @@ const config = {
       __DEVELOPMENT__: false,
       'process.env': { 'NODE_ENV': JSON.stringify('production') },
     }),
+    new optimize.UglifyJsPlugin(),
+    new optimize.OccurenceOrderPlugin(),
   ],
   module: {
     loaders: [
