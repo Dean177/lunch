@@ -4,7 +4,7 @@ import favicon from 'serve-favicon';
 import { Server } from 'http';
 import path from 'path';
 import webpack from 'webpack';
-import webpackConfig from '../../webpack.config.dev.js';
+import webpackConfig from '../../webpack.config.client.dev.js';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import configureWebsocket from './websocketHandler';

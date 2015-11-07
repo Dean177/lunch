@@ -1,4 +1,3 @@
-import './OptionAdder.scss';
 import OptionAutosuggest from '../components/OptionAutosuggest';
 import React, { Component, PropTypes } from 'react';
 

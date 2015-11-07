@@ -1,6 +1,11 @@
 import 'bootstrap/scss/bootstrap.scss';
 import 'font-awesome/scss/font-awesome.scss';
 import './App.scss';
+import './LunchPicker/LunchOption.scss';
+import './LunchPicker/LunchPicker.scss';
+import './LunchPicker/OptionAdder.scss';
+import './LunchPicker/PersonSquare.scss';
+
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Route } from 'react-router';

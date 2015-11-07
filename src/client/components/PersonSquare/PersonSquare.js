@@ -1,4 +1,3 @@
-import './PersonSquare.scss';
 import React, { Component, PropTypes } from 'react';
 
 class PersonSquare extends Component {

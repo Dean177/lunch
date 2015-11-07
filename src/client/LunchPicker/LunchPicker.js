@@ -1,6 +1,5 @@
-import './LunchPicker.scss';
 import React, { Component, PropTypes } from 'react';
-import Measure from 'react-measure';
+const Measure = require('react-measure');
 import { Motion, spring } from 'react-motion';
 import { bindActionCreators } from 'redux';
 import * as LunchActionCreators from '../actionCreators/lunchActionCreators';

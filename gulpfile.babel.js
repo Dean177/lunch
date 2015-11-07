@@ -10,9 +10,9 @@ import sequence from 'gulp-sequence';
 import nodemon from 'gulp-nodemon';
 import webpack from 'webpack';
 import path from 'path';
-import babelConfig from './babelConfig.dev.json';
-import webpackProdConfig from './webpack.config.prod';
+import webpackProdConfig from './webpack.config.client.prod.js';
 
+const babelConfig = { stage: 0 };
 const buildArtifactsOut = './build-artifacts';
 const lintSources = ['src/**/*.js', 'gulpfile.babel.js', 'webpack.config.prod.js'];
 const sourceMapConfig = {
@@ -21,13 +21,13 @@ const sourceMapConfig = {
   sourceRoot: (file) => { return path.join(path.relative(file.path, path.join(__dirname, '/src/')), '/src/'); },
 };
 
-gulp.task('start-production', sequence('make', 'production-server'));
+gulp.task('start', sequence('build', ['watch:client', 'watch:server'], 'server:dev'));
 
-gulp.task('start', sequence('build', ['watch-client', 'watch-server'], 'dev-server'));
+gulp.task('start-production', sequence('make', 'server:prod'));
 
-gulp.task('make', sequence('clean', ['build-server', 'static-assets', 'prod-webpack']));
+gulp.task('make', sequence('clean', ['build:server', 'static-assets', 'webpack:prod']));
 
-gulp.task('production-server', () => {
+gulp.task('server:prod', () => {
   nodemon({
     env: {
       'NODE_ENV': JSON.stringify('production'),
@@ -39,7 +39,7 @@ gulp.task('production-server', () => {
   });
 });
 
-gulp.task('dev-server', () => {
+gulp.task('server:dev', () => {
   nodemon({
     env: {
       'NODE_ENV': JSON.stringify('development'),
@@ -57,16 +57,20 @@ gulp.task('dev-server', () => {
   });
 });
 
-gulp.task('run-tests', (done) => {
+gulp.task('test:xml', (done) => {
   return sequence('clean', 'build', 'test:junit', 'lint:file')(done);
 });
 
+gulp.task('test', (done) => {
+  return sequence('clean', 'build', 'test:spec', 'lint')(done);
+});
+
 gulp.task('test:client', (done) => {
-  return sequence('build-client', ['test-min', 'lint:console'])(done);
+  return sequence('build:client', ['test:min', 'lint'])(done);
 });
 
 gulp.task('test:server', (done) => {
-  return sequence('build-server', ['test-min', 'lint:console'])(done);
+  return sequence('build:server', ['test:min', 'lint'])(done);
 });
 
 gulp.task('test:junit', () => {
@@ -79,12 +83,17 @@ gulp.task('test:junit', () => {
     }));
 });
 
-gulp.task('test-min', () => {
+gulp.task('test:spec', () => {
+  return gulp.src(['out/tests/**/*.spec.js'], { read: false })
+    .pipe(mocha({ reporter: 'spec' }));
+});
+
+gulp.task('test:min', () => {
   return gulp.src(['out/tests/**/*.spec.js'], { read: false })
     .pipe(mocha({ reporter: 'min' }));
 });
 
-gulp.task('watch-client', () => {
+gulp.task('watch:client', () => {
   gulp.watch([
     'src/client/**/*.js',
     'src/tests/client/**/*.js'],
@@ -92,7 +101,7 @@ gulp.task('watch-client', () => {
   );
 });
 
-gulp.task('watch-server', () => {
+gulp.task('watch:server', () => {
   gulp.watch([
     'src/server/**/*.js',
     'src/shared/**/*.js',
@@ -100,9 +109,9 @@ gulp.task('watch-server', () => {
   ], ['test:server']);
 });
 
-gulp.task('build', ['static-assets', 'build-client', 'build-server']);
+gulp.task('build', ['static-assets', 'build:client', 'build:server']);
 
-gulp.task('build-client', () => {
+gulp.task('build:client', () => {
   return gulp.src(['src/client/**/*.js', 'src/tests/**/*.js'], { base: './src' })
     .pipe(sourcemaps.init())
     .pipe(babel(babelConfig))
@@ -110,7 +119,7 @@ gulp.task('build-client', () => {
     .pipe(gulp.dest('out'));
 });
 
-gulp.task('build-server', () => {
+gulp.task('build:server', () => {
   return gulp.src([
     'src/server/**/*.js',
     'src/shared/**/*.js',
@@ -127,7 +136,7 @@ gulp.task('static-assets', () => {
     .pipe(gulp.dest('out/server'));
 });
 
-gulp.task('lint:console', () => {
+gulp.task('lint', () => {
   return gulp.src(lintSources)
     .pipe(eslint())
     .pipe(eslint.format());
@@ -139,7 +148,7 @@ gulp.task('lint:file', () => {
     .pipe(eslint.format('checkstyle', fs.createWriteStream(`${buildArtifactsOut}/codestyle.xml`)));
 });
 
-gulp.task('prod-webpack', (done) => {
+gulp.task('webpack:prod', (done) => {
   webpack(webpackProdConfig, (err, stats) => {
     if (err) throw new PluginError('webpack', err);
     util.log('[webpack]', stats.toString());

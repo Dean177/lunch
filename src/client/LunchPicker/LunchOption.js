@@ -1,4 +1,3 @@
-import './LunchOption.scss';
 import React, { Component, PropTypes } from 'react';
 
 class LunchOption extends Component {

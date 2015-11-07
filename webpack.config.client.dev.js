@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var babelConfig = require('./babelConfig.dev.json');
 
 module.exports = {
-  devtool: 'eval-source-map',
+  devtool: '#eval-source-map',
   entry: [
     'webpack-hot-middleware/client',
     './src/client/index',
