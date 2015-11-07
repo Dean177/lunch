@@ -40,19 +40,18 @@ class LunchPicker extends Component {
       .indexOf(choiceId);
   }
 
-  render() {
-    const {
-      enteringNewOption,
-      optionName,
-      peopleChoices,
-      lunchOptions,
-      dispatch,
-      user,
-    } = this.props;
+  lunchOptionsWithCountChosen(lunchOptions, peopleChoices) {
+    return lunchOptions.map((lunchOption) => {
+      const chosenCount = peopleChoices
+        .filter(({ choiceId }) => (choiceId === lunchOption.id))
+        .length;
 
-    const { squareDimension } = this.state;
+      return { ...lunchOption, chosenCount };
+    });
+  }
 
-    const choices = peopleChoices
+  choicesWithCoordinates(lunchOptions, peopleChoices, squareDimension) {
+    return peopleChoices
       .filter(({ choiceId }) => !!choiceId)
       .map(({ person, choiceId }) => {
         const xPos = squareDimension * this.getChooserCount(peopleChoices, person.id, choiceId);
@@ -64,16 +63,30 @@ class LunchPicker extends Component {
           yPos,
         };
       });
+  }
 
-    const previousDaysLunchOptions = [...lunchOptions, { id: '23', name: 'zzzzz'}];
+  render() {
+    const {
+      enteringNewOption,
+      optionName,
+      peopleChoices,
+      lunchOptions,
+      dispatch,
+      user,
+    } = this.props;
+
+    const lunchOptionsWithCountChosen = this.lunchOptionsWithCountChosen(lunchOptions, peopleChoices);
+    const choices = this.choicesWithCoordinates(lunchOptions, peopleChoices, this.state.squareDimension);
+
+    const previousDaysLunchOptions = [...lunchOptions, { id: '23', name: 'zzzzz'}]; // TODO
     const autoSuggestOptions = difference(previousDaysLunchOptions, lunchOptions);
 
     return (
       <div className="LunchPicker container">
         <div className="LunchOptions">
-          {lunchOptions.map(({id, name}) =>
+          {lunchOptionsWithCountChosen.map(({id, name, chosenCount}) =>
             <LunchOption optionName={name}
-                         choiceCount={18}
+                         chosenCount={chosenCount}
                          key={id}
                          onChosen={this.onOptionSelected.bind(this, id)} />
           )}

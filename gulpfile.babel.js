@@ -128,7 +128,9 @@ gulp.task('static-assets', () => {
 });
 
 gulp.task('lint:console', () => {
-  return gulp.src(lintSources).pipe(eslint()).pipe(eslint.format());
+  return gulp.src(lintSources)
+    .pipe(eslint())
+    .pipe(eslint.format());
 });
 
 gulp.task('lint:file', () => {
