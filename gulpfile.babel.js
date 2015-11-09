@@ -23,7 +23,7 @@ const sourceMapConfig = {
 
 gulp.task('start', sequence('build', ['watch:client', 'watch:server'], 'server:dev'));
 
-gulp.task('start-production', sequence('make', 'server:prod'));
+gulp.task('start:production', sequence('make', 'server:prod'));
 
 gulp.task('make', sequence('clean', ['build:server', 'static-assets', 'webpack:prod']));
 

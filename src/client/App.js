@@ -4,7 +4,7 @@ import './App.scss';
 import './LunchPicker/LunchOption.scss';
 import './LunchPicker/LunchPicker.scss';
 import './LunchPicker/OptionAdder.scss';
-import './LunchPicker/PersonSquare.scss';
+import './components/PersonSquare/PersonSquare.scss';
 
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
