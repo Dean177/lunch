@@ -24,7 +24,7 @@
     "bootstrap": "twbs/bootstrap#v4.0.0-alpha",
     "chai": "^3.3.0",
     "compression": "^1.6.0",
-    "css-loader": "^0.22.0",
+    "css-loader": "^0.23.0",
     "debug": "^2.2.0",
     "del": "^2.0.2",
     "eslint-config-airbnb": "0.1.0",
