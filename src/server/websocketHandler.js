@@ -10,8 +10,8 @@ import {
 const dBug = debug('lunch:socket-io');
 
 let lunchOptions = [
-  { id: '1', name: 'Boots', lastChosen: new Date()},
-  { id: '2', name: 'Chinese', lastChosen: new Date()},
+  { id: '1', name: 'Boots', lastChosen: new Date(), keep: true},
+  { id: '2', name: 'Chinese', lastChosen: new Date(), keep: true},
 ];
 
 let peopleChoices = [];
@@ -20,26 +20,34 @@ export default function configureWebsocket(httpServer) {
   const io = socketIo(httpServer);
   const connections = {};
 
+  function getOptionChoicesMessage() {
+    return {
+      type: OptionChoices,
+      payload: {
+        lunchOptions,
+        peopleChoices,
+      },
+    };
+  }
+
+  function updateClients() {
+    io.emit('message', getOptionChoicesMessage());
+  }
+
   io.on('connection', (socket) => {
     socket.on('error', dBug);
     const socketId = uuid();
     connections[socketId] = socket;
 
     // Send current state to the client
-    socket.send({
-      type: OptionChoices,
-      payload: {
-        lunchOptions,
-        peopleChoices,
-      },
-    });
+    socket.send(getOptionChoicesMessage());
 
     socket.on('message', (action) => {
-      if (! action.type || !action.payload || !action.meta || !action.meta.user) {
+      const { type, payload, meta } = action;
+      const now = new Date();
+      if (!type || !payload || !meta || !meta.user) {
         dBug('Potentially malformed action received', JSON.stringify(action, null, 2));
       }
-
-      const { type, payload, meta } = action;
 
       switch (type) {
       case AddLunchOption: {
@@ -49,27 +57,24 @@ export default function configureWebsocket(httpServer) {
           peopleChoices = upsert(
             peopleChoices,
             (personChoice) => (personChoice.person.id === user.id),
-            {person: user, choiceId: option.id, lastChosen: new Date()}
+            {person: user, choiceId: option.id, dateChosen: now}
           );
         } else {
-          lunchOptions = [...lunchOptions, {id: payload.id, name: payload.name}];
+          lunchOptions = [...lunchOptions, {id: payload.id, name: payload.name, lastChosen: now}];
           peopleChoices = upsert(
             peopleChoices,
             (personChoice) => (personChoice.person.id === user.id),
-            {person: user, choiceId: payload.id}
+            {person: user, choiceId: payload.id, dateChosen: now }
           );
         }
-
-        socket.broadcast.send({type: OptionChoices, payload: {lunchOptions, peopleChoices}});
         break;
       }
 
       case UserLunchChoice: {
         const { person, choiceId } = payload;
         const chosen = find(lunchOptions, (lunchOption) => (lunchOption.id === choiceId));
-        peopleChoices = upsert(peopleChoices, (personChoice) => (personChoice.person.id === person.id), { person, choiceId });
-        lunchOptions = upsert(lunchOptions, (lunchOption) => (lunchOption.id === choiceId), Object.assign({}, chosen, { lastChosen: new Date() }));
-        socket.broadcast.send({ type: OptionChoices, payload: { peopleChoices, lunchOptions } });
+        peopleChoices = upsert(peopleChoices, (personChoice) => (personChoice.person.id === person.id), { person, choiceId, dateChosen: new Date() });
+        lunchOptions = upsert(lunchOptions, (lunchOption) => (lunchOption.id === choiceId), Object.assign({}, chosen, { lastChosen: now }));
         break;
       }
 
@@ -79,8 +84,8 @@ export default function configureWebsocket(httpServer) {
         peopleChoices = upsert(peopleChoices, (pChoice) => (pChoice.person.id === id), {
           person: {id, name},
           choiceId: personChoice.choiceId,
+          dateChosen: now,
         });
-        io.emit('message', {type: OptionChoices, payload: {peopleChoices, lunchOptions}});
         break;
       }
 
@@ -93,9 +98,9 @@ export default function configureWebsocket(httpServer) {
             imageUrl: payload.url,
           },
           choiceId: personChoice.choiceId,
+          dateChosen: personChoice.dateChosen,
         });
 
-        io.emit('message', {type: OptionChoices, payload: {peopleChoices, lunchOptions}});
         break;
       }
 
@@ -103,12 +108,22 @@ export default function configureWebsocket(httpServer) {
         dBug('Unrecognised action type', action);
       }
       }
+
+      updateClients();
     });
 
     socket.on('close', () => {
       delete connections[socketId];
     });
   });
+
+  setInterval(() => {
+    const cutoffTime = (new Date()).getTime() - 4 * 60 * 60 * 1000;
+
+    lunchOptions = lunchOptions.filter(option => option.keep || option.lastChosen.getTime() > cutoffTime);
+    peopleChoices = peopleChoices.filter(personChoice => personChoice.dateChosen.getTime() > cutoffTime);
+    updateClients();
+  }, 60 * 1000);
 
   return io;
 }
