@@ -28,6 +28,11 @@ class OptionAdder extends Component {
     };
   }
 
+  onBlur() {
+    // If the 'toggleNewOption' function is fired immediately, go button will be hidden before the click can be registered.
+    setTimeout(this.props.toggleNewOption, 20);
+  }
+
   render() {
     let childElement;
     if (!this.props.isAdding) {
@@ -40,7 +45,7 @@ class OptionAdder extends Component {
             <OptionAutosuggest value={this.props.optionName}
                                onChange={this.props.enterOptionName}
                                getSuggestions={this.getSuggestions}
-                               onBlur={this.props.toggleNewOption}
+                               onBlur={this.onBlur}
                                inputClass="option-input"/>
             <button className="go-button" type="submit" onClick={this.onNewOption}>Go!</button>
       </form>

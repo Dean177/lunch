@@ -8,26 +8,12 @@ import './components/PersonSquare/PersonSquare.scss';
 
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { Route } from 'react-router';
 import { ReduxRouter } from 'redux-router';
+import routes from './routes';
 import configureStore from './util/configureStore';
-import Landing from './Landing/Landing';
-import ChooseLunch from './ChooseLunch';
-import UserConfig from './UserConfig/UserConfig';
-import RouteContainer from './RouteContainer';
 import { socket } from './util/socket';
 
-
-const routes = (
-  <Route path="" component={RouteContainer}>
-    <Route path="/" component={Landing} />
-    <Route path="/lunch" component={ChooseLunch} />
-    <Route path="/user" component={UserConfig} />
-  </Route>
-);
-
 const store = configureStore(routes);
-
 socket.on('message', store.dispatch);
 
 class App extends Component {
