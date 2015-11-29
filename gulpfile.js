@@ -1,6 +1,7 @@
 const del = require('del');
 const fs = require('fs');
 const gulp = require('gulp');
+const istanbul = require('gulp-istanbul');
 const mocha = require('gulp-mocha');
 const sourcemaps = require('gulp-sourcemaps');
 const sequence = require('gulp-sequence');
@@ -55,17 +56,42 @@ gulp.task('server:dev', () => {
   });
 });
 
-gulp.task('test', sequence('clean', 'transpile', 'test:min'));
+gulp.task('test', sequence('clean', 'transpile','test:min'));
 
-gulp.task('test:xml', sequence('clean', 'transpile', 'test:junit'));
+gulp.task('test:xml', sequence('clean', 'transpile', 'pre-test', 'test:junit'));
+
+gulp.task('pre-test', () => {
+  gulp.src([
+    './out/client/actionCreators/**/*.js',
+    './out/client/components/**/*.js',
+    './out/client/Landing/**/*.js',
+    './out/client/Lunch/**/*.js',
+    //'./out/client/LunchPicker/**/*.js',
+    './out/client/reducers/**/*.js',
+    './out/client/UserConfig/**/*.js',
+    './out/client/util/**/*.js',
+    './out/client/*.js',
+    './out/server/event-handlers/**/*.js',
+    './out/server/*.js',
+    './out/shared/constants/**/*.js',
+    './out/shared/util/**/*.js',
+    './out/shared/*.js',
+  ])
+    .pipe(istanbul())
+    .pipe(istanbul.hookRequire())
+});
 
 gulp.task('test:junit', () => {
-  return gulp.src(['out/tests/**/*.spec.js'], { read: false })
+  return gulp.src(['out/tests/**/*.spec.js'])
     .pipe(mocha({
       reporter: 'mocha-junit-reporter',
       reporterOptions: {
         mochaFile: `${buildArtifactsOut}/tests.xml`,
       },
+    }))
+    .pipe(istanbul.writeReports({
+      dir: './build-artifacts/coverage',
+      reporters: [ 'lcov', 'json', 'text', 'text-summary']
     }));
 });
 
