@@ -1,16 +1,19 @@
-# Lunch
+Typescript + React + Mocha + Webpack Boilerplate
+=======================================
 
-## Requirements
-- [Node](https://nodejs.org/en/)
-- [Gulp](http://gulpjs.com/) (`npm install gulp -g`)
+Prerequisites
+--------------------------------------
+* Node (Version 4+)
+* Typescript Definition Manager (TSD) `npm install -g tsd`
 
-## Running
-- Get the dependency packages with `npm install`
-- Run with `gulp start`
-- Open a browser at [http://localhost:3333](http://localhost:3333)
+Installation
+--------------------------------------
+* `npm install && tsd install`
 
-## Deployment
-`npm start` will create a production build of the client and start the server 
+Running the Dev Server
+--------------------------------------
+After setting up the project, type `npm start` to start the Express dev server.
 
-## Troubleshooting
-- If you see an error along the lines of `Failed to load external module babel-core/register` ensure you have a recent version of Gulp installed, and have run `npm install` as per [https://github.com/yeoman/generator-gulp-webapp/issues/356](https://github.com/yeoman/generator-gulp-webapp/issues/356) 
+Compiling for production
+---------------------------------------
+To compile the Javascript bundle for production, use `npm run build`.

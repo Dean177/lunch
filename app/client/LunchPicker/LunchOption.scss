@@ -1,0 +1,27 @@
+@import '../assets/colours';
+
+.LunchOption {
+  align-self: flex-end;
+  display: flex;
+  margin-bottom: 0.5em;
+
+  .option-name {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    box-shadow: -1px 1px 2px 0 rgba(0,0,0,0.1);
+    flex: content;
+    background-color: white;
+    color: $black;
+    padding: 1em;
+  }
+
+  .choice-count {
+    text-align: center;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: $green;
+    color: white;
+    padding: 1em;
+    width: 3.5em;
+  }
+}

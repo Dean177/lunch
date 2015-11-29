@@ -1,0 +1,18 @@
+@import '../assets/colours';
+
+.LunchPicker {
+  padding-top: 3em;
+  display: flex;
+
+  .LunchOptions {
+    min-width: 15em;
+    display: flex;
+    padding-right: 1em;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+  }
+
+  .PeopleChoices {
+  }
+}
