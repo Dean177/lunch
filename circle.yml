@@ -3,9 +3,12 @@ machine:
     version: 4.1.0
 
 dependencies:
+  cache_directories:
+    - "node_modules"
+    - "typings"
   post:
     - node node_modules/tsd/build/cli.js install
 
 test:
   post:
-    - cp build-artifacts/tests.xml $CIRCLE_TEST_REPORTS/mocha/tests.xml
+    - cp ./build-artifacts/tests.xml $CIRCLE_TEST_REPORTS/mocha/tests.xml

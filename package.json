@@ -9,7 +9,7 @@
     "build": "npm run clean && npm run build:webpack",
     "clean": "node_modules/gulp/bin/gulp.js clean",
     "start": "node ./app/server/dev_server.js",
-    "test": "node_modules/gulp/bin/gulp.js test"
+    "test": "node_modules/gulp/bin/gulp.js test:xml"
   },
   "author": {
     "name": "Dean Merchant",
