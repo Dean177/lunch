@@ -1,5 +1,5 @@
 {
-  "name": "react-typescript-boilerplate",
+  "name": "Lunch",
   "version": "1.0.0",
   "description": "Boilerplate project that uses Typescript, React, and Webpack",
   "main": "index.js",
@@ -7,10 +7,10 @@
   "scripts": {
     "build:webpack": "NODE_ENV=production webpack --config app/config/webpack.prod.js",
     "build": "npm run clean && npm run build:webpack",
-    "clean": "rimraf build",
+    "clean": "node_modules/gulp/bin/gulp.js clean",
     "start": "node ./app/server/dev_server.js",
-    "pretest": "tsc test/*.ts --module commonjs",
-    "test": "mocha"
+    "test": "node_modules/gulp/bin/gulp.js test"
+
   },
   "author": {
     "name": "Dean Merchant",
