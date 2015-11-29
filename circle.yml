@@ -11,4 +11,5 @@ dependencies:
 
 test:
   post:
+    - mkdir $CIRCLE_TEST_REPORTS/mocha
     - cp ./build-artifacts/tests.xml $CIRCLE_TEST_REPORTS/mocha/tests.xml
