@@ -64,7 +64,7 @@
     "redux": "^3.0.2",
     "redux-devtools": "^2.1.5",
     "redux-router": "^1.0.0-beta3",
-    "rewire": "^2.4.0",
+    "rewire": "^2.5.1",
     "sass-loader": "3.1.1",
     "serve-favicon": "^2.3.0",
     "sinon": "^1.17.2",
