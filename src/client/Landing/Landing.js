@@ -42,16 +42,17 @@ class Landing extends Component {
   render() {
     const autoSuggestInput = (
       <OptionAutosuggest value={ this.props.optionName }
-                         placeholder="Food..."
+                         placeholder='Food...'
                          onChange={this.onNameChange}
                          getSuggestions={this.getSuggestions}
-                         inputClass="borderless"/>
+                         inputClass='borderless'
+      />
     );
 
     return (
-      <form onSubmit={ this.onSubmit } className="Landing">
+      <form onSubmit={ this.onSubmit } className='Landing'>
         <h1> I want { autoSuggestInput } for lunch </h1>
-        <button className="btn btn-primary-outline btn-lg" type="submit">Go</button>
+        <button className='btn btn-primary-outline btn-lg' type='submit'>Go</button>
       </form>
     );
   }

@@ -11,9 +11,9 @@ class LunchOption extends Component {
     const { optionName, chosenCount, onChosen } = this.props;
 
     return (
-      <div className="LunchOption" onClick={onChosen}>
-        <div className="option-name">{optionName}</div>
-        <div className="choice-count">{chosenCount}</div>
+      <div className='LunchOption' onClick={onChosen}>
+        <div className='option-name'>{optionName}</div>
+        <div className='choice-count'>{chosenCount}</div>
       </div>
     );
   }

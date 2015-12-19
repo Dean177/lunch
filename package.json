@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "description": "Get some lunch",
   "scripts": {
-    "start": "gulp build && node out/server/index.js",
-    "start:production": "gulp start-production",
+    "clean": "gulp clean",
+    "start": "gulp static-assets && gulp build:server && gulp server:dev",
+    "start:production": "npm run clean && gulp build:server && gulp static-assets && gulp webpack:prod && gulp server:prod'",
     "test": "webpack --config webpack.config.test.js && node ./client-test-runner",
     "lint": "eslint src/**/*.js gulpfile.js webpack.config.prod.js",
     "lint:file": "eslint -f checkstyle src/**/*.js gulpfile.js webpack.config.prod.js > ./build-artifacts/codestyle.xml"
@@ -47,7 +48,6 @@
     "gulp-babel": "6.1.1",
     "gulp-mocha": "2.1.3",
     "gulp-nodemon": "2.0.4",
-    "gulp-sequence": "0.4.1",
     "gulp-sourcemaps": "1.6.0",
     "gulp-util": "3.0.6",
     "history": "1.13.0",

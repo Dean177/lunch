@@ -32,22 +32,22 @@ class LunchPicker extends Component {
     const { user } = this.props;
 
     return (
-      <div className="UserConfig">
-        <Link to="/lunch" className="main-nav-link">
-          <i className="fa fa-square-o" />
+      <div className='UserConfig'>
+        <Link to='/lunch' className='main-nav-link'>
+          <i className='fa fa-square-o' />
         </Link>
-        <div className="container">
+        <div className='container'>
           <h1>Settings</h1>
 
           <form onSubmit={this.onSubmit}>
-            <div className="form-group">
+            <div className='form-group'>
               <label>Name</label>
-              <input onChange={this.onNameChange} value={user.name} type="text" className="form-control"></input>
+              <input onChange={this.onNameChange} value={user.name} type='text' className='form-control' />
             </div>
 
-            <div className="form-group">
+            <div className='form-group'>
               <label>Image Url</label>
-              <input onChange={this.onImageChange} value={user.imageUrl} type="text" className="form-control"></input>
+              <input onChange={this.onImageChange} value={user.imageUrl} type='text' className='form-control' />
             </div>
 
             <PersonSquare person={user} />

@@ -10,7 +10,7 @@ export const logger = store => next => action => {
 export const serverEvent = store => next => action => {
   if (action.meta && action.meta.isServerAction) {
     const user = store.getState().user;
-    send(Object.assign({}, action, { meta: { user }}));
+    send(Object.assign({}, action, { meta: { user } }));
   }
 
   return next(action);

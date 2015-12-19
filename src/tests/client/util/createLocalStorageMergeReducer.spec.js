@@ -34,7 +34,7 @@ describe('createLocalStorageMergeReducer', () => {
   });
 
   it('Will merge state returned by the reducerObject into its current state to produce a new state object', () => {
-    const action = { type: SomeActionType, payload: { key: 'bKey', value: 'newBValue'} };
+    const action = { type: SomeActionType, payload: { key: 'bKey', value: 'newBValue' } };
     const reducer = createReducer(mockLocalStorage());
     const nextState = reducer(initialState, action);
     expect(nextState).to.deep.equal({ aKey: initialState.aKey, bKey: action.payload.value });

@@ -15,7 +15,7 @@ describe('createStateMergeReducer', () => {
   const reducer = createStateMergeReducer(initialState, reducerObject);
 
   it('Will merge state returned by the reducerObject into its current state to produce a new state object', () => {
-    const action = { type: SomeActionType, payload: { key: 'key', value: 'value'} };
+    const action = { type: SomeActionType, payload: { key: 'key', value: 'value' } };
     const newState = reducer(initialState, action);
 
     expect(newState.key).to.not.be.undefined;
@@ -23,7 +23,7 @@ describe('createStateMergeReducer', () => {
   });
 
   it('Will override keys on the input state when merging the state object', () => {
-    const action = { type: SomeActionType, payload: { key: 'aKey', value: 'value'} };
+    const action = { type: SomeActionType, payload: { key: 'aKey', value: 'value' } };
     const newState = reducer(initialState, action);
 
     expect(newState.aKey).not.to.equal(initialState.aKey);

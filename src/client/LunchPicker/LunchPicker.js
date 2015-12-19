@@ -77,13 +77,13 @@ class LunchPicker extends Component {
     const lunchOptionsWithCountChosen = this.lunchOptionsWithCountChosen(lunchOptions, peopleChoices);
     const choices = this.choicesWithCoordinates(lunchOptions, peopleChoices, this.state.squareDimension);
 
-    const previousDaysLunchOptions = [...lunchOptions, { id: '23', name: 'zzzzz'}]; // TODO
+    const previousDaysLunchOptions = [...lunchOptions, { id: '23', name: 'zzzzz' }]; // TODO
     const autoSuggestOptions = difference(previousDaysLunchOptions, lunchOptions);
 
     return (
-      <div className="LunchPicker container">
-        <div className="LunchOptions">
-          {lunchOptionsWithCountChosen.map(({id, name, chosenCount}) =>
+      <div className='LunchPicker container'>
+        <div className='LunchOptions'>
+          {lunchOptionsWithCountChosen.map(({ id, name, chosenCount }) =>
             <LunchOption optionName={name}
                          chosenCount={chosenCount}
                          key={id}
@@ -98,9 +98,9 @@ class LunchPicker extends Component {
               {...bindActionCreators(LunchActionCreators, dispatch)} />
           </Measure>
         </div>
-        <div className="PeopleChoices">
+        <div className='PeopleChoices'>
           {choices.map(({ person, xPos, yPos }) =>
-            <Motion key={person.id} style={{person, xPos: spring(xPos), yPos: spring(yPos)}}>
+            <Motion key={person.id} style={{ person, xPos: spring(xPos), yPos: spring(yPos) }}>
               {(interpolatedChoice) =>
                 <PersonSquare person={person} style={{
                   transform: `translate3d(${interpolatedChoice.xPos}px, ${interpolatedChoice.yPos}px, 0)`,

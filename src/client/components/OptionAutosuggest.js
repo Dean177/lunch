@@ -35,14 +35,16 @@ class OptionAutosuggest extends Component {
     };
 
     return (
-      <Autosuggest suggestions={ this.props.getSuggestions }
-                   suggestionRenderer={(lunchOption) => lunchOption.name}
-                   suggestionValue={(lunchOption) => lunchOption.name}
-                   ref="optionText"
-                   value={ this.props.value }
-                   showWhen={ input => input.trim().length >= 2 }
-                   inputAttributes={ inputAttributes }
-                   theme={ this.theme } />
+      <Autosuggest
+        suggestions={ this.props.getSuggestions }
+        suggestionRenderer={(lunchOption) => lunchOption.name}
+        suggestionValue={(lunchOption) => lunchOption.name}
+        ref='optionText'
+        value={ this.props.value }
+        showWhen={ input => input.trim().length >= 2 }
+        inputAttributes={ inputAttributes }
+        theme={ this.theme }
+      />
     );
   }
 }

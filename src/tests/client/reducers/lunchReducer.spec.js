@@ -8,8 +8,8 @@ const initialState = {
   optionName: 'Name for the new option',
   selectedOptionId: '',
   enteringNewOption: false,
-  lunchOptions: [ { id: '0', name: 'Tesco'} ],
-  peopleChoices: [ ],
+  lunchOptions: [{ id: '0', name: 'Tesco' }],
+  peopleChoices: [],
 };
 
 describe('lunchReducer', () => {
@@ -18,8 +18,8 @@ describe('lunchReducer', () => {
       const peopleChoicesAction = {
         type: OptionChoices,
         payload: {
-          lunchOptions: [ { id: '0', name: 'Market'}, { id: '0', name: 'Chinese'}],
-          peopleChoices: [ { person: { id: '0', name: 'Boar'}, choiceId: '0' }],
+          lunchOptions: [{ id: '0', name: 'Market' }, { id: '0', name: 'Chinese' }],
+          peopleChoices: [{ person: { id: '0', name: 'Boar' }, choiceId: '0' }],
         },
       };
       const newState = lunchReducer(initialState, peopleChoicesAction);
@@ -30,7 +30,7 @@ describe('lunchReducer', () => {
   });
 
   describe(UserLunchChoice, () => {
-    const egret = { id: 4, name: 'Egret'};
+    const egret = { id: 4, name: 'Egret' };
     const choiceId = 'iiii-chos-eyou';
     const chooseLunchOptionAction = { type: UserLunchChoice, payload: { choiceId, person: egret } };
     const firstChoiceState = lunchReducer(initialState, chooseLunchOptionAction);
@@ -42,7 +42,7 @@ describe('lunchReducer', () => {
     });
 
     it('Updates the choiceId when person has already made a choice', () => {
-      const secondChoice = { type: UserLunchChoice, payload: { choiceId: '0', person: egret }};
+      const secondChoice = { type: UserLunchChoice, payload: { choiceId: '0', person: egret } };
       const secondChoiceState = lunchReducer(firstChoiceState, secondChoice);
       expect(secondChoiceState.peopleChoices.length).to.equal(firstChoiceState.peopleChoices.length);
       expect(secondChoiceState.peopleChoices[0].choiceId).to.equal('0');
@@ -54,7 +54,7 @@ describe('lunchReducer', () => {
     const ferret = { id: 'ferr', name: 'Ferret' };
     const addLunchOption = {
       type: AddLunchOption,
-      payload: { id: lunchOption.id, name: lunchOption.name, person: ferret},
+      payload: { id: lunchOption.id, name: lunchOption.name, person: ferret },
     };
     const newState = lunchReducer(initialState, addLunchOption);
 
