@@ -1,1 +1,4 @@
-import './LunchPicker/LunchPicker.scss';
+import './LunchPicker.scss';
+import LunchPicker from './LunchPicker';
+
+export default LunchPicker;

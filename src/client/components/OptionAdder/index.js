@@ -1,1 +1,4 @@
-import './LunchPicker/OptionAdder.scss';
+import './OptionAdder.scss';
+import OptionAdder from './OptionAdder';
+
+export default OptionAdder;

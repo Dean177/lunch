@@ -3,9 +3,9 @@ const Measure = require('react-measure');
 import { Motion, spring } from 'react-motion';
 import { bindActionCreators } from 'redux';
 import * as LunchActionCreators from '../actionCreators/lunchActionCreators';
-import OptionAdder from './../components/OptionAdder/OptionAdder';
-import LunchOption from './../components/LunchOption/LunchOption';
-import PersonSquare from './../components/PersonSquare/PersonSquare';
+import OptionAdder from './../components/OptionAdder';
+import LunchOption from './../components/LunchOption';
+import PersonSquare from './../components/PersonSquare';
 import { difference } from 'underscore';
 
 class LunchPicker extends Component {

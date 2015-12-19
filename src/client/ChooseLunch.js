@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import LunchPicker from './LunchPicker/LunchPicker';
-
+import LunchPicker from './LunchPicker';
 
 @connect(appState => {
   const {

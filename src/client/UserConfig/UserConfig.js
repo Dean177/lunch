@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { changeName, changeImageUrl } from '../actionCreators/userActionCreator';
-import PersonSquare from '../components/PersonSquare/PersonSquare';
+import PersonSquare from '../components/PersonSquare';
 import { Link } from 'react-router';
 
 

@@ -42,8 +42,7 @@ class OptionAutosuggest extends Component {
                    value={ this.props.value }
                    showWhen={ input => input.trim().length >= 2 }
                    inputAttributes={ inputAttributes }
-                   theme={ this.theme }
-      />
+                   theme={ this.theme } />
     );
   }
 }
