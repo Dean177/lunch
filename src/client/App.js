@@ -1,6 +1,6 @@
 import 'bootstrap/scss/bootstrap.scss';
 import 'font-awesome/scss/font-awesome.scss';
-import './App.scss';
+
 import './LunchPicker/LunchOption.scss';
 import './LunchPicker/LunchPicker.scss';
 import './LunchPicker/OptionAdder.scss';
@@ -18,22 +18,15 @@ socket.on('message', store.dispatch);
 
 class App extends Component {
   render() {
-    let devtools;
     if (__DEVELOPMENT__) {
-      const { DevTools, DebugPanel, LogMonitor } = require('redux-devtools/lib/react');
-      devtools = (
-        <DebugPanel top right bottom>
-          <DevTools store={store} monitor={LogMonitor} visibleOnLoad={false} />
-        </DebugPanel>
-      );
+      // TODO re-enable devtools https://github.com/gaearon/redux-devtools/tree/v3.0.0
     }
 
     return (
-      <div className="App">
+      <div className='App'>
         <Provider store={store}>
           <ReduxRouter>{routes}</ReduxRouter>
         </Provider>
-        {devtools}
       </div>
     );
   }

@@ -10,8 +10,8 @@ import {
 const dBug = debug('lunch:socket-io');
 
 let lunchOptions = [
-  { id: '1', name: 'Boots', lastChosen: new Date(), keep: true},
-  { id: '2', name: 'Chinese', lastChosen: new Date(), keep: true},
+  { id: '1', name: 'Boots', lastChosen: new Date(), keep: true },
+  { id: '2', name: 'Chinese', lastChosen: new Date(), keep: true },
 ];
 
 let peopleChoices = [];
@@ -50,63 +50,63 @@ export default function configureWebsocket(httpServer) {
       }
 
       switch (type) {
-      case AddLunchOption: {
-        const { user } = meta;
-        const option = find(lunchOptions, ({ name }) => name === payload.name);
-        if (option) {
-          peopleChoices = upsert(
-            peopleChoices,
-            (personChoice) => (personChoice.person.id === user.id),
-            {person: user, choiceId: option.id, dateChosen: now}
-          );
-        } else {
-          lunchOptions = [...lunchOptions, {id: payload.id, name: payload.name, lastChosen: now}];
-          peopleChoices = upsert(
-            peopleChoices,
-            (personChoice) => (personChoice.person.id === user.id),
-            {person: user, choiceId: payload.id, dateChosen: now }
-          );
+        case AddLunchOption: {
+          const { user } = meta;
+          const option = find(lunchOptions, ({ name }) => name === payload.name);
+          if (option) {
+            peopleChoices = upsert(
+              peopleChoices,
+              (personChoice) => (personChoice.person.id === user.id),
+              { person: user, choiceId: option.id, dateChosen: now }
+            );
+          } else {
+            lunchOptions = [...lunchOptions, { id: payload.id, name: payload.name, lastChosen: now }];
+            peopleChoices = upsert(
+              peopleChoices,
+              (personChoice) => (personChoice.person.id === user.id),
+              { person: user, choiceId: payload.id, dateChosen: now }
+            );
+          }
+          break;
         }
-        break;
-      }
 
-      case UserLunchChoice: {
-        const { person, choiceId } = payload;
-        const chosen = find(lunchOptions, (lunchOption) => (lunchOption.id === choiceId));
-        peopleChoices = upsert(peopleChoices, (personChoice) => (personChoice.person.id === person.id), { person, choiceId, dateChosen: new Date() });
-        lunchOptions = upsert(lunchOptions, (lunchOption) => (lunchOption.id === choiceId), Object.assign({}, chosen, { lastChosen: now }));
-        break;
-      }
+        case UserLunchChoice: {
+          const { person, choiceId } = payload;
+          const chosen = find(lunchOptions, (lunchOption) => (lunchOption.id === choiceId));
+          peopleChoices = upsert(peopleChoices, (personChoice) => (personChoice.person.id === person.id), { person, choiceId, dateChosen: new Date() });
+          lunchOptions = upsert(lunchOptions, (lunchOption) => (lunchOption.id === choiceId), Object.assign({}, chosen, { lastChosen: now }));
+          break;
+        }
 
-      case ChangeName: {
-        const { id, name } = payload;
-        const personChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === id));
-        peopleChoices = upsert(peopleChoices, (pChoice) => (pChoice.person.id === id), {
-          person: {id, name},
-          choiceId: personChoice.choiceId,
-          dateChosen: now,
-        });
-        break;
-      }
+        case ChangeName: {
+          const { id, name } = payload;
+          const personChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === id));
+          peopleChoices = upsert(peopleChoices, (pChoice) => (pChoice.person.id === id), {
+            person: { id, name },
+            choiceId: personChoice.choiceId,
+            dateChosen: now,
+          });
+          break;
+        }
 
-      case ChangeImageUrl: {
-        dBug(`${payload.id} changed their user image.`);
-        const personChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === payload.id));
-        peopleChoices = upsert(peopleChoices, (pChoice) => (pChoice.person.id === payload.id), {
-          person: {
-            id: payload.id,
-            imageUrl: payload.url,
-          },
-          choiceId: personChoice.choiceId,
-          dateChosen: personChoice.dateChosen,
-        });
+        case ChangeImageUrl: {
+          dBug(`${payload.id} changed their user image.`);
+          const personChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === payload.id));
+          peopleChoices = upsert(peopleChoices, (pChoice) => (pChoice.person.id === payload.id), {
+            person: {
+              id: payload.id,
+              imageUrl: payload.url,
+            },
+            choiceId: personChoice.choiceId,
+            dateChosen: personChoice.dateChosen,
+          });
 
-        break;
-      }
+          break;
+        }
 
-      default: {
-        dBug('Unrecognised action type', action);
-      }
+        default: {
+          dBug('Unrecognised action type', action);
+        }
       }
 
       updateClients();

@@ -1,27 +1,31 @@
-import babel from 'gulp-babel';
-import del from 'del';
-import eslint from 'gulp-eslint';
-import fs from 'fs';
-import gulp from 'gulp';
-import util, { PluginError } from 'gulp-util';
-import mocha from 'gulp-mocha';
-import sourcemaps from 'gulp-sourcemaps';
-import sequence from 'gulp-sequence';
-import nodemon from 'gulp-nodemon';
-import webpack from 'webpack';
-import path from 'path';
-import webpackProdConfig from './webpack.config.client.prod.js';
+const babel = require('gulp-babel');
+const del = require('del');
+const eslint = require('gulp-eslint');
+const fs = require('fs');
+const gulp = require('gulp');
+const util = require('gulp-util');
+const mocha = require('gulp-mocha');
+const sourcemaps = require('gulp-sourcemaps');
+const sequence = require('gulp-sequence');
+const nodemon = require('gulp-nodemon');
+const webpack = require('webpack');
+const path = require('path');
+const PluginError = util.PluginError;
 
-const babelConfig = { stage: 0 };
+const webpackProdConfig = require('./webpack.config.prod.js');
+const babelConfig = {
+  'presets': ['react', 'es2015', 'stage-0'],
+  'plugins': ['transform-decorators-legacy'],
+};
 const buildArtifactsOut = './build-artifacts';
-const lintSources = ['src/**/*.js', 'gulpfile.babel.js', 'webpack.config.prod.js'];
+const lintSources = ['src/**/*.js', 'gulpfile.js', 'webpack.config.prod.js'];
 const sourceMapConfig = {
   debug: true,
   includeContent: false,
-  sourceRoot: (file) => { return path.join(path.relative(file.path, path.join(__dirname, '/src/')), '/src/'); },
+  sourceRoot: (file) => (path.join(path.relative(file.path, path.join(__dirname, 'src')), 'src')),
 };
 
-gulp.task('start', sequence('build', ['watch:client', 'watch:server'], 'server:dev'));
+gulp.task('start', sequence('build', 'server:dev'));
 
 gulp.task('start:production', sequence('make', 'server:prod'));
 

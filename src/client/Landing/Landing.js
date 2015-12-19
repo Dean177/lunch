@@ -19,30 +19,25 @@ class Landing extends Component {
     dispatch: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    const { dispatch } = this.props;
+  onSubmit = (event) => {
+    event.preventDefault();
+    const { dispatch, user, optionName } = this.props;
 
-    this.onSubmit = (event) => {
-      event.preventDefault();
+    if (optionName.length > 0) {
+      dispatch(addLunchOption(user, optionName));
+    }
 
-      if (this.props.optionName.length > 0) {
-        dispatch(addLunchOption(this.props.user, this.props.optionName));
-      }
+    const stateNav = pushState(null, '/lunch');
+    dispatch(stateNav);
+  };
 
-      const stateNav = pushState(null, '/lunch');
-      dispatch(stateNav);
-    };
+  onNameChange = compose(dispatch, enterOptionName);
 
-    this.onNameChange = compose(dispatch, enterOptionName);
-
-    this.getSuggestions = (input, callback) => {
-      const regex = new RegExp(`^${input}`, 'i');
-      const suggestions = this.props.lunchOptions.filter(option => regex.test(option.name));
-      callback(null, suggestions);
-    };
-  }
-
+  getSuggestions = (input, callback) => {
+    const regex = new RegExp(`^${input}`, 'i');
+    const suggestions = this.props.lunchOptions.filter(option => regex.test(option.name));
+    callback(null, suggestions);
+  };
 
   render() {
     const autoSuggestInput = (

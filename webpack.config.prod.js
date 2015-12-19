@@ -1,6 +1,9 @@
-import path from 'path';
-import { DefinePlugin, optimize } from 'webpack';
+const path = require('path');
+const webpack = require('webpack');
 
+const DefinePlugin = webpack.DefinePlugin;
+const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+const OccurenceOrderPlugin = webpack.optimize.OccurenceOrderPlugin;
 
 const config = {
   entry: ['./src/client/index'],
@@ -14,21 +17,17 @@ const config = {
       __DEVELOPMENT__: false,
       'process.env': { 'NODE_ENV': JSON.stringify('production') },
     }),
-    new optimize.UglifyJsPlugin(),
-    new optimize.OccurenceOrderPlugin(),
+    new UglifyJsPlugin(),
+    new OccurenceOrderPlugin(),
   ],
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         loader: 'babel',
-        query: { stage: 0 },
-        include: [ path.join(__dirname, 'src', 'client'), path.join(__dirname, 'src', 'shared') ],
+        include: [path.join(__dirname, 'src', 'client'), path.join(__dirname, 'src', 'shared')],
       },
-      {
-        test: /\.(css)(\?.+)$/,
-        loaders: ['style-loader', 'css-loader'],
-      },
+      { test: /\.(css)(\?.+)$/, loaders: ['style-loader', 'css-loader'] },
       { test: /\.scss$/, loader: 'style!css!sass' },
       { test: /\.(png|gif|jpg)$/, loader: 'file-loader' },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
@@ -37,4 +36,4 @@ const config = {
   },
 };
 
-export default config;
+module.exports = config;

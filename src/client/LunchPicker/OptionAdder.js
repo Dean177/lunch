@@ -12,26 +12,21 @@ class OptionAdder extends Component {
     enterOptionName: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    const { addLunchOption } = props;
+  onNewOption = (event) => {
+    event.preventDefault();
+    this.props.addLunchOption(this.props.user, this.props.optionName);
+  };
 
-    this.onNewOption = (event) => {
-      event.preventDefault();
-      addLunchOption(this.props.user, this.props.optionName);
-    };
+  getSuggestions = (input, callback) => {
+    const regex = new RegExp(`^${input}`, 'i');
+    const suggestions = this.props.lunchOptions.filter(option => regex.test(option.name));
+    callback(null, suggestions);
+  };
 
-    this.getSuggestions = (input, callback) => {
-      const regex = new RegExp(`^${input}`, 'i');
-      const suggestions = this.props.lunchOptions.filter(option => regex.test(option.name));
-      callback(null, suggestions);
-    };
-  }
-
-  onBlur() {
+  onBlur = () => {
     // If the 'toggleNewOption' function is fired immediately, go button will be hidden before the click can be registered.
     setTimeout(this.props.toggleNewOption, 20);
-  }
+  };
 
   render() {
     let childElement;

@@ -7,5 +7,9 @@
   },
   "globals": {
     "__DEVELOPMENT__": true
+  },
+  "rules": {
+    "react/jsx-quotes": 0,
+    "jsx-quotes": [1, "prefer-single"]
   }
 }

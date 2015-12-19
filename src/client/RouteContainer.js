@@ -1,6 +1,12 @@
 import React, { PropTypes } from 'react';
 
-const RouteContainer = (props) => <div>{props.children}</div>;
+//{props.children}
+const RouteContainer = (props) => (
+  <div>
+    <h1>Routes</h1>
+
+  </div>
+);
 
 RouteContainer.propTypes = {
   children: PropTypes.node,

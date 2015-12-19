@@ -4,10 +4,7 @@ import express from 'express';
 import favicon from 'serve-favicon';
 import { Server } from 'http';
 import path from 'path';
-import webpack from 'webpack';
-import webpackConfig from '../../webpack.config.client.dev.js';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
+
 import configureWebsocket from './websocketHandler';
 
 const app = express();
@@ -26,12 +23,16 @@ if (process.env.NODE_ENV === JSON.stringify('production')) {
   app.use('/assets', express.static(assetPath));
 } else {
   dBug('Serving assets from webpack');
+  console.log('Serving assets from webpack');
+  const webpack = require('webpack');
+  const webpackConfig = require('../../webpack.config.dev.js');
   const compiler = webpack(webpackConfig);
-  app.use(webpackHotMiddleware(compiler));
-  app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
+
+  app.use(require('webpack-dev-middleware')(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
+  app.use(require('webpack-hot-middleware')(compiler));
 }
 
-app.get('/*', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile('/index.html', { root: __dirname });
 });
 
