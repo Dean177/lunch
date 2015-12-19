@@ -4,8 +4,8 @@ const path = require('path');
 
 const buildArtifactsOut = './build-artifacts';
 const mocha = new Mocha({
-  reporter: 'mocha-junit-reporter',
-  reporterOptions: { mochaFile: path.join(buildArtifactsOut, 'tests.xml') },
+  //reporter: 'mocha-junit-reporter',
+  //reporterOptions: { mochaFile: path.join(buildArtifactsOut, 'tests.xml') },
 });
 const testDir = './out/tests/client';
 
