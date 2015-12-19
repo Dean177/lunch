@@ -13,7 +13,7 @@ const createUserReducer = createLocalStorageMergeReducer('lunchUser', initialSta
     return { name };
   },
 
-  [ChangeImageUrl](state, { payload: { url }}) {
+  [ChangeImageUrl](state, { payload: { url } }) {
     return { imageUrl: url };
   },
 });

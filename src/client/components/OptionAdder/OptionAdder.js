@@ -1,4 +1,4 @@
-import OptionAutosuggest from '../components/OptionAutosuggest';
+import OptionAutosuggest from '../OptionAutosuggest';
 import React, { Component, PropTypes } from 'react';
 
 class OptionAdder extends Component {

@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  devtool: '#cheap-module-eval-source-map',
+  devtool: '#eval-source-map',
   entry: [
     'webpack-hot-middleware/client',
     './src/client/index',
@@ -33,7 +33,7 @@ module.exports = {
             [
               'react-transform', {
                 transforms: [
-                  { transform: 'react-transform-hmr', imports: ['react'], locals: ['modules'] },
+                  { transform: 'react-transform-hmr', imports: ['react'], locals: ['module'] },
                   { transform: 'react-transform-catch-errors', imports: ['react', 'redbox-react'] },
                 ],
               },

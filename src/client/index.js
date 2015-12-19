@@ -1,6 +1,6 @@
 import './App.scss';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import App from './Appy';
+import App from './App';
 
 ReactDOM.render(<App />, document.getElementById('lunch'));

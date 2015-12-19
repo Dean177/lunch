@@ -6,7 +6,7 @@ import MockComponent from '../../testingUtil/MockComponent';
 import TestUtils from 'react-addons-test-utils';
 import React from 'react';
 import { chooseLunchOption } from '../../../client/actionCreators/lunchActionCreators';
-const LunchOption = require('../../../client/LunchPicker/LunchOption');
+const LunchOption = require('../../../client/components/LunchOption/LunchOption');
 const LunchPicker = rewire('../../../client/LunchPicker/LunchPicker');
 LunchPicker.__set__('Measure', MockComponent);
 

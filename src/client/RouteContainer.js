@@ -1,12 +1,10 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
-//{props.children}
-const RouteContainer = (props) => (
-  <div>
-    <h1>Routes</h1>
-
-  </div>
-);
+class RouteContainer extends Component {
+  render() {
+    return (<div>{this.props.children}</div>);
+  }
+}
 
 RouteContainer.propTypes = {
   children: PropTypes.node,

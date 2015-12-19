@@ -1,18 +1,17 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import { reduxReactRouter } from 'redux-router';
 import createHistory from 'history/lib/createBrowserHistory';
-import rootReducer from '../reducers/index';
+import rootReducer from '../reducers';
 import { logger, serverEvent, actionFormatValidator } from './middleware';
 
 export default function configureStore(routes, initialState) {
   let createStoreFinal;
 
   if (__DEVELOPMENT__) {
-    const { devTools } = require('redux-devtools');
+    // TODO re-enable devtools https://github.com/gaearon/redux-devtools/tree/v3.0.0
     createStoreFinal = compose(
       applyMiddleware(logger, serverEvent, actionFormatValidator),
-      reduxReactRouter({ routes, createHistory }),
-      devTools()
+      reduxReactRouter({ routes, createHistory })
     )(createStore);
   } else {
     createStoreFinal = compose(

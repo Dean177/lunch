@@ -31,7 +31,7 @@ class Landing extends Component {
     dispatch(stateNav);
   };
 
-  onNameChange = compose(dispatch, enterOptionName);
+  onNameChange = compose(this.props.dispatch, enterOptionName);
 
   getSuggestions = (input, callback) => {
     const regex = new RegExp(`^${input}`, 'i');
