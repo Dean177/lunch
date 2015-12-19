@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const RewirePlugin = require('rewire-webpack');
 const DefinePlugin = webpack.DefinePlugin;
 
 module.exports = {
@@ -15,7 +14,6 @@ module.exports = {
   noInfo: true,
   plugins: [
     new DefinePlugin({ __DEVELOPMENT__: true }),
-    new RewirePlugin(),
   ],
   module: {
     loaders: [
