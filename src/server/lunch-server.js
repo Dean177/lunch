@@ -23,7 +23,7 @@ if (process.env.NODE_ENV === JSON.stringify('production')) {
   const compiler = webpack(webpackConfig);
   dBug('Serving assets from webpack');
   app.use(require('webpack-dev-middleware')(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
-  app.use(require('webpack-hot-middleware')(compiler));
+  app.use(require('webpack-hot-middleware')(compiler, { noInfo: true }));
 }
 
 app.get('/', (req, res) => {

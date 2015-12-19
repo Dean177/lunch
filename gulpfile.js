@@ -1,6 +1,5 @@
 const babel = require('gulp-babel');
 const del = require('del');
-const eslint = require('gulp-eslint');
 const fs = require('fs');
 const gulp = require('gulp');
 const util = require('gulp-util');
@@ -53,11 +52,8 @@ gulp.task('server:dev', () => {
     script: 'out/server/index.js',
     ext: 'js',
     verbose: false,
+    ignore: ['*'],
     watch: ['out/server/**/*', 'out/shared/**/*'],
-    ignore: [
-      'out/client/**/*',
-      'src/**/*',
-    ],
   });
 });
 
@@ -113,10 +109,11 @@ gulp.task('watch:server', () => {
   ], ['test:server']);
 });
 
-gulp.task('build', ['static-assets', 'build:client', 'build:server']);
+// gulp.task('build', ['static-assets', 'build:client', 'build:server']);
+gulp.task('build', ['static-assets', 'build:server']);
 
 gulp.task('build:client', () => {
-  return gulp.src(['src/client/**/*.js', 'src/tests/**/*.js'], { base: './src' })
+  return gulp.src(['src/tests/**/*.js'], { base: './src' })
     .pipe(sourcemaps.init())
     .pipe(babel(babelConfig))
     .pipe(sourcemaps.write('.', sourceMapConfig))
@@ -138,18 +135,6 @@ gulp.task('build:server', () => {
 gulp.task('static-assets', () => {
   return gulp.src(['src/server/index.html', 'src/server/favicon.ico'])
     .pipe(gulp.dest('out/server'));
-});
-
-gulp.task('lint', () => {
-  return gulp.src(lintSources)
-    .pipe(eslint())
-    .pipe(eslint.format());
-});
-
-gulp.task('lint:file', () => {
-  return gulp.src(lintSources)
-    .pipe(eslint())
-    .pipe(eslint.format('checkstyle', fs.createWriteStream(`${buildArtifactsOut}/codestyle.xml`)));
 });
 
 gulp.task('webpack:prod', (done) => {

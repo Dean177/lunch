@@ -1,5 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
+const DefinePlugin = webpack.DefinePlugin;
+const NoErrorsPlugin = webpack.NoErrorsPlugin;
+const HotModuleReplacementPlugin = webpack.HotModuleReplacementPlugin;
 
 module.exports = {
   devtool: '#eval-source-map',
@@ -14,9 +17,9 @@ module.exports = {
   },
   noInfo: true,
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({ __DEVELOPMENT__: true }),
+    new HotModuleReplacementPlugin(),
+    new NoErrorsPlugin(),
+    new DefinePlugin({ __DEVELOPMENT__: true }),
   ],
   module: {
     loaders: [
@@ -41,6 +44,7 @@ module.exports = {
           ],
         },
       },
+      { test: /\.jsx?$/, loader: 'eslint-loader', exclude: /node_modules/ },
       { test: /\.(css)(\?.+)$/, loaders: ['style-loader', 'css-loader'] },
       { test: /\.scss$/, loader: 'style!css!sass' },
       { test: /\.(png|gif|jpg)$/, loader: 'file-loader' },
