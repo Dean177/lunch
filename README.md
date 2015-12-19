@@ -1,4 +1,5 @@
 # Lunch
+[![Circle CI](https://circleci.com/gh/Dean177/lunch.svg?style=svg)](https://circleci.com/gh/Dean177/lunch)
 
 ## Requirements
 - [Node](https://nodejs.org/en/)
