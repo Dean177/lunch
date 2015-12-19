@@ -61,7 +61,7 @@
     "react-transform-catch-errors": "1.0.0",
     "react-transform-hmr": "1.0.0",
     "redbox-react": "1.1.1",
-    "redux": "3.0.2",
+    "redux": "3.0.5",
     "redux-devtools": "3.0.0",
     "redux-router": "1.0.0-beta3",
     "rewire": "2.5.1",
