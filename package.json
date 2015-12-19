@@ -5,8 +5,7 @@
   "scripts": {
     "start": "gulp build && node out/server/index.js",
     "start:production": "gulp start-production",
-    "test": "gulp test",
-    "test:file": "webpack --config webpack.config.test.js && node ./client-test-runner",
+    "test": "webpack --config webpack.config.test.js && node ./client-test-runner",
     "lint": "eslint src/**/*.js gulpfile.js webpack.config.prod.js",
     "lint:file": "eslint -f checkstyle src/**/*.js gulpfile.js webpack.config.prod.js > ./build-artifacts/codestyle.xml"
   },
