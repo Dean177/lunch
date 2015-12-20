@@ -1,17 +1,20 @@
-import actionHandlers from '../actionHandlers';
 import debug from 'debug';
+
 const dBug = debug('lunch:actionHandler');
 
-
-function validateActionFormat(action) {
+export function validateActionFormat(action, onError) {
   if (!action.type || !action.payload || !action.meta || !action.meta.user) {
-    dBug('Potentially malformed action received', JSON.stringify(action, null, 2));
+    onError(action);
   }
 }
 
-export default function getActionHandler(io) {
-  return (socket) => (action) => {
-    validateActionFormat(action);
+function onInvalidAction(action) {
+  dBug('Potentially malformed action received', JSON.stringify(action, null, 2));
+}
+
+export default function getActionHandler(actionHandlers) {
+  return (io) => (socket) => (action) => {
+    validateActionFormat(action, onInvalidAction);
     if (!actionHandlers.hasOwnProperty(action.type)) {
       dBug('Unrecognised client action', action);
     }

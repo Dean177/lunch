@@ -1,14 +1,39 @@
+// noinspection Eslint
+"use strict";
+const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const DefinePlugin = webpack.DefinePlugin;
 
+function walkSync(dir, filesList) {
+  let fileList = filesList || [];
+  fs.readdirSync(dir).forEach((file) => {
+    if (fs.statSync(dir + '/' + file).isDirectory()) {
+      fileList = walkSync(dir + '/' + file, fileList);
+    } else {
+      fileList.push({ fileName: file, path: dir + '/' + file });
+    }
+  });
+  return fileList;
+}
+
+const nodeModules = {};
+fs.readdirSync('node_modules')
+  .filter((x) => { return ['.bin'].indexOf(x) === -1; })
+  .forEach((mod) => { nodeModules[mod] = 'commonjs ' + mod; });
+
+const testFiles = {};
+walkSync('./test')
+  .filter((testFile) => (testFile.fileName.includes('.spec.js')))
+  .forEach((spec) => { testFiles[spec.fileName.substr(0, spec.fileName.length - 3)] = spec.path; });
+
 module.exports = {
   devtool: '#eval-source-map',
   target: 'node',
-  entry: ['./src/tests/index'],
+  entry: testFiles,
   output: {
-    path: path.join(__dirname, 'out/tests/client'),
-    filename: 'test-bundle.js',
+    path: path.join(__dirname, 'out/test'),
+    filename: '[name].js',
     publicPath: '/assets/',
   },
   noInfo: true,
@@ -24,7 +49,7 @@ module.exports = {
       },
       {
         test: /sinon\.js$/,
-        loader: "imports?define=>false,require=>false",
+        loader: 'imports?define=>false,require=>false',
       },
       { test: /\.(css)(\?.+)$/, loader: 'null-loader' },
       { test: /\.scss$/, loader: 'null-loader' },

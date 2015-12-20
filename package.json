@@ -7,9 +7,9 @@
     "build": "gulp static-assets && gulp build:server",
     "start": "npm run build && gulp server:dev",
     "start:production": "npm run clean && npm run build && gulp webpack:prod && gulp server:prod'",
-    "test": "webpack --config webpack.config.test.js && node ./client-test-runner",
+    "test":  "webpack --config webpack.config.test.js && mocha out/test/**/*.spec.js",
     "lint": "eslint src/**/*.js gulpfile.js webpack.config.prod.js",
-    "lint:file": "eslint -f checkstyle src/**/*.js gulpfile.js webpack.config.prod.js > ./build-artifacts/codestyle.xml"
+    "lint:file": "eslint -f checkstyle src/**/*.js gulpfile.js webpack.config.prod.js > ./build-artifacts/codestyle.xml",
   },
   "author": "Dean Merchant <deanmerchant@gmail.com>",
   "repository": {
@@ -32,6 +32,7 @@
     "babel-runtime": "6.3.19",
     "bootstrap": "twbs/bootstrap#v4.0.0-alpha",
     "chai": "3.3.0",
+    "chai-spies": "0.7.1",
     "compression": "1.6.0",
     "css-loader": "0.23.0",
     "debug": "2.2.0",
@@ -81,7 +82,6 @@
     "rewire": "2.5.1",
     "sass-loader": "3.1.2",
     "serve-favicon": "2.3.0",
-    "sinon": "1.17.2",
     "socket.io": "1.3.7",
     "socket.io-client": "1.3.7",
     "source-map-support": "0.4.0",

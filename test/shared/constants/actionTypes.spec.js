@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { values, uniq } from 'underscore';
-import * as applicationConstants from '../../../shared/constants/actionTypes';
+import * as applicationConstants from '../../../src/shared/constants/actionTypes';
 
 describe('actionTypes', () => {
   it('Should have no constant with the same value', () => {

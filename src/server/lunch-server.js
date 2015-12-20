@@ -2,6 +2,7 @@ import debug from 'debug';
 import express from 'express';
 import favicon from 'serve-favicon';
 import { Server } from 'http';
+import socketIo from 'socket.io';
 import path from 'path';
 
 import configureWebsocket from './websocketHandler';
@@ -35,6 +36,6 @@ app.get('/', (req, res) => {
 });
 
 const lunchServer = new Server(app);
-configureWebsocket(lunchServer);
+configureWebsocket(socketIo(lunchServer));
 
 export default lunchServer;

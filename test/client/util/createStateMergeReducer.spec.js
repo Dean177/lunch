@@ -1,5 +1,5 @@
 /* eslint no-unused-expressions: 0 */
-import createStateMergeReducer from '../../../client/util/createStateMergeReducer';
+import createStateMergeReducer from '../../../src/client/util/createStateMergeReducer';
 import { expect } from 'chai';
 
 

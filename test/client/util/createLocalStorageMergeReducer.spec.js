@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import createLocalStorageMergeReducer from '../../../client/util/createLocalStorageMergeReducer';
+import createLocalStorageMergeReducer from '../../../src/client/util/createLocalStorageMergeReducer';
 import mockLocalStorage from '../../testingUtil/mockLocalStorage';
 
 
