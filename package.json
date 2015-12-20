@@ -7,7 +7,7 @@
     "build": "gulp static-assets && gulp build:server",
     "start": "npm run build && gulp server:dev",
     "start:production": "npm run clean && npm run build && gulp webpack:prod && gulp server:prod'",
-    "test":  "webpack --config webpack.config.test.js && mocha out/test/**/*.spec.js",
+    "test": "webpack --config webpack.config.test.js && mocha out/test/**/*.spec.js",
     "lint": "eslint src/**/*.js gulpfile.js webpack.config.prod.js",
     "lint:file": "eslint -f checkstyle src/**/*.js gulpfile.js webpack.config.prod.js > ./build-artifacts/codestyle.xml"
   },
@@ -41,7 +41,7 @@
     "eslint": "1.10.3",
     "eslint-config-airbnb": "2.1.1",
     "eslint-loader": "^1.1.1",
-    "eslint-plugin-react": "3.11.2",
+    "eslint-plugin-react": "3.12.0",
     "express": "4.13.3",
     "extract-text-webpack-plugin": "0.9.0",
     "file-loader": "0.8.4",
