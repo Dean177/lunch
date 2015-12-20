@@ -9,7 +9,7 @@
     "start:production": "npm run clean && npm run build && gulp webpack:prod && gulp server:prod'",
     "test":  "webpack --config webpack.config.test.js && mocha out/test/**/*.spec.js",
     "lint": "eslint src/**/*.js gulpfile.js webpack.config.prod.js",
-    "lint:file": "eslint -f checkstyle src/**/*.js gulpfile.js webpack.config.prod.js > ./build-artifacts/codestyle.xml",
+    "lint:file": "eslint -f checkstyle src/**/*.js gulpfile.js webpack.config.prod.js > ./build-artifacts/codestyle.xml"
   },
   "author": "Dean Merchant <deanmerchant@gmail.com>",
   "repository": {
