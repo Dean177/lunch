@@ -23,5 +23,3 @@ export const update = (lunchOption) => {
 export const findByName = (optionName) => {
   return _.find(lunchOptions, (lunchOption) => optionName === lunchOption.name);
 };
-
-

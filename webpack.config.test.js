@@ -3,7 +3,10 @@
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
+const RewirePlugin = require('rewire-webpack');
 const DefinePlugin = webpack.DefinePlugin;
+const BannerPlugin = webpack.BannerPlugin;
+const IgnorePlugin = webpack.IgnorePlugin;
 
 function walkSync(dir, filesList) {
   let fileList = filesList || [];
@@ -39,6 +42,10 @@ module.exports = {
   noInfo: true,
   plugins: [
     new DefinePlugin({ __DEVELOPMENT__: true }),
+    new BannerPlugin('require("source-map-support").install();', { raw: true, entryOnly: false }),
+    new RewirePlugin(),
+    new IgnorePlugin(/jsdom$/),
+    new IgnorePlugin(/sinon$/)
   ],
   module: {
     loaders: [
@@ -47,10 +54,7 @@ module.exports = {
         loader: 'babel',
         exclude: /node_modules/,
       },
-      {
-        test: /sinon\.js$/,
-        loader: 'imports?define=>false,require=>false',
-      },
+      { test: /sinon.*\js$/, loader: "imports?define=>false,require=>false" },
       { test: /\.(css)(\?.+)$/, loader: 'null-loader' },
       { test: /\.scss$/, loader: 'null-loader' },
       { test: /\.(png|gif|jpg)$/, loader: 'null-loader' },

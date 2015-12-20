@@ -25,6 +25,8 @@ gulp.task('server:prod', () => {
     script: 'out/server/index.js',
     verbose: false,
     ignore: ['*'],
+    watch: ['noop/'],
+    ext: 'noop'
   });
 });
 
@@ -38,6 +40,7 @@ gulp.task('server:dev', () => {
     script: 'out/server/index.js',
     ext: 'js',
     verbose: false,
+    ignore: ['*'],
     watch: ['out/server/**/*', 'out/shared/**/*'],
   });
 });
@@ -55,8 +58,7 @@ gulp.task('build:server', () => {
 });
 
 gulp.task('static-assets', () => {
-  return gulp.src(['src/server/index.html', 'src/server/favicon.ico'])
-    .pipe(gulp.dest('out/server'));
+  return gulp.src(['src/server/index.html', 'src/server/favicon.ico']).pipe(gulp.dest('out/server'));
 });
 
 gulp.task('webpack:prod', (done) => {

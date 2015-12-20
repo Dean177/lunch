@@ -1,16 +1,18 @@
 //import React from 'react';
-//// import '../../testingUtil/dom-mock';
-//import { shallow } from 'enzyme';
-//import { expect } from 'chai';
-//import rewire from 'rewire';
-//import MockComponent from '../../testingUtil/MockComponent';
+////import { shallow } from 'enzyme';
+////import { expect } from 'chai';
 //
+//import LunchPicker from '../../../src/client/LunchPicker/LunchPicker';
 //import { chooseLunchOption } from '../../../src/client/actionCreators/lunchActionCreators';
-//const LunchPicker = rewire('../../../src/client/LunchPicker/LunchPicker');
-//LunchPicker.__set__('Measure', MockComponent);
+//
+////import rewire from 'rewire';
+////const LunchPicker = rewire('../../../src/client/LunchPicker/LunchPicker');
+////import MockComponent from '../../testingUtil/MockComponent';
+////const LunchPicker = rewire('../../../src/client/LunchPicker/LunchPicker');
+////LunchPicker.__set__('Measure', MockComponent);
 //
 //
-//describe.skip('LunchPicker', () => {
+//describe('LunchPicker', () => {
 //  const user = {
 //    id: 'some-id',
 //    name: 'test-user',
