@@ -38,7 +38,6 @@ gulp.task('server:dev', () => {
     script: 'out/server/index.js',
     ext: 'js',
     verbose: false,
-    ignore: ['*'],
     watch: ['out/server/**/*', 'out/shared/**/*'],
   });
 });

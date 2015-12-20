@@ -3,7 +3,7 @@ import express from 'express';
 import { Server } from 'http';
 import io from 'socket.io-client';
 import { OptionChoices } from '../../shared/constants/actionTypes';
-import configureWebsocketHandler from '../../server/websocketHandler';
+import configureWebsocketHandler from '../../server/websocketHandler/index';
 
 const serverTestPort = 22222;
 const serverUrl = `http://localhost:${serverTestPort}`;

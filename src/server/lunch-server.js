@@ -26,6 +26,10 @@ if (process.env.NODE_ENV === JSON.stringify('production')) {
   app.use(require('webpack-hot-middleware')(compiler, { noInfo: true }));
 }
 
+app.get('/lunch', (req, res) => {
+  res.sendFile('/index.html', { root: __dirname });
+});
+
 app.get('/', (req, res) => {
   res.sendFile('/index.html', { root: __dirname });
 });

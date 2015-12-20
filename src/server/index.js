@@ -1,3 +1,4 @@
+require('source-map-support').install();
 import debug from 'debug';
 import { serverPort } from '../shared/constants/config';
 import lunchServer from './lunch-server';
