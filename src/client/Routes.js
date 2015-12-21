@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route } from 'react-router';
-import ChooseLunch from './ChooseLunch';
-import Landing from './Landing/Landing';
+import ChooseLunch from './ChooseLunch/index';
+import Landing from './Landing';
 import RouteContainer from './RouteContainer';
-import UserConfig from './UserConfig/UserConfig';
+import UserConfig from './UserConfig';
 
 const routes = (
   <Route path='' component={RouteContainer}>

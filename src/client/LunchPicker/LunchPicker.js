@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 const Measure = require('react-measure');
 import { Motion, spring } from 'react-motion';
 import { bindActionCreators } from 'redux';
-import * as LunchActionCreators from '../actionCreators/lunchActionCreators';
 import OptionAdder from './../components/OptionAdder';
 import LunchOption from './../components/LunchOption';
 import PersonSquare from './../components/PersonSquare';
@@ -15,15 +14,16 @@ class LunchPicker extends Component {
     optionName: PropTypes.string.isRequired,
     lunchOptions: PropTypes.array.isRequired,
     peopleChoices: PropTypes.array.isRequired,
-    dispatch: PropTypes.func.isRequired,
+    chooseLunchOption: PropTypes.func.isRequired,
+    toggleNewOption: PropTypes.func.isRequired,
+    addLunchOption: PropTypes.func.isRequired,
+    enterOptionName: PropTypes.func.isRequired,
   };
 
-  state = {
-    squareDimension: 0,
-  };
+  state = { squareDimension: 0 };
 
   onOptionSelected(choiceId) {
-    this.props.dispatch(LunchActionCreators.chooseLunchOption(this.props.user, choiceId));
+    this.props.chooseLunchOption(this.props.user, choiceId);
   }
 
   getChooserCount(peopleChoices, personId, userChoiceId) {
@@ -49,15 +49,16 @@ class LunchPicker extends Component {
     });
   }
 
-  choicesWithCoordinates(lunchOptions, peopleChoices, squareDimension) {
+  peopleChoicesWithCoordinates(lunchOptions, peopleChoices, squareDimension) {
     return peopleChoices
       .filter(({ choiceId }) => !!choiceId)
-      .map(({ person, choiceId }) => {
+      .map((personChoice) => {
+        const { person, choiceId } = personChoice;
         const xPos = squareDimension * this.getChooserCount(peopleChoices, person.id, choiceId);
         const yPos = squareDimension * this.getChoiceIndex(lunchOptions, choiceId);
 
         return {
-          person,
+          ...personChoice,
           xPos,
           yPos,
         };
@@ -70,18 +71,20 @@ class LunchPicker extends Component {
       optionName,
       peopleChoices,
       lunchOptions,
-      dispatch,
       user,
+      toggleNewOption,
+      addLunchOption,
+      enterOptionName,
     } = this.props;
 
     const lunchOptionsWithCountChosen = this.lunchOptionsWithCountChosen(lunchOptions, peopleChoices);
-    const choices = this.choicesWithCoordinates(lunchOptions, peopleChoices, this.state.squareDimension);
+    const choices = this.peopleChoicesWithCoordinates(lunchOptions, peopleChoices, this.state.squareDimension);
 
     const previousDaysLunchOptions = [...lunchOptions, { id: '23', name: 'zzzzz' }]; // TODO
     const autoSuggestOptions = difference(previousDaysLunchOptions, lunchOptions);
 
     return (
-      <div className='LunchPicker container'>
+      <div className='LunchPicker'>
         <div className='LunchOptions'>
           {lunchOptionsWithCountChosen.map(({ id, name, chosenCount }) =>
             <LunchOption optionName={name}
@@ -89,20 +92,21 @@ class LunchPicker extends Component {
                          key={id}
                          onChosen={this.onOptionSelected.bind(this, id)} />
           )}
-          <Measure whitelist={['height']} onMeasure={ (dimensions) => this.setState({ squareDimension: dimensions.height }) }>
+          <Measure whitelist={['height']} onMeasure={(dimensions) => this.setState({ squareDimension: dimensions.height })} >
             <OptionAdder
               user={user}
               lunchOptions={autoSuggestOptions}
               isAdding={enteringNewOption}
               optionName={optionName}
-              {...bindActionCreators(LunchActionCreators, dispatch)} />
+              { ...{ toggleNewOption, addLunchOption, enterOptionName } }
+            />
           </Measure>
         </div>
         <div className='PeopleChoices'>
-          {choices.map(({ person, xPos, yPos }) =>
+          {choices.map(({ person, isFetching, xPos, yPos }) =>
             <Motion key={person.id} style={{ person, xPos: spring(xPos), yPos: spring(yPos) }}>
               {(interpolatedChoice) =>
-                <PersonSquare person={person} style={{
+                <PersonSquare person={person} isFetching={isFetching} style={{
                   transform: `translate3d(${interpolatedChoice.xPos}px, ${interpolatedChoice.yPos}px, 0)`,
                   zIndex: interpolatedChoice.yPos,
                 }} />

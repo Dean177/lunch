@@ -3,6 +3,7 @@ import { find } from 'underscore';
 import upsert from '../../shared/util/upsert';
 import {
   AddLunchOption,
+  ChangeOrderDetails,
   EnterLunchOptionName,
   OptionChoices,
   ToggleEnterNewLunchOption,
@@ -17,22 +18,7 @@ const initialState = {
   peopleChoices: [],
 };
 
-
 const lunchReducer = createStateMergeReducer(initialState, {
-  [OptionChoices](state, { payload: { peopleChoices, lunchOptions } }) {
-    return { lunchOptions, peopleChoices };
-  },
-
-  [UserLunchChoice]({ peopleChoices }, { payload: { person, choiceId } }) {
-    const newPeopleChoices = upsert(
-      peopleChoices,
-      (personChoice) => (personChoice.person.id === person.id),
-      { person, choiceId }
-    );
-
-    return { peopleChoices: newPeopleChoices };
-  },
-
   [AddLunchOption](state, { payload }) {
     let lunchOptions;
     const option = find(state.lunchOptions, ({ name }) => name === payload.name);
@@ -61,6 +47,22 @@ const lunchReducer = createStateMergeReducer(initialState, {
       peopleChoices: newPeopleChoices,
     };
   },
+
+  [OptionChoices](state, { payload: { peopleChoices, lunchOptions } }) {
+    return { lunchOptions, peopleChoices };
+  },
+
+  [UserLunchChoice]({ peopleChoices }, { payload: { person, choiceId } }) {
+    const newPeopleChoices = upsert(
+      peopleChoices,
+      (personChoice) => (personChoice.person.id === person.id),
+      { person, choiceId }
+    );
+
+    return { peopleChoices: newPeopleChoices };
+  },
+
+
 
   [ToggleEnterNewLunchOption](state) {
     return { enteringNewOption: !state.enteringNewOption };

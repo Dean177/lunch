@@ -1,0 +1,37 @@
+@import '../../colours';
+
+.Sidebar {
+  background-color: $green;
+  color: white;
+  padding: 2em;
+  label {
+    font-size: 1.5em;
+    font-weight: 700;
+  }
+  .action-buttons {
+    .btn {
+      width: 100%;
+      padding: 0.5em 1.25em;
+      margin-right: 0.5em;
+    }
+  }
+
+  .OthersOrders {
+
+  }
+}
+
+.PersonOrder {
+  color: $black;
+  margin-bottom: 0.5em;
+  background-color: white;
+  .PersonSquare {
+    position: relative;
+    display: inline;
+    vertical-align: top;
+  }
+  .PersonOrder {
+    padding-left: 0.5em;
+    display: inline-block;
+  }
+}

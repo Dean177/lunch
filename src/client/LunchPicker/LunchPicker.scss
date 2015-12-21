@@ -1,7 +1,6 @@
 @import '../colours';
 
 .LunchPicker {
-  padding-top: 3em;
   display: flex;
 
   .LunchOptions {
@@ -10,7 +9,6 @@
     padding-right: 1em;
     flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: flex-end;
   }
 
   .PeopleChoices {

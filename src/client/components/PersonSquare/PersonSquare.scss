@@ -1,7 +1,13 @@
+@import '../../colours';
+
 .PersonSquare {
   position: absolute;
   width: 3.5em;
   height: 3.5em;
   border-radius: 5px;
   box-shadow: -1px 1px 2px 0 rgba(0,0,0,0.1);
+
+  &.isFetching {
+    box-shadow: 0 0 10px 0 $green;
+  }
 }

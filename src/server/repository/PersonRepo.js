@@ -4,24 +4,29 @@ const people = [];
 
 export const add = (person) => {
   people.push(person);
+  return person;
 };
 
 export const findById = (personId) => find(people, (person) => (person.id === personId));
 
 export const getAll = () => people;
 
-export const update = () => { };
-
-export const updateImageUrl = (personId, imageUrl) => {
-  const user = find(people, (person) => (person.id === personId));
-  user.imageUrl = imageUrl;
+export const updateImageUrl = (user, imageUrl) => {
+  const matchingUser = find(people, (person) => (person.id === user.id));
+  if (matchingUser) {
+    user.imageUrl = imageUrl;
+    return user;
+  } else {
+    return add({ ...user, imageUrl });
+  }
 };
 
-export const updateName = (personId, name) => {
-  const user = find(people, (person) => (person.id === personId));
-  if (user) {
+export const updateName = (user, name) => {
+  const matchingUser = find(people, (person) => (person.id === user.id));
+  if (matchingUser) {
     user.name = name;
+    return user;
   } else {
-    add({ id: personId, name, imageUrl: '' });
+    return add({ ...user, name });
   }
 };

@@ -9,15 +9,25 @@ const lunchOptions = [
 ];
 
 export const add = (name) => {
-  const newLunchOption = { id: uuid(), name };
+  const newLunchOption = { id: uuid(), name, lastChosen: new Date() };
   lunchOptions.push(newLunchOption);
   return newLunchOption;
 };
 
-export const getAll = (cutoffTime) => (lunchOptions.filter(option => option.keep || option.lastChosen.getTime() > cutoffTime));
+export const getAll = (cutoffTime) => {
+  return lunchOptions.filter(option => {
+    return option.keep || (option.lastChosen && option.lastChosen.getTime() > cutoffTime)
+  });
+};
 
-export const update = (lunchOption) => {
-  dBug('Not implemented yet', lunchOption);
+export const updateLastChosen = (lunchOptionId) => {
+  const updatedOption = _.find(lunchOptions, (lunchOption) => lunchOption.id === lunchOptionId);
+  if (updatedOption) {
+    updatedOption.lastChose = new Date();
+    return updatedOption;
+  } else {
+    dBug("Attempted to update option which doesn't exist", lunchOptionId);
+  }
 };
 
 export const findByName = (optionName) => {

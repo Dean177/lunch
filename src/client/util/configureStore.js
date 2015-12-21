@@ -1,7 +1,7 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import { reduxReactRouter } from 'redux-router';
 import createHistory from 'history/lib/createBrowserHistory';
-import rootReducer from '../reducers';
+import rootReducer from '../reducers/index';
 import { logger, serverEvent, actionFormatValidator } from './middleware';
 
 export default function configureStore(routes, initialState) {

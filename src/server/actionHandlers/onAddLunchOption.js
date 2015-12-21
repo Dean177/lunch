@@ -10,9 +10,9 @@ export default function onAddLunchOption(io, socket, action) {
 
   const existingOption = LunchOptionRepo.findByName(name);
   if (existingOption) {
-    PersonChoiceRepo.update(user.id, existingOption.id);
+    PersonChoiceRepo.updateChoiceId(user, existingOption.id);
   } else {
     const newLunchOption = LunchOptionRepo.add(name);
-    PersonChoiceRepo.update(user.id, newLunchOption.id);
+    PersonChoiceRepo.updateChoiceId(user, newLunchOption.id);
   }
 }
