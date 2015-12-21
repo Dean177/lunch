@@ -2,7 +2,7 @@ import debug from 'debug';
 const dBug = debug('lunch:PersonChoiceRepo');
 import { find } from 'underscore';
 
-let peopleChoices = [];
+const peopleChoices = [];
 
 export const getAll = (cutoffTime) => peopleChoices.filter(personChoice => personChoice.dateChosen.getTime() > cutoffTime);
 
@@ -28,8 +28,12 @@ export const updateChoiceId = (person, choiceId) => {
   dBug(`${person.name} update choice to ${choiceId}`);
   const personChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === person.id));
   if (personChoice) {
-    personChoice.choiceId = choiceId;
-    personChoice.dateChosen = new Date();
+    if (personChoice.choiceId != choiceId) {
+      personChoice.choiceId = choiceId;
+      personChoice.dateChosen = new Date();
+      personChoice.isFetching = false;
+    }
+
     return personChoice;
   } else {
     return add({ person, choiceId, dateChosen: new Date() });
@@ -47,19 +51,10 @@ export const updateOrderDetails = (person, orderDetails) => {
 };
 
 export const updateWhoIsFetchingLunch = (userId, lunchOptionId) => {
-  peopleChoices = peopleChoices
+  dBug(`${userId} is getting lunch for option ${lunchOptionId}`);
+  peopleChoices
     .filter(personChoice => personChoice.choiceId === lunchOptionId)
-    .map(personChoice => {
-      if (personChoice.person.id === userId) {
-        return {
-          ...personChoice,
-          isFetching: true
-        }
-      } else {
-        return {
-          ...personChoice,
-          isFetching: false
-        }
-      }
-    })
+    .forEach(personChoice => {
+      personChoice.isFetching = personChoice.person.id === userId;
+    });
 };
