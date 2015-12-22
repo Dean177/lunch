@@ -1,15 +1,9 @@
 const babel = require('gulp-babel');
-const del = require('del');
 const gulp = require('gulp');
 const util = require('gulp-util');
 const sourcemaps = require('gulp-sourcemaps');
 const nodemon = require('gulp-nodemon');
-const webpack = require('webpack');
 const path = require('path');
-const PluginError = util.PluginError;
-
-const webpackProdConfig = require('./webpack.config.prod.js');
-
 const sourceMapConfig = {
   debug: true,
   includeContent: false,
@@ -60,13 +54,3 @@ gulp.task('build:server', () => {
 gulp.task('static-assets', () => {
   return gulp.src(['src/server/index.html', 'src/server/favicon.ico']).pipe(gulp.dest('out/server'));
 });
-
-gulp.task('webpack:prod', (done) => {
-  webpack(webpackProdConfig, (err, stats) => {
-    if (err) throw new PluginError('webpack', err);
-    util.log('[webpack]', stats.toString());
-    done();
-  });
-});
-
-gulp.task('clean', () => del(['out/**', 'build-artifacts']));

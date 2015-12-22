@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { changeOrderDetails, goneToFetchLunch, offerToGetLunch, toggleNewOption, addLunchOption, chooseLunchOption, enterOptionName } from '../actionCreators/lunchActionCreators';
-import LunchPicker from '../LunchPicker';
+import LunchPicker from '../components/LunchPicker';
 import Sidebar from '../components/Sidebar';
 
 

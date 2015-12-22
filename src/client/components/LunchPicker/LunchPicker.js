@@ -2,12 +2,12 @@ import React, { Component, PropTypes } from 'react';
 const Measure = require('react-measure');
 import { Motion, spring } from 'react-motion';
 import { bindActionCreators } from 'redux';
-import OptionAdder from './../components/OptionAdder';
-import LunchOption from './../components/LunchOption';
-import PersonSquare from './../components/PersonSquare';
+import OptionAdder from '../OptionAdder';
+import LunchOption from '../LunchOption';
+import PersonSquare from '../PersonSquare';
 import { difference } from 'underscore';
 
-class LunchPicker extends Component {
+export default class LunchPicker extends Component {
   static propTypes = {
     user: PropTypes.object.isRequired,
     enteringNewOption: PropTypes.bool.isRequired,
@@ -21,10 +21,6 @@ class LunchPicker extends Component {
   };
 
   state = { squareDimension: 0 };
-
-  onOptionSelected(choiceId) {
-    this.props.chooseLunchOption(this.props.user, choiceId);
-  }
 
   getChooserCount(peopleChoices, personId, userChoiceId) {
     return peopleChoices
@@ -63,6 +59,10 @@ class LunchPicker extends Component {
           yPos,
         };
       });
+  }
+
+  onOptionSelected(choiceId) {
+    this.props.chooseLunchOption(this.props.user, choiceId);
   }
 
   render() {
@@ -118,5 +118,3 @@ class LunchPicker extends Component {
     );
   }
 }
-
-export default LunchPicker;
