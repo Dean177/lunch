@@ -1,5 +1,4 @@
-// noinspection Eslint
-"use strict";
+'use strict';
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
@@ -45,7 +44,7 @@ module.exports = {
     new BannerPlugin('require("source-map-support").install();', { raw: true, entryOnly: false }),
     new RewirePlugin(),
     new IgnorePlugin(/jsdom$/),
-    new IgnorePlugin(/sinon$/)
+    new IgnorePlugin(/sinon$/),
   ],
   module: {
     loaders: [
@@ -54,7 +53,7 @@ module.exports = {
         loader: 'babel',
         exclude: /node_modules/,
       },
-      { test: /sinon.*\js$/, loader: "imports?define=>false,require=>false" },
+      { test: /sinon.*\js$/, loader: 'imports?define=>false,require=>false' },
       { test: /\.(css)(\?.+)$/, loader: 'null-loader' },
       { test: /\.scss$/, loader: 'null-loader' },
       { test: /\.(png|gif|jpg)$/, loader: 'null-loader' },

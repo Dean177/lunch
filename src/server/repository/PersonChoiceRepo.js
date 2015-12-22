@@ -4,7 +4,9 @@ import { find } from 'underscore';
 
 const peopleChoices = [];
 
-export const getAll = (cutoffTime) => peopleChoices.filter(personChoice => personChoice.dateChosen.getTime() > cutoffTime);
+export const getAll = (cutoffTime) => peopleChoices.filter(personChoice => (
+  personChoice.dateChosen && personChoice.dateChosen > cutoffTime)
+);
 
 export const add = (personChoice) => {
   dBug(`User: ${personChoice.person.name} has made initial choice ${personChoice.choiceId}`);
@@ -14,10 +16,12 @@ export const add = (personChoice) => {
 
 export const updateName = (user, name) => {
   const matchingUser = find(peopleChoices, (personChoice) => (personChoice.person.id === user.id));
-  if (matchingUser) {
-    matchingUser.person.name = name;
-    return matchingUser;
+  if (!matchingUser) {
+    dBug(`Attempted to update the name of a user which doesn't exist ${user}`);
   }
+
+  matchingUser.person.name = name;
+  return matchingUser;
 };
 
 export const findByPersonId = (personId) => {
@@ -27,17 +31,17 @@ export const findByPersonId = (personId) => {
 export const updateChoiceId = (person, choiceId) => {
   dBug(`${person.name} update choice to ${choiceId}`);
   const personChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === person.id));
-  if (personChoice) {
-    if (personChoice.choiceId != choiceId) {
-      personChoice.choiceId = choiceId;
-      personChoice.dateChosen = new Date();
-      personChoice.isFetching = false;
-    }
-
-    return personChoice;
-  } else {
-    return add({ person, choiceId, dateChosen: new Date() });
+  if (!personChoice) {
+    return add({ person, choiceId, dateChosen: new Date().getTime() });
   }
+
+  personChoice.dateChosen = new Date().getTime();
+  if (personChoice.choiceId !== choiceId) {
+    personChoice.choiceId = choiceId;
+    personChoice.isFetching = false;
+  }
+
+  return personChoice;
 };
 
 export const updateOrderDetails = (person, orderDetails) => {
@@ -46,6 +50,7 @@ export const updateOrderDetails = (person, orderDetails) => {
   if (!personChoice) {
     dBug(`${person.name} updated orderDetails without making a selection`);
   }
+
   personChoice.orderDetails = orderDetails;
   return personChoice;
 };

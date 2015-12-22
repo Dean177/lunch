@@ -6,7 +6,7 @@ import {
   GoneToFetchLunch,
   OfferToGetLunch,
   ToggleEnterNewLunchOption,
-  UserLunchChoice
+  UserLunchChoice,
 } from '../../shared/constants/actionTypes';
 
 export function addLunchOption(person, name) {

@@ -3,7 +3,6 @@ import { find } from 'underscore';
 import upsert from '../../shared/util/upsert';
 import {
   AddLunchOption,
-  ChangeOrderDetails,
   EnterLunchOptionName,
   OptionChoices,
   ToggleEnterNewLunchOption,
@@ -61,8 +60,6 @@ const lunchReducer = createStateMergeReducer(initialState, {
 
     return { peopleChoices: newPeopleChoices };
   },
-
-
 
   [ToggleEnterNewLunchOption](state) {
     return { enteringNewOption: !state.enteringNewOption };

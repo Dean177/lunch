@@ -1,6 +1,6 @@
 import OptionAutosuggest from '../OptionAutosuggest';
 import React, { Component, PropTypes } from 'react';
-import { Person, PersonChoice, LunchOption } from '../../PropTypes';
+import { Person, LunchOption } from '../../PropTypes';
 
 
 class OptionAdder extends Component {
@@ -21,7 +21,7 @@ class OptionAdder extends Component {
 
   onBlur = () => {
     // If the 'toggleNewOption' function is fired immediately, go button will be hidden before the click can be registered.
-    setTimeout(this.props.toggleNewOption, 20);
+    setTimeout(this.props.toggleNewOption, 100);
   };
 
   getSuggestions = (input, callback) => {

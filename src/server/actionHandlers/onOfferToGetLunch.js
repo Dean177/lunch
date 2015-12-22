@@ -1,4 +1,3 @@
-import * as PersonRepo from '../repository/PersonRepo';
 import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
 import debug from 'debug';
 const dBug = debug('lunch:actionHandler:onChangeName');

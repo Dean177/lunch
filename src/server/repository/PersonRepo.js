@@ -13,20 +13,20 @@ export const getAll = () => people;
 
 export const updateImageUrl = (user, imageUrl) => {
   const matchingUser = find(people, (person) => (person.id === user.id));
-  if (matchingUser) {
-    user.imageUrl = imageUrl;
-    return user;
-  } else {
+  if (!matchingUser) {
     return add({ ...user, imageUrl });
   }
+
+  user.imageUrl = imageUrl;
+  return user;
 };
 
 export const updateName = (user, name) => {
   const matchingUser = find(people, (person) => (person.id === user.id));
   if (matchingUser) {
-    user.name = name;
-    return user;
-  } else {
     return add({ ...user, name });
   }
+
+  user.name = name;
+  return user;
 };

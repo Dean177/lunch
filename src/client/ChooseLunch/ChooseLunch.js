@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { Person, LunchOption, PersonChoice } from '../PropTypes';
 import { find } from 'underscore';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -15,16 +16,27 @@ import Sidebar from '../components/Sidebar';
   );
 
   return {
+    enteringNewOption: appState.lunch.enteringNewOption,
+    lunchOptions: appState.lunch.lunchOptions,
+    optionName: appState.lunch.optionName,
+    peopleChoices: appState.lunch.peopleChoices,
+    selectedOptionId: appState.lunch.selectedOptionId,
     user: appState.user,
     userLunchChoice,
-    enteringNewOption: appState.lunch.enteringNewOption,
-    optionName: appState.lunch.optionName,
-    selectedOptionId: appState.lunch.selectedOptionId,
-    lunchOptions: appState.lunch.lunchOptions,
-    peopleChoices: appState.lunch.peopleChoices,
   };
 })
 class ChooseLunch extends Component {
+  static propTypes = {
+    dispatch: PropTypes.func,
+    enteringNewOption: PropTypes.bool,
+    lunchOptions: PropTypes.arrayOf(LunchOption),
+    optionName: PropTypes.string,
+    peopleChoices: PropTypes.arrayOf(PersonChoice),
+    selectedOptionId: PropTypes.string,
+    user: Person,
+    userLunchChoice: PersonChoice,
+  };
+
   render() {
     const {
       enteringNewOption,

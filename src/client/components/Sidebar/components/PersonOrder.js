@@ -1,14 +1,24 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import PersonSquare from '../../PersonSquare';
 import { PersonChoice } from '../../../PropTypes';
 
-function PersonOrder({ personChoice: { person, orderDetails, isFetching} }) {
+function getOrderText(isFetching, hasOrderDetails) {
+  if (isFetching) {
+    return 'is fetching';
+  } else if (hasOrderDetails) {
+    return 'wants:';
+  }
+
+  return '';
+}
+
+function PersonOrder({ personChoice: { person, orderDetails, isFetching } }) {
   return (
-    <div className="PersonOrder" key={person.id}>
-      <PersonSquare  person={person} />
-      <div className="main">
-        <p className="title">{person.name} {isFetching ? 'is fetching' : orderDetails ? 'wants:' : ''}</p>
-        <pre className="description">{orderDetails}</pre>
+    <div className='PersonOrder' key={person.id}>
+      <PersonSquare person={person} />
+      <div className='main'>
+        <p className='title'>{person.name} {getOrderText(isFetching, orderDetails)}</p>
+        <pre className='description'>{orderDetails}</pre>
       </div>
     </div>
   );

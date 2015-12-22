@@ -1,6 +1,5 @@
 const babel = require('gulp-babel');
 const gulp = require('gulp');
-const util = require('gulp-util');
 const sourcemaps = require('gulp-sourcemaps');
 const nodemon = require('gulp-nodemon');
 const path = require('path');
@@ -20,7 +19,7 @@ gulp.task('server:prod', () => {
     verbose: false,
     ignore: ['*'],
     watch: ['noop/'],
-    ext: 'noop'
+    ext: 'noop',
   });
 });
 

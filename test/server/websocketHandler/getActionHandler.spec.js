@@ -46,7 +46,6 @@ describe('getActionHandler', () => {
   });
 
   it('Should call the handler matching an actions type', () => {
-
     actionHandler(spyAction);
 
     expect(onActionType).to.have.been.called();

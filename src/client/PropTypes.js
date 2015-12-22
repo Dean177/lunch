@@ -11,10 +11,11 @@ export const PersonChoice = PropTypes.shape({
   choiceId: PropTypes.string,
   orderDetails: PropTypes.string,
   isFetching: PropTypes.bool,
+  dateChosen: PropTypes.number,
 });
 
 export const LunchOption = PropTypes.shape({
   id: PropTypes.string.isRequired,
   name: PropTypes.string,
-  lastChosen: PropTypes.string,
+  lastChosen: PropTypes.number,
 });

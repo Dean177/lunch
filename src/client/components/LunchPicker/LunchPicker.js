@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { Person, PersonChoice, LunchOption as LunchOptProp } from '../../PropTypes';
 const Measure = require('react-measure');
 import { Motion, spring } from 'react-motion';
-import { bindActionCreators } from 'redux';
 import OptionAdder from '../OptionAdder';
 import LunchOption from '../LunchOption';
 import PersonSquare from '../PersonSquare';
@@ -10,18 +9,22 @@ import { difference } from 'underscore';
 
 export default class LunchPicker extends Component {
   static propTypes = {
-    user: Person.isRequired,
-    enteringNewOption: PropTypes.bool.isRequired,
-    optionName: PropTypes.string.isRequired,
-    lunchOptions: PropTypes.arrayOf(LunchOptProp).isRequired,
-    peopleChoices: PropTypes.arrayOf(PersonChoice).isRequired,
-    chooseLunchOption: PropTypes.func.isRequired,
-    toggleNewOption: PropTypes.func.isRequired,
     addLunchOption: PropTypes.func.isRequired,
+    chooseLunchOption: PropTypes.func.isRequired,
+    enteringNewOption: PropTypes.bool.isRequired,
     enterOptionName: PropTypes.func.isRequired,
+    lunchOptions: PropTypes.arrayOf(LunchOptProp).isRequired,
+    optionName: PropTypes.string.isRequired,
+    peopleChoices: PropTypes.arrayOf(PersonChoice).isRequired,
+    toggleNewOption: PropTypes.func.isRequired,
+    user: Person.isRequired,
   };
 
   state = { squareDimension: 0 };
+
+  onOptionSelected(choiceId) {
+    this.props.chooseLunchOption(this.props.user, choiceId);
+  }
 
   getChooserCount(peopleChoices, personId, userChoiceId) {
     return peopleChoices
@@ -60,10 +63,6 @@ export default class LunchPicker extends Component {
           yPos,
         };
       });
-  }
-
-  onOptionSelected(choiceId) {
-    this.props.chooseLunchOption(this.props.user, choiceId);
   }
 
   render() {

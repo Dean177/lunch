@@ -44,7 +44,7 @@ module.exports = {
           ],
         },
       },
-      //{ test: /\.jsx?$/, loader: 'eslint-loader', exclude: /node_modules/ },
+      { test: /\.jsx?$/, loader: 'eslint-loader', exclude: /node_modules/ },
       { test: /\.(css)(\?.+)$/, loaders: ['style-loader', 'css-loader'] },
       { test: /\.scss$/, loader: 'style!css!sass' },
       { test: /\.(png|gif|jpg)$/, loader: 'file-loader' },

@@ -12,7 +12,7 @@ const actionHandlers = {
   [ChangeName]: onChangeName,
   [ChangeOrderDetails]: onChangeOrderDetails,
   [UserLunchChoice]: onUserLunchChoice,
-  [OfferToGetLunch]: onOfferToGetLunch
+  [OfferToGetLunch]: onOfferToGetLunch,
 };
 
 export default actionHandlers;

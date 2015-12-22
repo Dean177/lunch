@@ -16,8 +16,8 @@ function PersonSquare(props) {
 }
 
 PersonSquare.propTypes = {
- person: Person.isRequired,
- isFetching: PropTypes.bool,
+  person: Person.isRequired,
+  isFetching: PropTypes.bool,
 };
 
 export default PersonSquare;
