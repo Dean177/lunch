@@ -1,5 +1,6 @@
 import './Landing.scss';
 import React, { Component, PropTypes } from 'react';
+import { Person, LunchOption } from '../PropTypes';
 import { connect } from 'react-redux';
 import { pushState } from 'redux-router';
 import { compose } from 'underscore';
@@ -14,8 +15,8 @@ import OptionAutosuggest from '../components/OptionAutosuggest';
 class Landing extends Component {
   static propTypes = {
     optionName: PropTypes.string.isRequired,
-    lunchOptions: PropTypes.array.isRequired,
-    user: PropTypes.object.isRequired,
+    lunchOptions: PropTypes.arrayOf(LunchOption).isRequired,
+    user: Person.isRequired,
     dispatch: PropTypes.func.isRequired,
   };
 
@@ -41,11 +42,12 @@ class Landing extends Component {
 
   render() {
     const autoSuggestInput = (
-      <OptionAutosuggest value={ this.props.optionName }
-                         placeholder='Food...'
-                         onChange={this.onNameChange}
-                         getSuggestions={this.getSuggestions}
-                         inputClass='borderless'
+      <OptionAutosuggest
+        value={ this.props.optionName }
+        placeholder='Food...'
+        onChange={this.onNameChange}
+        getSuggestions={this.getSuggestions}
+        inputClass='borderless'
       />
     );
 

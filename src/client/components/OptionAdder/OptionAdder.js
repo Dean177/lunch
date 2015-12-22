@@ -1,12 +1,14 @@
 import OptionAutosuggest from '../OptionAutosuggest';
 import React, { Component, PropTypes } from 'react';
+import { Person, PersonChoice, LunchOption } from '../../PropTypes';
+
 
 class OptionAdder extends Component {
   static propTypes = {
-    user: PropTypes.object.isRequired,
+    user: Person.isRequired,
     isAdding: PropTypes.bool.isRequired,
     optionName: PropTypes.string.isRequired,
-    lunchOptions: PropTypes.array.isRequired,
+    lunchOptions: PropTypes.arrayOf(LunchOption).isRequired,
     toggleNewOption: PropTypes.func.isRequired,
     addLunchOption: PropTypes.func.isRequired,
     enterOptionName: PropTypes.func.isRequired,

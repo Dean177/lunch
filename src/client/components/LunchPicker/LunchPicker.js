@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Person, PersonChoice, LunchOption as LunchOptProp } from '../../PropTypes';
 const Measure = require('react-measure');
 import { Motion, spring } from 'react-motion';
 import { bindActionCreators } from 'redux';
@@ -9,11 +10,11 @@ import { difference } from 'underscore';
 
 export default class LunchPicker extends Component {
   static propTypes = {
-    user: PropTypes.object.isRequired,
+    user: Person.isRequired,
     enteringNewOption: PropTypes.bool.isRequired,
     optionName: PropTypes.string.isRequired,
-    lunchOptions: PropTypes.array.isRequired,
-    peopleChoices: PropTypes.array.isRequired,
+    lunchOptions: PropTypes.arrayOf(LunchOptProp).isRequired,
+    peopleChoices: PropTypes.arrayOf(PersonChoice).isRequired,
     chooseLunchOption: PropTypes.func.isRequired,
     toggleNewOption: PropTypes.func.isRequired,
     addLunchOption: PropTypes.func.isRequired,

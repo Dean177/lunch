@@ -1,15 +1,16 @@
 import React, { Component, PropTypes } from 'react';
+import { PersonChoice } from '../../PropTypes';
 import { Motion, spring } from 'react-motion';
 import PersonSquare from '../PersonSquare'
 import PersonOrder from './components/PersonOrder';
 
 export default class Sidebar extends Component {
   static propTypes = {
-    changeOrderDetails: PropTypes.func,
-    goneToFetchLunch: PropTypes.func,
-    offerToGetLunch: PropTypes.func,
-    peopleChoices: PropTypes.array,
-    userLunchChoice: PropTypes.object
+    changeOrderDetails: PropTypes.func.isRequired,
+    goneToFetchLunch: PropTypes.func.isRequired,
+    offerToGetLunch: PropTypes.func.isRequired,
+    peopleChoices: PropTypes.arrayOf(PersonChoice).isRequired,
+    userLunchChoice: PersonChoice
   };
 
   onGetLunch = (event) => {

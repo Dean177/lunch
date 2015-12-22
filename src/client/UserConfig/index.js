@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Person } from '../PropTypes';
 import { connect } from 'react-redux';
 import { changeName, changeImageUrl } from '../actionCreators/userActionCreator';
 import PersonSquare from '../components/PersonSquare';
@@ -8,7 +9,7 @@ import { Link } from 'react-router';
 @connect(appState => ({ user: appState.user }))
 class LunchPicker extends Component {
   static propTypes = {
-    user: PropTypes.object.isRequired,
+    user: Person.isRequired,
     dispatch: PropTypes.func.isRequired,
   };
 
