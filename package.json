@@ -36,7 +36,7 @@
     "chai-spies": "0.7.1",
     "classnames": "2.2.1",
     "compression": "1.6.0",
-    "css-loader": "0.23.0",
+    "css-loader": "0.23.1",
     "debug": "2.2.0",
     "del": "2.0.2",
     "enzyme": "1.2.0",
