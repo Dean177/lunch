@@ -4,7 +4,16 @@ import { find } from 'underscore';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
-import { changeOrderDetails, goneToFetchLunch, offerToGetLunch, toggleNewOption, addLunchOption, chooseLunchOption, enterOptionName } from '../actionCreators/lunchActionCreators';
+import {
+  addLunchOption,
+  changeOrderDetails,
+  chooseLunchOption,
+  enterOptionName,
+  enterPaymentAmount,
+  goneToFetchLunch,
+  offerToGetLunch,
+  toggleNewOption,
+} from '../actionCreators/lunchActionCreators';
 import LunchPicker from '../components/LunchPicker';
 import Sidebar from '../components/Sidebar';
 
@@ -64,7 +73,7 @@ class ChooseLunch extends Component {
           <Sidebar
             userLunchChoice={userLunchChoice}
             peopleChoices={peopleChoices}
-            {...bindActionCreators({ changeOrderDetails, goneToFetchLunch, offerToGetLunch }, dispatch)} />
+            {...bindActionCreators({ changeOrderDetails, goneToFetchLunch, offerToGetLunch, enterPaymentAmount }, dispatch)} />
         </div>
       </div>
     );

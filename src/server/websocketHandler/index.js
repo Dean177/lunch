@@ -7,7 +7,9 @@ import actionHandlers from '../actionHandlers';
 const dBug = debug('lunch:socket-io');
 const actionHandler = getActionHandler(actionHandlers);
 
-function updateClients(io) { io.emit('message', getOptionChoicesMessage()); }
+function updateClients(io) {
+  io.emit('action', getOptionChoicesMessage());
+}
 
 export default function configureWebsocket(io) {
   const connections = {};
@@ -24,17 +26,17 @@ export default function configureWebsocket(io) {
 
     socket.on('close', () => { delete connections[socketId]; });
 
-    socket.on('authenticate', (data) => {
-      dBug('auth payload received from client', data);
+    socket.on('authenticate', (authData) => {
+      dBug('auth payload received from client', authData);
 
       // Send current state to the client
       socket.emit('authenticated', {});
       socket.emit('action', getOptionChoicesMessage());
+    });
 
-      socket.on('action', (action) => {
-        socketActionHandler(action);
-        updateClients(io);
-      });
+    socket.on('action', (action) => {
+      socketActionHandler(action);
+      updateClients(io);
     });
   });
 

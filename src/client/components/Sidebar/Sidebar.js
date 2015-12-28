@@ -7,14 +7,11 @@ import SplitwiseIntegration from './components/SplitwiseIntegration';
 export default class Sidebar extends Component {
   static propTypes = {
     changeOrderDetails: PropTypes.func.isRequired,
+    enterPaymentAmount: PropTypes.func.isRequired,
     goneToFetchLunch: PropTypes.func.isRequired,
     offerToGetLunch: PropTypes.func.isRequired,
     peopleChoices: PropTypes.arrayOf(PersonChoice).isRequired,
     userLunchChoice: PersonChoice,
-  };
-
-  state = {
-    paymentAmount: 0,
   };
 
   onGetLunch = (event) => {
@@ -32,7 +29,7 @@ export default class Sidebar extends Component {
   };
 
   onPaymentAmountChange = (event) => {
-    this.setState({ paymentAmount: event.target.value });
+    this.props.enterPaymentAmount(event.target.value);
   };
 
   onReady = (event) => {
@@ -62,7 +59,7 @@ export default class Sidebar extends Component {
                 />
               </fieldset>
 
-              <fieldset className='form-group'>
+              <fieldset className='form-group' style={{ display: userLunchChoice.isFetching ? 'none' : null }}>
                 <label>I will pay the buyer:</label>
                 <div className='input-group'>
                   <div className='input-group-addon'>£</div>
@@ -71,7 +68,7 @@ export default class Sidebar extends Component {
                     step='0.01'
                     className='i-pay form-control'
                     onChange={this.onPaymentAmountChange}
-                    value={this.state.paymentAmount}
+                    value={userLunchChoice.paymentAmount || ''}
                   />
                 </div>
               </fieldset>

@@ -1,18 +1,20 @@
-import { AddLunchOption, ChangeImageUrl, ChangeName, ChangeOrderDetails, UserLunchChoice, OfferToGetLunch } from '../../shared/constants/actionTypes';
+import * as aTypes from '../../shared/constants/actionTypes';
 import onAddLunchOption from './onAddLunchOption';
 import onChangeImageUrl from './onChangeImageUrl';
 import onChangeName from './onChangeName';
 import onChangeOrderDetails from './onChangeOrderDetails';
+import onChangePaymentAmount from './onChangePaymentAmount';
 import onUserLunchChoice from './onUserLunchChoice';
 import onOfferToGetLunch from './onOfferToGetLunch';
 
 const actionHandlers = {
-  [AddLunchOption]: onAddLunchOption,
-  [ChangeImageUrl]: onChangeImageUrl,
-  [ChangeName]: onChangeName,
-  [ChangeOrderDetails]: onChangeOrderDetails,
-  [UserLunchChoice]: onUserLunchChoice,
-  [OfferToGetLunch]: onOfferToGetLunch,
+  [aTypes.AddLunchOption]: onAddLunchOption,
+  [aTypes.ChangeImageUrl]: onChangeImageUrl,
+  [aTypes.ChangeName]: onChangeName,
+  [aTypes.ChangeOrderDetails]: onChangeOrderDetails,
+  [aTypes.EnterPaymentAmount]: onChangePaymentAmount,
+  [aTypes.UserLunchChoice]: onUserLunchChoice,
+  [aTypes.OfferToGetLunch]: onOfferToGetLunch,
 };
 
 export default actionHandlers;

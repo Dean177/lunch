@@ -1,6 +1,7 @@
 @import '../colours';
 
 .LoadingScreen {
+  z-index: 3;
   position: relative;
   background-color: $green;
   width: 100%;
@@ -24,7 +25,7 @@
   width: 150px;
   background-color: $green;
   position: absolute;
-  z-index: 2;
+  z-index: 3;
 
   &.left {
     left: 0;

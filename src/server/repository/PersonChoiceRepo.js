@@ -32,7 +32,7 @@ export const updateChoiceId = (person, choiceId) => {
   dBug(`${person.name} update choice to ${choiceId}`);
   const personChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === person.id));
   if (!personChoice) {
-    return add({ person, choiceId, dateChosen: new Date().getTime() });
+    return add({ person, choiceId, dateChosen: new Date().getTime(), paymentAmount: '' });
   }
 
   personChoice.dateChosen = new Date().getTime();
@@ -46,12 +46,23 @@ export const updateChoiceId = (person, choiceId) => {
 
 export const updateOrderDetails = (person, orderDetails) => {
   dBug(`${person.name} update orderDetails to ${orderDetails}`);
-  const personChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === person.id));
+  const personChoice = findByPersonId(person.id);
   if (!personChoice) {
     dBug(`${person.name} updated orderDetails without making a selection`);
   }
 
   personChoice.orderDetails = orderDetails;
+  return personChoice;
+};
+
+export const updatePaymentAmount = (person, amount) => {
+  dBug(`${person.name} changed paymentAmount to ${amount}`);
+  const personChoice = findByPersonId(person.id);
+  if (!personChoice) {
+    dBug(`${person.name} updated payment amount without making a selection`);
+  }
+
+  personChoice.paymentAmount = amount;
   return personChoice;
 };
 

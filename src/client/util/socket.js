@@ -4,5 +4,5 @@ import { serverPort } from '../../shared/constants/config';
 export const socket = io.connect(`http://${window.location.hostname}:${serverPort}`);
 
 export default function send(action) {
-  socket.emit('message', action);
+  socket.emit('action', action);
 }
