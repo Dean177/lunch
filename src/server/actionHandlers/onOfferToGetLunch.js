@@ -1,6 +1,6 @@
 import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
 import debug from 'debug';
-const dBug = debug('lunch:actionHandler:onChangeName');
+const dBug = debug('lunch:actionHandler:onOfferToGetLunch');
 
 export default function onOfferToGetLunch(io, socket, action) {
   const { payload: { lunchOptionId }, meta: { user } } = action;
