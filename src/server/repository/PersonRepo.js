@@ -30,3 +30,10 @@ export const updateName = (user, name) => {
   user.name = name;
   return user;
 };
+
+export const getAccessToken = (personId) => {
+  return {
+    token: '',
+    secret: ''
+  }
+};
