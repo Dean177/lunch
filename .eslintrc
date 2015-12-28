@@ -14,6 +14,7 @@
     "react/jsx-closing-bracket-location": 0,
     "react/jsx-indent-props": 0,
     "react/jsx-quotes": 0,
+    "react/jsx-boolean-value": [2, "always"],
     "jsx-quotes": [1, "prefer-single"]
   }
 }

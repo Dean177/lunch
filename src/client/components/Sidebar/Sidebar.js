@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { PersonChoice } from '../../PropTypes';
 import { Motion, spring } from 'react-motion';
 import PersonOrder from './components/PersonOrder';
+import SplitwiseIntegration from './components/SplitwiseIntegration';
 
 export default class Sidebar extends Component {
   static propTypes = {
@@ -10,6 +11,10 @@ export default class Sidebar extends Component {
     offerToGetLunch: PropTypes.func.isRequired,
     peopleChoices: PropTypes.arrayOf(PersonChoice).isRequired,
     userLunchChoice: PersonChoice,
+  };
+
+  state = {
+    paymentAmount: 0,
   };
 
   onGetLunch = (event) => {
@@ -26,6 +31,10 @@ export default class Sidebar extends Component {
     this.props.changeOrderDetails(event.target.value);
   };
 
+  onPaymentAmountChange = (event) => {
+    this.setState({ paymentAmount: event.target.value });
+  };
+
   onReady = (event) => {
     event.preventDefault();
   };
@@ -35,6 +44,8 @@ export default class Sidebar extends Component {
     if (!userLunchChoice) {
       return <span/>;
     }
+
+    const hasSplitwiseAuth = false;
 
     return (
       <Motion defaultStyle={{ xPosition: -500 }} style={{ xPosition: spring(0) }}>
@@ -49,6 +60,20 @@ export default class Sidebar extends Component {
                   onChange={this.onOrderChange}
                   value={userLunchChoice.orderDetails}
                 />
+              </fieldset>
+
+              <fieldset className='form-group'>
+                <label>I will pay the buyer:</label>
+                <div className='input-group'>
+                  <div className='input-group-addon'>£</div>
+                  <input
+                    type='number'
+                    step='0.01'
+                    className='i-pay form-control'
+                    onChange={this.onPaymentAmountChange}
+                    value={this.state.paymentAmount}
+                  />
+                </div>
               </fieldset>
 
               <fieldset className='form-group' style={{ display: 'none' }}>
@@ -68,6 +93,8 @@ export default class Sidebar extends Component {
                   <PersonOrder key={personChoice.person.id} personChoice={personChoice} />
                 ))}
             </div>
+
+            <SplitwiseIntegration isAuthorized={hasSplitwiseAuth} />
           </div>
         )}
       </Motion>
