@@ -7,9 +7,27 @@ import { ReduxRouter } from 'redux-router';
 import routes from './Routes';
 import configureStore from './util/configureStore';
 import { socket } from './util/socket';
+import { Authenticated } from '../shared/constants/actionTypes';
 
 const store = configureStore(routes);
-socket.on('message', store.dispatch);
+
+socket.on('action', store.dispatch);
+socket.on('connect', () => {
+  const { user } = store.getState();
+
+  socket.emit('authenticate', {
+    id: user.id,
+    name: user.name,
+    splitwiseAuthToken: user.splitwiseAuthToken,
+  });
+
+  socket.on('authenticated', () => {
+    setTimeout(() => {
+      store.dispatch({ type: Authenticated, payload: { isAuthenticated: true } });
+    }, 1000);
+  });
+});
+
 
 class App extends Component {
   render() {

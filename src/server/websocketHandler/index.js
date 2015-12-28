@@ -18,16 +18,23 @@ export default function configureWebsocket(io) {
   io.on('connection', (socket) => {
     const socketActionHandler = serverActionHandler(socket);
     const socketId = uuid();
-    connections[socketId] = socket;
+    connections[socketId] =  { socket };
+
     socket.on('error', dBug);
+
     socket.on('close', () => { delete connections[socketId]; });
 
-    // Send current state to the client
-    socket.send(getOptionChoicesMessage());
+    socket.on('authenticate', (data) => {
+      dBug('auth payload received from client', data);
 
-    socket.on('message', (action) => {
-      socketActionHandler(action);
-      updateClients(io);
+      // Send current state to the client
+      socket.emit('authenticated', {});
+      socket.emit('action', getOptionChoicesMessage());
+
+      socket.on('action', (action) => {
+        socketActionHandler(action);
+        updateClients(io);
+      });
     });
   });
 

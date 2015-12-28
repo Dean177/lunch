@@ -1,8 +1,10 @@
 export const AddLunchOption = 'AddLunchOption';
+export const Authenticated = 'Authenticated';
 export const ChangeImageUrl = 'ChangeImageUrl';
 export const ChangeName = 'ChangeName';
 export const ChangeOrderDetails = 'ChangeOrderDetails';
 export const EnterLunchOptionName = 'EnterLunchOptionName';
+export const SplitwiseAuthToken = 'SplitwiseAuthToken';
 export const OptionChoices = 'OptionChoices';
 export const OfferToGetLunch = 'OfferToGetLunch';
 export const GoneToFetchLunch = 'GoneToFetchLunch';

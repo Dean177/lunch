@@ -1,5 +1,4 @@
 import debug from 'debug';
-
 const dBug = debug('lunch:actionHandler');
 
 export function validateActionFormat(action, onError) {
