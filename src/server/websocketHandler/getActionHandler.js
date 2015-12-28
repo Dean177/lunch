@@ -15,11 +15,10 @@ export default function getActionHandler(actionHandlers) {
   return (io) => (socket) => (action) => {
     validateActionFormat(action, onInvalidAction);
     if (!actionHandlers.hasOwnProperty(action.type)) {
-      dBug('Unrecognised client action', action);
+      return dBug('Unrecognised client action', action);
     }
 
     dBug(`Action: ${action.type} from ${action.meta.user.name}`);
-
     actionHandlers[action.type](io, socket, action);
   };
 }

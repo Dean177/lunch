@@ -1,22 +1,49 @@
 import createStateMergeReducer from '../util/createStateMergeReducer';
-import { Authenticated } from '../../shared/constants/actionTypes';
+import {
+  Authenticated,
+  SplitwiseAuth,
+  SplitwiseAuthFailure,
+  SplitwiseAuthSuccess,
+  SplitwiseAuthToken,
+} from '../../shared/constants/actionTypes/authActionTypes';
 const initialState = {
+  splitwiseAuthorizationLink: '',
   isAuthenticated: false,
+  isAttemptingSplitwiseAuthentication: false,
+  splitwiseAuthFailureMessage: '',
   hasAuthorizedSplitwiseToken: false,
   splitwiseAuthorizationToken: '',
 };
 
-const SplitwiseAuthorizationToken = 'SplitwiseAuthorizationToken';
 
 const CreateSplitwiseReducer = createStateMergeReducer(initialState, {
   [Authenticated]() {
     return { isAuthenticated: true };
   },
 
-  [SplitwiseAuthorizationToken](state, { payload: { authToken } }) {
-    return { splitwiseAuthorizationToken: authToken };
+  [SplitwiseAuth]() {
+    return {
+      isAttemptingSplitwiseAuthentication: true,
+      splitwiseAuthFailureMessage: '',
+    };
   },
 
+  [SplitwiseAuthFailure](state, { payload: { message } }) {
+    return {
+      isAttemptingSplitwiseAuthentication: false,
+      splitwiseAuthFailureMessage: message,
+    };
+  },
+
+  [SplitwiseAuthSuccess]() {
+    return {
+      isAttemptingSplitwiseAuthentication: false,
+    };
+  },
+
+  [SplitwiseAuthToken](state, { payload: { authToken } }) {
+    return { splitwiseAuthorizationToken: authToken };
+  },
 });
 
 export default CreateSplitwiseReducer;

@@ -1,4 +1,4 @@
-@import '../../colours';
+@import '../../variables';
 
 .Sidebar {
   width: 20em;
@@ -29,7 +29,7 @@
 }
 
 .PersonOrder {
-  border-radius: 5px;
+  border-radius: $border-radius;
   color: $black;
   margin-bottom: 0.5em;
   background-color: white;

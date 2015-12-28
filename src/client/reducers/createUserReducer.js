@@ -1,5 +1,5 @@
 import createLocalStorageMergeReducer from '../util/createLocalStorageMergeReducer';
-import { ChangeName, ChangeImageUrl } from '../../shared/constants/actionTypes';
+import { ChangeName, ChangeImageUrl } from '../../shared/constants/actionTypes/userActionTypess';
 import { v4 as uuid } from 'node-uuid';
 
 const initialState = {

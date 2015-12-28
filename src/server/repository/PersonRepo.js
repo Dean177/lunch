@@ -12,7 +12,7 @@ export const findById = (personId) => find(people, (person) => (person.id === pe
 export const getAll = () => people;
 
 export const updateImageUrl = (user, imageUrl) => {
-  const matchingUser = find(people, (person) => (person.id === user.id));
+  const matchingUser = findById(user.id);
   if (!matchingUser) {
     return add({ ...user, imageUrl });
   }
@@ -22,7 +22,7 @@ export const updateImageUrl = (user, imageUrl) => {
 };
 
 export const updateName = (user, name) => {
-  const matchingUser = find(people, (person) => (person.id === user.id));
+  const matchingUser = findById(user.id);
   if (matchingUser) {
     return add({ ...user, name });
   }

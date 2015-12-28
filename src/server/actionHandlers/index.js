@@ -1,20 +1,24 @@
-import * as aTypes from '../../shared/constants/actionTypes';
+import * as authTypes from '../../shared/constants/actionTypes/authActionTypes';
+import * as lunchTypes from '../../shared/constants/actionTypes/lunchActionTypes';
+import * as userTypes from '../../shared/constants/actionTypes/userActionTypess';
 import onAddLunchOption from './onAddLunchOption';
 import onChangeImageUrl from './onChangeImageUrl';
 import onChangeName from './onChangeName';
 import onChangeOrderDetails from './onChangeOrderDetails';
 import onChangePaymentAmount from './onChangePaymentAmount';
+import onSplitwiseAuth from './onSplitwiseAuth';
 import onUserLunchChoice from './onUserLunchChoice';
 import onOfferToGetLunch from './onOfferToGetLunch';
 
 const actionHandlers = {
-  [aTypes.AddLunchOption]: onAddLunchOption,
-  [aTypes.ChangeImageUrl]: onChangeImageUrl,
-  [aTypes.ChangeName]: onChangeName,
-  [aTypes.ChangeOrderDetails]: onChangeOrderDetails,
-  [aTypes.EnterPaymentAmount]: onChangePaymentAmount,
-  [aTypes.UserLunchChoice]: onUserLunchChoice,
-  [aTypes.OfferToGetLunch]: onOfferToGetLunch,
+  [authTypes.SplitwiseAuth]: onSplitwiseAuth,
+  [lunchTypes.AddLunchOption]: onAddLunchOption,
+  [userTypes.ChangeImageUrl]: onChangeImageUrl,
+  [userTypes.ChangeName]: onChangeName,
+  [lunchTypes.ChangeOrderDetails]: onChangeOrderDetails,
+  [lunchTypes.EnterPaymentAmount]: onChangePaymentAmount,
+  [lunchTypes.UserLunchChoice]: onUserLunchChoice,
+  [lunchTypes.OfferToGetLunch]: onOfferToGetLunch,
 };
 
 export default actionHandlers;

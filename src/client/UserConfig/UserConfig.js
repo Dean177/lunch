@@ -1,15 +1,21 @@
 import React, { Component, PropTypes } from 'react';
-import { Person } from '../PropTypes';
 import { connect } from 'react-redux';
-import { changeName, changeImageUrl } from '../actionCreators/userActionCreator';
-import PersonSquare from '../components/PersonSquare';
-import SplitwiseLogo from '../components/SplitwiseLogo';
+import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
+import { Auth, Person } from '../PropTypes';
+import { changeName, changeImageUrl } from '../../shared/actionCreators/userActionCreator';
+import { splitwiseAuthAttempt } from '../../shared/actionCreators/authActionCreator';
+import PersonSquare from '../components/PersonSquare';
+import SplitwiseAuthorizer from './components/SplitwiseAuthorizer';
 
 
-@connect(appState => ({ user: appState.user }))
+@connect(appState => ({
+  auth: appState.auth,
+  user: appState.user,
+}))
 class LunchPicker extends Component {
   static propTypes = {
+    auth: Auth.isRequired,
     user: Person.isRequired,
     dispatch: PropTypes.func.isRequired,
   };
@@ -18,21 +24,16 @@ class LunchPicker extends Component {
     event.preventDefault();
   };
 
-  onNameChange = (event) => {
-    this.props.dispatch(changeName(this.props.user.id, event.target.value));
-  };
-
   onImageChange = (event) => {
     this.props.dispatch(changeImageUrl(this.props.user.id, event.target.value));
   };
 
-  attemptSplitwiseAuthorisation = (event) => {
-    event.preventDefault();
+  onNameChange = (event) => {
+    this.props.dispatch(changeName(this.props.user.id, event.target.value));
   };
 
   render() {
-    const { user } = this.props;
-    const authorizationLink = 'https://secure.splitwise.com/authorize?oauth_token=chPGkxKhXdewW6YNdy9nK0J70dRXEYZpxPLU3fR3';
+    const { auth, user } = this.props;
 
     return (
       <div className='UserConfig'>
@@ -58,23 +59,13 @@ class LunchPicker extends Component {
             </div>
 
             <div className='form-group'>
-              <label>Splitwise Integration</label>
-              <div className='splitwise-authorizer'>
-                <SplitwiseLogo />
-                <ol className='how-to-steps'>
-                  <li>
-                    <p>Use the following link to authorize Lunch to access your account</p>
-                    <a className='btn btn-primary-outline' target='_blank'
-                      href={authorizationLink}
-                    >Authorize Splitwise</a>
-                  </li>
-                  <li>
-                    <p>Then click here once you have allowed lunch to access your account</p>
-                    <button className='btn btn-primary-outline' onClick={this.attemptSplitwiseAuthorisation}>Confirm auth</button>
-                  </li>
-                </ol>
-              </div>
-
+              <SplitwiseAuthorizer
+                authorizationLink={auth.splitwiseAuthorizationLink}
+                attemptSplitwiseAuth={bindActionCreators(splitwiseAuthAttempt, this.props.dispatch)}
+                authFailureMessage={auth.splitwiseAuthFailureMessage}
+                isAuthorized={auth.hasAuthorizedSplitwiseToken}
+                isAuthorizing={auth.isAttemptingSplitwiseAuthentication}
+              />
             </div>
           </form>
         </div>

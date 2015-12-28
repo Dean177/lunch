@@ -4,7 +4,7 @@ import { Person, LunchOption } from '../PropTypes';
 import { connect } from 'react-redux';
 import { pushState } from 'redux-router';
 import { compose } from 'underscore';
-import { enterOptionName, addLunchOption } from '../actionCreators/lunchActionCreators';
+import { enterOptionName, addLunchOption } from '../../shared/actionCreators/lunchActionCreators';
 import OptionAutosuggest from '../components/OptionAutosuggest';
 
 @connect(state => ({

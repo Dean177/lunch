@@ -64,8 +64,7 @@ export default class Sidebar extends Component {
                 <div className='input-group'>
                   <div className='input-group-addon'>£</div>
                   <input
-                    type='number'
-                    step='0.01'
+                    type='text'
                     className='i-pay form-control'
                     onChange={this.onPaymentAmountChange}
                     value={userLunchChoice.paymentAmount || ''}

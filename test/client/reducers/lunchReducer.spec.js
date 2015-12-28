@@ -1,7 +1,13 @@
 /* eslint no-unused-expressions: 0 */
 import { expect } from 'chai';
 import { find } from 'underscore';
-import { AddLunchOption, UserLunchChoice, EnterLunchOptionName, ToggleEnterNewLunchOption, OptionChoices } from '../../../src/shared/constants/actionTypes';
+import {
+  AddLunchOption,
+  EnterLunchOptionName,
+  OptionChoices,
+  ToggleEnterNewLunchOption,
+  UserLunchChoice,
+} from '../../../src/shared/constants/actionTypes/lunchActionTypes';
 import lunchReducer from '../../../src/client/reducers/lunchReducer';
 
 const initialState = {

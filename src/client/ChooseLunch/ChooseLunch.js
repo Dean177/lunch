@@ -13,7 +13,7 @@ import {
   goneToFetchLunch,
   offerToGetLunch,
   toggleNewOption,
-} from '../actionCreators/lunchActionCreators';
+} from '../../shared/actionCreators/lunchActionCreators';
 import LunchPicker from '../components/LunchPicker';
 import Sidebar from '../components/Sidebar';
 

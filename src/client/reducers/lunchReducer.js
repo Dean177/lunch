@@ -7,7 +7,7 @@ import {
   OptionChoices,
   ToggleEnterNewLunchOption,
   UserLunchChoice,
-} from '../../shared/constants/actionTypes';
+} from '../../shared/constants/actionTypes/lunchActionTypes';
 
 
 const initialState = {

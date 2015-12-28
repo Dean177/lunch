@@ -1,4 +1,4 @@
-import { OptionChoices } from '../../shared/constants/actionTypes';
+import { OptionChoices } from '../../shared/constants/actionTypes/lunchActionTypes';
 import * as LunchOptionRepo from '../repository/LunchOptionRepo';
 import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
 

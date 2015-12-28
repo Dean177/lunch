@@ -7,7 +7,7 @@ import { ReduxRouter } from 'redux-router';
 import routes from './Routes';
 import configureStore from './util/configureStore';
 import { socket } from './util/socket';
-import { Authenticated } from '../shared/constants/actionTypes';
+import { Authenticated } from '../shared/constants/actionTypes/authActionTypes';
 
 const store = configureStore(routes);
 
