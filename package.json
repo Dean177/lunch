@@ -7,7 +7,7 @@
     "build": "gulp static-assets && npm run build:server",
     "build:server": "gulp build:server",
     "build:production": "npm run clean && npm run build && webpack --config webpack.config.prod.js",
-    "start": "npm run build && gulp server:dev",
+    "start": "env NODE_ENV=production DEBUG=lunch:* npm run build && node --harmony_destructuring out/server/index",
     "test": "webpack --config webpack.config.test.js && mocha out/test/**/*.spec.js",
     "lint": "eslint src/**/*.js test/**/*.js gulpfile.js webpack.config.*",
     "lint:file": "eslint -f checkstyle src/**/*.js gulpfile.js webpack.config.prod.js > ./build-artifacts/codestyle.xml"

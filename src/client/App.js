@@ -15,15 +15,11 @@ socket.on('action', store.dispatch);
 socket.on('connect', () => {
   const { user } = store.getState();
 
-  socket.emit('authenticate', {
-    id: user.id,
-    name: user.name,
-    splitwiseAuthToken: user.splitwiseAuthToken,
-  });
+  socket.emit('authenticate', { user });
 
-  socket.on('authenticated', () => {
+  socket.on('authenticated', (payload) => {
     setTimeout(() => {
-      store.dispatch({ type: Authenticated, payload: { isAuthenticated: true } });
+      store.dispatch({ type: Authenticated, payload });
     }, 1000);
   });
 });

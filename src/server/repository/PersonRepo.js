@@ -1,4 +1,6 @@
+import debug from 'debug';
 import { find } from 'underscore';
+const dBug = debug('lunch:PersonRepo');
 
 const people = [];
 
@@ -23,7 +25,7 @@ export const updateImageUrl = (user, imageUrl) => {
 
 export const updateName = (user, name) => {
   const matchingUser = findById(user.id);
-  if (matchingUser) {
+  if (!matchingUser) {
     return add({ ...user, name });
   }
 
@@ -31,9 +33,23 @@ export const updateName = (user, name) => {
   return user;
 };
 
-export const getAccessToken = (personId) => {
-  return {
-    token: '',
-    secret: ''
+export const updateSplitwiseAuth = (userId, splitwiseAuth) => {
+  dBug(`Update auth for user: ${userId}`, splitwiseAuth);
+  const matchingUser = findById(userId);
+  if (!matchingUser) {
+    // TODO error
   }
+
+  matchingUser.splitwiseAuth = { ...matchingUser.splitwiseAuth,  ...splitwiseAuth };
+
+  return matchingUser.splitwiseAuth;
+};
+
+export const getSplitwiseAuth = (userId) => {
+  const matchingUser = findById(userId);
+  if (!matchingUser) {
+    return false;
+  }
+
+  return matchingUser.splitwiseAuth;
 };

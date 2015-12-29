@@ -8,14 +8,16 @@ export default function onOfferToGetLunch(io, socket, action) {
   const { meta: { user } } = action;
   dBug(`user: ${user.name} attempted to confirm splitwise auth.`);
 
-  const splitwiseAuth = PersonRepo.getAccessToken(user.id);
+  const splitwiseAuth = PersonRepo.getSplitwiseAuth(user.id);
 
   if (!splitwiseAuth) {
     socket.emit('action', splitwiseAuthFailure('No access token found for user.'));
   }
 
-  // TODO create a token for the user if they dont have one (in websocket index
-  const authApi = new AuthApi();
+  const SplitwiseConsumerSecret = process.env.SPLITWISE_CONSUMER_SECRET;
+  const SplitwiseConsumerKey = process.env.SPLITWISE_CONSUMER_KEY;
+  const authApi = new AuthApi(SplitwiseConsumerKey, SplitwiseConsumerSecret);
+  dBug(`Attempting to auth user`)
   const splitwiseApi = authApi.getSplitwiseApi(splitwiseAuth.token, splitwiseAuth.secret);
 
   splitwiseApi.getCurrentUser()
