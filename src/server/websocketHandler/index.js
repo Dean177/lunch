@@ -14,7 +14,6 @@ const actionHandler = getActionHandler(actionHandlers);
 
 
 export default function configureWebsocket(io) {
-  const authApi = getSplitwiseAuthApi();
   const connections = {};
 
   function updateClients() {
@@ -27,59 +26,11 @@ export default function configureWebsocket(io) {
   io.on('connection', (socket) => {
     const socketActionHandler = serverActionHandler(socket);
     const socketId = uuid();
-    connections[socketId] = { socket };
+    connections[socketId] = {socket};
 
     socket.on('error', dBug);
     socket.on('close', () => { delete connections[socketId]; });
-    socket.on(Authenticate, ({ user }) => {
-      dBug('User authenticating:', user);
-      // TODO Find the current user, create them if they dont exist, remove the duplicated user creation code from 'updateSplitwiseAuth'
-
-      const onNewAuth = ({ oAuthToken, oAuthTokenSecret }) => {
-        dBug('Received new splitwise api token for user: ', { token: oAuthToken });
-        const authObject = {
-          token: oAuthToken,
-          splitwiseAuthorizationLink: authApi.getUserAuthorisationUrl(oAuthToken),
-          hasAuthorizedSplitwiseToken: false,
-        };
-
-        socket.emit('authenticated', authObject);
-        updateSplitwiseAuth(user, { ...authObject, secret: oAuthTokenSecret });
-      };
-
-      const onAuthErr = (err) => {
-        dBug('User not authenticated or api is down', err);
-        socket.emit(Authenticated, {
-          token: '',
-          splitwiseAuthorizationLink: '',
-          hasAuthorizedSplitwiseToken: false,
-        });
-      };
-
-      const splitwiseAuth = getSplitwiseAuth(user.id);
-      if (!splitwiseAuth) {
-        authApi.getOAuthRequestToken()
-          .then(onNewAuth)
-          .catch(onAuthErr);
-      } else {
-        dBug(`user: ${user.name} has existing auth token:`);
-        const splitwiseApi = authApi.getSplitwiseApi(splitwiseAuth.token, splitwiseAuth.secret);
-        splitwiseApi.getCurrentUser().then((splitwiseUserInfo) => {
-          // TODO Add the splitwise user data to personRepo?
-          dBug(`user: ${user.name} fetched splitwise details`);
-          socket.emit(Action, splitwiseAuthSuccess(splitwiseUserInfo));
-          socket.emit('authenticated', {
-            token: splitwiseAuth.token,
-            splitwiseAuthorizationLink: authApi.getUserAuthorisationUrl(splitwiseAuth.token),
-            hasAuthorizedSplitwiseToken: true,
-          });
-        }).catch(onAuthErr);
-      }
-
-      // Send current state to the client
-      socket.emit(Action, getOptionChoicesMessage());
-    });
-
+    socket.on(Authenticate, onAuthenticateUser(socket));
     socket.on(Action, (action) => {
       socketActionHandler(action);
       updateClients();
@@ -88,3 +39,53 @@ export default function configureWebsocket(io) {
 
   return io;
 }
+
+export const onAuthenticateUser = (socket) => (user) => {
+  dBug('User authenticating:', user);
+  const authApi = getSplitwiseAuthApi();
+  // TODO Find the current user, create them if they don't exist, remove the duplicated user creation code from 'updateSplitwiseAuth'
+
+  const onNewAuth = ({ oAuthToken, oAuthTokenSecret }) => {
+    dBug('Received new splitwise api token for user: ', { token: oAuthToken });
+    const authObject = {
+      token: oAuthToken,
+      splitwiseAuthorizationLink: authApi.getUserAuthorisationUrl(oAuthToken),
+      hasAuthorizedSplitwiseToken: false,
+    };
+
+    socket.emit('authenticated', authObject);
+    updateSplitwiseAuth(user, { ...authObject, secret: oAuthTokenSecret });
+  };
+
+  const onAuthErr = (err) => {
+    dBug('User not authenticated or api is down', err);
+    socket.emit(Authenticated, {
+      token: '',
+      splitwiseAuthorizationLink: '',
+      hasAuthorizedSplitwiseToken: false,
+    });
+  };
+
+  const splitwiseAuth = getSplitwiseAuth(user.id);
+  if (!splitwiseAuth) {
+    authApi.getOAuthRequestToken()
+      .then(onNewAuth)
+      .catch(onAuthErr);
+  } else {
+    dBug(`user: ${user.name} has existing auth token:`);
+    const splitwiseApi = authApi.getSplitwiseApi(splitwiseAuth.token, splitwiseAuth.secret);
+    splitwiseApi.getCurrentUser().then((splitwiseUserInfo) => {
+      // TODO Add the splitwise user data to personRepo?
+      dBug(`user: ${user.name} fetched splitwise details`);
+      socket.emit(Action, splitwiseAuthSuccess(splitwiseUserInfo));
+      socket.emit('authenticated', {
+        token: splitwiseAuth.token,
+        splitwiseAuthorizationLink: authApi.getUserAuthorisationUrl(splitwiseAuth.token),
+        hasAuthorizedSplitwiseToken: true,
+      });
+    }).catch(onAuthErr);
+  }
+
+  // Send current state to the client
+  socket.emit(Action, getOptionChoicesMessage());
+};

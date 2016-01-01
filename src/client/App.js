@@ -16,7 +16,7 @@ socket.on(Action, store.dispatch);
 socket.on('connect', () => {
   const { user } = store.getState();
 
-  socket.emit(Authenticate, { user });
+  socket.emit(Authenticate, user);
   socket.on(Authenticated, (payload) => {
     setTimeout(
       () => { store.dispatch({ type: Authenticated, payload }); },
