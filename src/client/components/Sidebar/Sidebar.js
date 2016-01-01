@@ -9,6 +9,7 @@ export default class Sidebar extends Component {
     changeOrderDetails: PropTypes.func.isRequired,
     enterPaymentAmount: PropTypes.func.isRequired,
     goneToFetchLunch: PropTypes.func.isRequired,
+    hasAuthorizedSplitwiseToken: PropTypes.bool.isRequired,
     offerToGetLunch: PropTypes.func.isRequired,
     peopleChoices: PropTypes.arrayOf(PersonChoice).isRequired,
     userLunchChoice: PersonChoice,
@@ -37,12 +38,12 @@ export default class Sidebar extends Component {
   };
 
   render() {
-    const { peopleChoices, userLunchChoice } = this.props;
+    const { peopleChoices, userLunchChoice, hasAuthorizedSplitwiseToken } = this.props;
     if (!userLunchChoice) {
       return <span/>;
     }
 
-    const hasSplitwiseAuth = false;
+    const displayPaymentAmount = hasAuthorizedSplitwiseToken && !userLunchChoice.isFetching;
 
     return (
       <Motion defaultStyle={{ xPosition: -500 }} style={{ xPosition: spring(0) }}>
@@ -59,7 +60,7 @@ export default class Sidebar extends Component {
                 />
               </fieldset>
 
-              <fieldset className='form-group' style={{ display: userLunchChoice.isFetching ? 'none' : null }}>
+              <fieldset className='form-group' style={{ display: displayPaymentAmount ? '' : 'none' }}>
                 <label>I will pay the buyer:</label>
                 <div className='input-group'>
                   <div className='input-group-addon'>£</div>
@@ -90,7 +91,7 @@ export default class Sidebar extends Component {
                 ))}
             </div>
 
-            <SplitwiseIntegration isAuthorized={hasSplitwiseAuth} />
+            <SplitwiseIntegration isAuthorized={hasAuthorizedSplitwiseToken} />
           </div>
         )}
       </Motion>

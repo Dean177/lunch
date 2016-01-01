@@ -5,6 +5,7 @@ const dBug = debug('lunch:PersonRepo');
 const people = [];
 
 export const add = (person) => {
+  dBug(`Created new user`, person);
   people.push(person);
   return person;
 };
@@ -33,23 +34,40 @@ export const updateName = (user, name) => {
   return user;
 };
 
-export const updateSplitwiseAuth = (userId, splitwiseAuth) => {
-  dBug(`Update auth for user: ${userId}`, splitwiseAuth);
-  const matchingUser = findById(userId);
+export const updateSplitwiseAuth = (user, splitwiseAuth) => {
+  dBug(`Update auth for user: ${user.id}`, splitwiseAuth);
+  let matchingUser = findById(user.id);
   if (!matchingUser) {
-    // TODO error
+    dBug(`No existing user with id ${user.id}`);
+    matchingUser = add({
+      ...user,
+      splitwiseAuth
+    });
+  } else if (matchingUser.splitwiseAuth == null) {
+    matchingUser.splitwiseAuth = splitwiseAuth;
+  } else {
+    matchingUser.splitwiseAuth = { ...matchingUser.splitwiseAuth,  ...splitwiseAuth };
   }
 
-  matchingUser.splitwiseAuth = { ...matchingUser.splitwiseAuth,  ...splitwiseAuth };
+  const updatedAuth = matchingUser.splitwiseAuth;
+  dBug(`Updated auth for user: ${user.id}`, updatedAuth);
 
-  return matchingUser.splitwiseAuth;
+  return updatedAuth;
 };
 
 export const getSplitwiseAuth = (userId) => {
+  dBug(`Fetching existing auth for user: ${userId}`);
   const matchingUser = findById(userId);
-  if (!matchingUser) {
+  if (!matchingUser || matchingUser.splitwiseAuth == null) {
+    dBug(`No auth found for : ${userId}`);
     return false;
   }
 
-  return matchingUser.splitwiseAuth;
+  const { token, secret } = matchingUser.splitwiseAuth;
+  if (!token || !secret || token == null || secret == null) {
+    dBug(`Corrupt auth stored for: ${userId}`, matchingUser.splitwiseAuth);
+    return false;
+  }
+
+  return { token, secret };
 };

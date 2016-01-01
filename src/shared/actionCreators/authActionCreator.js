@@ -15,9 +15,9 @@ export function splitwiseAuthFailure(message) {
   };
 }
 
-export function splitwiseAuthSuccess(authToken) {
+export function splitwiseAuthSuccess(user) {
   return {
     type: SplitwiseAuthSuccess,
-    payload: { authToken },
+    payload: user,
   };
 }

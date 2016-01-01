@@ -33,8 +33,7 @@ export default function configureWebsocket(io) {
     socket.on('error', dBug);
     socket.on('close', () => { delete connections[socketId]; });
     socket.on('authenticate', ({ user }) => {
-      dBug(`auth payload received from user: ${user}`);
-      socket.emit('test', 'two');
+      dBug('auth payload received from user:', user);
 
       const onNewAuth = ({ oAuthToken, oAuthTokenSecret }) => {
         dBug('newAuthSuccess', { token: oAuthToken, secret: oAuthTokenSecret });
@@ -45,12 +44,12 @@ export default function configureWebsocket(io) {
         };
 
         socket.emit('authenticated', authObject);
-        //updateSplitwiseAuth(user.id, authObject);
+        updateSplitwiseAuth(user, { ...authObject, secret: oAuthTokenSecret });
       };
 
       const onNewAuthErr = (err) => {
         dBug('newAuthFailed', err);
-        // TODO handle the case where the splitwise api is down
+        // TODO handle the case where the splitwise api is down?
         socket.emit('authenticated', {
           token: '',
           splitwiseAuthorizationLink: authApi.getUserAuthorisationUrl(splitwiseAuth.token),
@@ -61,30 +60,29 @@ export default function configureWebsocket(io) {
       const splitwiseAuth = getSplitwiseAuth(user.id);
       if (!splitwiseAuth) {
         dBug(`fetching new authpair for user: ${user.name}`);
-        authApi.getOAuthRequestToken().then(onNewAuth, onNewAuthErr).then(() => { socket.emit('test', 'three'); });
+        authApi.getOAuthRequestToken()
+          .then(onNewAuth)
+          .catch(onNewAuthErr);
       } else {
-        dBug(`user: ${user.name} has existing auth token: ${splitwiseAuth}`);
+        dBug(`user: ${user.name} has existing auth token:`, splitwiseAuth);
         const splitwiseApi = authApi.getSplitwiseApi(splitwiseAuth.token, splitwiseAuth.secret);
-        splitwiseApi.getCurrentUser().then(
-          (splitwiseUserInfo) => {
-            // TODO Add the current user data to personRepo
-            dBug(`user: ${user.name} splitwise details: ${splitwiseUserInfo}`);
-            socket.emit('authenticated', {
-              token: splitwiseAuth.token,
-              splitwiseAuthorizationLink: authApi.getUserAuthorisationUrl(splitwiseAuth.token),
-              hasAuthorizedSplitwiseToken: false
-            })
-          },
-          (err) => {
-            dBug('User not authenticated or api is down', err);
-            // TODO User has not authed the token / the api is down. How to distinguish?
-            socket.emit('authenticated', {
-              token: '',
-              splitwiseAuthorizationLink: authApi.getUserAuthorisationUrl(splitwiseAuth.token),
-              hasAuthorizedSplitwiseToken: false
-            });
-          }
-        );
+        splitwiseApi.getCurrentUser().then((splitwiseUserInfo) => {
+          // TODO Add the current user data to personRepo
+          dBug(`user: ${user.name} splitwise details: ${splitwiseUserInfo}`);
+          socket.emit('authenticated', {
+            token: splitwiseAuth.token,
+            splitwiseAuthorizationLink: authApi.getUserAuthorisationUrl(splitwiseAuth.token),
+            hasAuthorizedSplitwiseToken: true
+          })
+        }).catch((err) => {
+          dBug('User not authenticated or api is down', err);
+          // TODO User has not authed the token / the api is down. How to distinguish?
+          socket.emit('authenticated', {
+            token: '',
+            splitwiseAuthorizationLink: authApi.getUserAuthorisationUrl(splitwiseAuth.token),
+            hasAuthorizedSplitwiseToken: false
+          });
+        });
       }
 
       // Send current state to the client

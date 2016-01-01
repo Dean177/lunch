@@ -26,6 +26,7 @@ import Sidebar from '../components/Sidebar';
 
   return {
     enteringNewOption: appState.lunch.enteringNewOption,
+    hasAuthorizedSplitwiseToken: appState.auth.hasAuthorizedSplitwiseToken,
     lunchOptions: appState.lunch.lunchOptions,
     optionName: appState.lunch.optionName,
     peopleChoices: appState.lunch.peopleChoices,
@@ -38,6 +39,7 @@ class ChooseLunch extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
     enteringNewOption: PropTypes.bool,
+    hasAuthorizedSplitwiseToken: PropTypes.bool.isRequired,
     lunchOptions: PropTypes.arrayOf(LunchOption),
     optionName: PropTypes.string,
     peopleChoices: PropTypes.arrayOf(PersonChoice),
@@ -48,13 +50,14 @@ class ChooseLunch extends Component {
 
   render() {
     const {
-      enteringNewOption,
-      optionName,
       dispatch,
-      peopleChoices,
-      userLunchChoice,
-      user,
+      enteringNewOption,
+      hasAuthorizedSplitwiseToken,
       lunchOptions,
+      optionName,
+      peopleChoices,
+      user,
+      userLunchChoice,
     } = this.props;
     return (
       <div className='ChooseLunch'>
@@ -63,17 +66,18 @@ class ChooseLunch extends Component {
         </Link>
         <div className='lunch-body'>
           <LunchPicker
-            user={user}
             enteringNewOption={enteringNewOption}
-            optionName={optionName}
             lunchOptions={lunchOptions}
+            optionName={optionName}
             peopleChoices={peopleChoices}
-            {...bindActionCreators({ toggleNewOption, addLunchOption, chooseLunchOption, enterOptionName }, dispatch)}
+            user={user}
+            {...bindActionCreators({ addLunchOption, chooseLunchOption, enterOptionName, toggleNewOption }, dispatch)}
           />
           <Sidebar
-            userLunchChoice={userLunchChoice}
+            hasAuthorizedSplitwiseToken={hasAuthorizedSplitwiseToken}
             peopleChoices={peopleChoices}
-            {...bindActionCreators({ changeOrderDetails, goneToFetchLunch, offerToGetLunch, enterPaymentAmount }, dispatch)} />
+            userLunchChoice={userLunchChoice}
+            {...bindActionCreators({ changeOrderDetails, enterPaymentAmount, goneToFetchLunch, offerToGetLunch }, dispatch)} />
         </div>
       </div>
     );
