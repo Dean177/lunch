@@ -64,7 +64,7 @@
     "node-uuid": "1.4.3",
     "nodemon": "1.4.1",
     "null-loader": "0.1.1",
-    "react": "0.14.3",
+    "react": "0.14.5",
     "react-addons-test-utils": "0.14.3",
     "react-autosuggest": "2.2.5",
     "react-dom": "0.14.3",
