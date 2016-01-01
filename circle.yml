@@ -1,3 +1,10 @@
 machine:
   node:
     version: 4.1.0
+
+test:
+  override:
+    - npm run build:client
+    - npm run build:server
+    - npm test
+    - npm run lint

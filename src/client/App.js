@@ -8,27 +8,26 @@ import routes from './Routes';
 import configureStore from './util/configureStore';
 import { socket } from './util/socket';
 import { Authenticated } from '../shared/constants/actionTypes/authActionTypes';
+import { Action, Authenticate } from '../shared/constants/WeboscketMessageTypes';
 
 const store = configureStore(routes);
 
-socket.on('action', store.dispatch);
+socket.on(Action, store.dispatch);
 socket.on('connect', () => {
   const { user } = store.getState();
 
-  socket.emit('authenticate', { user });
-
-  socket.on('authenticated', (payload) => {
-    setTimeout(() => {
-      store.dispatch({ type: Authenticated, payload });
-    }, 1000);
+  socket.emit(Authenticate, { user });
+  socket.on(Authenticated, (payload) => {
+    setTimeout(
+      () => { store.dispatch({ type: Authenticated, payload }); },
+      500
+    );
   });
 });
 
 
 class App extends Component {
   render() {
-    // TODO re-enable devtools https://github.com/gaearon/redux-devtools/tree/v3.0.0
-
     return (
       <div className='App'>
         <Provider store={store}>

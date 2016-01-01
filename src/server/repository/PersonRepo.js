@@ -35,18 +35,17 @@ export const updateName = (user, name) => {
 };
 
 export const updateSplitwiseAuth = (user, splitwiseAuth) => {
-  dBug(`Update auth for user: ${user.id}`, splitwiseAuth);
   let matchingUser = findById(user.id);
   if (!matchingUser) {
     dBug(`No existing user with id ${user.id}`);
     matchingUser = add({
       ...user,
-      splitwiseAuth
+      splitwiseAuth,
     });
   } else if (matchingUser.splitwiseAuth == null) {
     matchingUser.splitwiseAuth = splitwiseAuth;
   } else {
-    matchingUser.splitwiseAuth = { ...matchingUser.splitwiseAuth,  ...splitwiseAuth };
+    matchingUser.splitwiseAuth = { ...matchingUser.splitwiseAuth, ...splitwiseAuth };
   }
 
   const updatedAuth = matchingUser.splitwiseAuth;
@@ -65,7 +64,7 @@ export const getSplitwiseAuth = (userId) => {
 
   const { token, secret } = matchingUser.splitwiseAuth;
   if (!token || !secret || token == null || secret == null) {
-    dBug(`Corrupt auth stored for: ${userId}`, matchingUser.splitwiseAuth);
+    dBug(`Corrupt auth stored for: ${userId}`);
     return false;
   }
 

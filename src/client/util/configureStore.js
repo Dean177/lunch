@@ -8,14 +8,13 @@ export default function configureStore(routes, initialState) {
   let createStoreFinal;
 
   if (__DEVELOPMENT__) {
-    // TODO re-enable devtools https://github.com/gaearon/redux-devtools/tree/v3.0.0
     createStoreFinal = compose(
       applyMiddleware(logger, serverEvent, actionFormatValidator),
       reduxReactRouter({ routes, createHistory })
     )(createStore);
   } else {
     createStoreFinal = compose(
-      applyMiddleware(serverEvent, actionFormatValidator),
+      applyMiddleware(serverEvent),
       reduxReactRouter({ routes, createHistory })
     )(createStore);
   }

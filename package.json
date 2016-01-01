@@ -5,12 +5,12 @@
   "scripts": {
     "clean": "node tasks/clean",
     "build": "gulp static-assets && npm run build:server",
+    "build:client": "webpack --config webpack.config.prod.js",
     "build:server": "gulp build:server",
-    "build:production": "npm run clean && npm run build && webpack --config webpack.config.prod.js",
+    "build:production": "npm run clean && npm run build && npm run build:client",
     "start": "env NODE_ENV=production DEBUG=lunch:* npm run build && node --harmony_destructuring out/server/index",
     "test": "webpack --config webpack.config.test.js && mocha out/test/**/*.spec.js",
-    "lint": "eslint src/**/*.js test/**/*.js gulpfile.js webpack.config.*",
-    "lint:file": "eslint -f checkstyle src/**/*.js gulpfile.js webpack.config.prod.js > ./build-artifacts/codestyle.xml"
+    "lint": "eslint src/**/*.js test/**/*.js gulpfile.js webpack.config.*"
   },
   "author": "Dean Merchant <deanmerchant@gmail.com>",
   "repository": {
@@ -77,9 +77,6 @@
     "react-transform-hmr": "1.0.1",
     "redbox-react": "1.1.1",
     "redux": "3.0.5",
-    "redux-devtools": "3.0.1",
-    "redux-devtools-dock-monitor": "1.0.1",
-    "redux-devtools-log-monitor": "1.0.1",
     "redux-router": "1.0.0-beta5",
     "rewire": "2.5.1",
     "rewire-webpack": "1.0.1",
@@ -88,7 +85,7 @@
     "socket.io": "1.3.7",
     "socket.io-client": "1.3.7",
     "source-map-support": "0.4.0",
-    "splitwise-node": "0.1.0",
+    "splitwise-node": "0.1.1",
     "sqlite3": "3.1.1",
     "style-loader": "0.13.0",
     "underscore": "1.8.3",

@@ -17,5 +17,5 @@ describe('actionTypes', () => {
     const constantKeys = flatten(map(actionTypes, keys));
 
     expect(constantKeys).to.deep.equal(uniq(constantKeys));
-  })
+  });
 });

@@ -67,7 +67,6 @@ class LunchPicker extends Component {
                 isAuthorizing={auth.isAttemptingSplitwiseAuthentication}
               />
             </div>
-            <pre>{JSON.stringify(auth, null, 2)}</pre>
           </form>
         </div>
       </div>
