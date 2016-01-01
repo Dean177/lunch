@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { flatten, keys, map, uniq, values } from 'underscore';
 import * as lunchTypes from '../../../src/shared/constants/actionTypes/lunchActionTypes';
 import * as userTypes from '../../../src/shared/constants/actionTypes/userActionTypess';
-import * as authTypes from '../../../src/shared/constants/actionTypes/userActionTypess';
+import * as authTypes from '../../../src/shared/constants/actionTypes/authActionTypes';
 
 const actionTypes = [lunchTypes, userTypes, authTypes];
 
