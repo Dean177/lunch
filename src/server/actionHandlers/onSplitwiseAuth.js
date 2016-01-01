@@ -12,14 +12,11 @@ export default function onSplitwiseAuth(io, socket, action) {
 
   if (!splitwiseAuth) {
     socket.emit('action', splitwiseAuthFailure('No access token found for user.'));
-  } else {
-    dBug('Auth found for user:', splitwiseAuth);
   }
 
   const SplitwiseConsumerKey = process.env.SPLITWISE_CONSUMER_KEY;
   const SplitwiseConsumerSecret = process.env.SPLITWISE_CONSUMER_SECRET;
-  const splitwiseApi = new AuthApi(SplitwiseConsumerKey, SplitwiseConsumerSecret)
-    .getSplitwiseApi(splitwiseAuth.token, splitwiseAuth.secret);
+  const splitwiseApi = new AuthApi(SplitwiseConsumerKey, SplitwiseConsumerSecret).getSplitwiseApi(splitwiseAuth.token, splitwiseAuth.secret);
 
   splitwiseApi.getCurrentUser().then((user) => {
     socket.emit('action', splitwiseAuthSuccess(user));
