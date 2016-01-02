@@ -47,8 +47,11 @@ const lunchReducer = createStateMergeReducer(initialState, {
     };
   },
 
-  [OptionChoices](state, { payload: { peopleChoices, lunchOptions } }) {
-    return { lunchOptions, peopleChoices };
+  [OptionChoices](state, { payload: { lunchOptions, peopleChoices } }) {
+    return {
+      lunchOptions: lunchOptions || [],
+      peopleChoices: peopleChoices || [],
+    };
   },
 
   [UserLunchChoice]({ peopleChoices }, { payload: { person, choiceId } }) {

@@ -8,11 +8,14 @@ export default function onAddLunchOption(io, socket, action) {
   const { payload: { name }, meta: { user } } = action;
   dBug(`LunchOption: ${name} added by ${user.name}`);
 
-  const existingOption = LunchOptionRepo.findByName(name);
-  if (existingOption) {
-    PersonChoiceRepo.updateChoiceId(user, existingOption.id);
-  } else {
-    const newLunchOption = LunchOptionRepo.add(name);
-    PersonChoiceRepo.updateChoiceId(user, newLunchOption.id);
-  }
+  return LunchOptionRepo.findByName(name)
+    .then((existingOption) => {
+      if (existingOption) {
+        return PersonChoiceRepo.updateChoiceId(user, existingOption.id);
+      }
+
+      return LunchOptionRepo.add(name).then(newLunchOption => {
+        return PersonChoiceRepo.updateChoiceId(user, newLunchOption.id);
+      });
+    });
 }

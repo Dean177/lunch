@@ -6,6 +6,7 @@ export default function onOfferToGetLunch(io, socket, action) {
   const { payload: { lunchOptionId }, meta: { user } } = action;
   dBug(`user: ${user.name} offered to get lunch for ${lunchOptionId}`);
 
-  PersonChoiceRepo.updateWhoIsFetchingLunch(user.id, lunchOptionId);
-  // TODO broadcast the change
+  return PersonChoiceRepo.updateWhoIsFetchingLunch(user.id, lunchOptionId).then(() => {
+    // TODO broadcast the change
+  });
 }
