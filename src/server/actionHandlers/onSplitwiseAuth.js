@@ -14,6 +14,7 @@ export default function onSplitwiseAuth(io, socket, action) {
     socket.emit(Action, splitwiseAuthSuccess(splitwiseUser));
   }).catch(err => {
     dBug(err);
-    socket.emit(Action, splitwiseAuthFailure(err.message));
+    // TODO, make splitwise-node return proper Error objects
+    socket.emit(Action, splitwiseAuthFailure(err.message || err.error));
   });
 }

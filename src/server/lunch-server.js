@@ -33,7 +33,7 @@ app.get('/*', (req, res) => {
 });
 
 const lunchServer = new Server(app);
-const websocket = socketIo(lunchServer);
-configureWebsocket(websocket, actionHandlers);
+const websockets = socketIo(lunchServer);
+configureWebsocket(websockets, actionHandlers);
 
 export default lunchServer;

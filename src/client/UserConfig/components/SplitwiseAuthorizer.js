@@ -28,7 +28,6 @@ export default class SplitwiseAuthorizer extends Component {
       isAuthorizing,
     } = this.props;
 
-
     const failureBox = (
       <div className='fail-box'>
         <h2>Authorization Failed</h2>

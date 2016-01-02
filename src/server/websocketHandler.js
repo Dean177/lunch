@@ -3,7 +3,7 @@ import { v4 as uuid } from 'node-uuid';
 import getOptionChoicesMessage from './actionCreators/getOptionChoicesMessage';
 import { Action } from '../shared/constants/WeboscketMessageTypes';
 
-const dBug = debug('lunch:websocketHandler');
+const dBug = debug('lunch:configureWebsockets');
 
 export function validateActionFormat(action, onError) {
   if (!action.type || !action.payload || !action.meta || !action.meta.user) {
@@ -15,7 +15,7 @@ function onInvalidAction(action) {
   dBug('Potentially malformed action received', JSON.stringify(action, null, 2));
 }
 
-export function getActionHandler(actionHandlers, io) {
+export function configureActionHandlers(actionHandlers, websockets) {
   return (socket) => (action) => {
     validateActionFormat(action, onInvalidAction);
     if (!actionHandlers.hasOwnProperty(action.type)) {
@@ -23,7 +23,7 @@ export function getActionHandler(actionHandlers, io) {
     }
 
     dBug(`Action: ${action.type} from ${action.meta.user.name}`);
-    return actionHandlers[action.type](io, socket, action);
+    return actionHandlers[action.type](websockets, socket, action);
   };
 }
 
@@ -33,25 +33,22 @@ export function sendCurrentState(emitter) {
   });
 }
 
-export const websocketHandler = (connections, getWebsocketHandler) => (websocket) => {
-  const socketActionHandler = getWebsocketHandler(websocket);
+export const getWebsocketHandler = (connections, getActionHandlerForSocket) => (websocket) => {
   const socketId = uuid();
   connections[socketId] = { websocket };
-
   websocket.on('error', dBug);
   websocket.on('close', () => { delete connections[socketId]; });
-  websocket.on(Action, socketActionHandler);
+  websocket.on(Action, getActionHandlerForSocket(websocket));
 
   sendCurrentState(websocket);
 };
 
-export default function configureWebsocket(io, actionHandlers) {
+export default function configureWebsockets(websockets, actionHandlers) {
   const connections = {};
   // Necessary because old lunchOptions & personChoices are pruned regularly
-  setInterval(sendCurrentState.bind(this, io), 60 * 1000);
-  const serverActionHandler = getActionHandler(actionHandlers, io);
+  setInterval(sendCurrentState.bind(this, websockets), 60 * 1000);
 
-  io.on('connection', websocketHandler(connections, serverActionHandler));
+  websockets.on('connection', getWebsocketHandler(connections, configureActionHandlers(actionHandlers, websockets)));
 
-  return io;
+  return websockets;
 }

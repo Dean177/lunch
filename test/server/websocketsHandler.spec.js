@@ -1,7 +1,7 @@
 import chai from 'chai';
 import spies from 'chai-spies';
 import { values } from 'underscore';
-import configureWebsocket, { getActionHandler, validateActionFormat, websocketHandler } from '../../src/server/websocketHandler';
+import configureWebsocket, { configureActionHandlers, validateActionFormat, getWebsocketHandler } from '../../src/server/websocketHandler';
 const { expect } = chai;
 chai.use(spies);
 
@@ -33,7 +33,7 @@ describe('validateActionFormat', () => {
   });
 });
 
-describe('getActionHandler', () => {
+describe('configureActionHandlers', () => {
   const spyAction = { type: 'SPY_ACTION_TYPE', payload: {}, meta: { user: {} } };
   let actionHandler;
   let spyIo;
@@ -44,7 +44,7 @@ describe('getActionHandler', () => {
     spyIo = chai.spy();
     socket = chai.spy();
     onActionType = chai.spy();
-    actionHandler = getActionHandler({ [spyAction.type]: onActionType }, spyIo)(socket);
+    actionHandler = configureActionHandlers({ [spyAction.type]: onActionType }, spyIo)(socket);
   });
 
   it('Should call the handler matching an actions type', () => {
@@ -61,7 +61,7 @@ describe('getActionHandler', () => {
   });
 });
 
-describe('websocketHandler', () => {
+describe('getWebsocketHandler', () => {
   let actionHandlerApy;
   let connections;
   let socketSpy;
@@ -73,17 +73,17 @@ describe('websocketHandler', () => {
   });
 
   it('Gets a new action handler for every websocket connection', () => {
-    websocketHandler(connections, actionHandlerApy)(socketSpy);
+    getWebsocketHandler(connections, actionHandlerApy)(socketSpy);
     expect(actionHandlerApy).to.have.been.called.with(socketSpy);
   });
 
   it('Should store each new websocket connection in the provided object', () => {
-    websocketHandler(connections, actionHandlerApy)(socketSpy);
+    getWebsocketHandler(connections, actionHandlerApy)(socketSpy);
     expect(values(connections)[0].websocket).to.equal(socketSpy);
   });
 });
 
-describe('configureWebsocket', () => {
+describe('configureWebsockets', () => {
   it('Should attach the "connection" handler', () => {
     const spyIo = { on: chai.spy() };
     configureWebsocket(spyIo, {});

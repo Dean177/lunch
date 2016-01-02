@@ -8,12 +8,12 @@ import routes from './Routes';
 import configureStore from './util/configureStore';
 import { socket } from './util/socket';
 import { Authenticate } from '../shared/constants/actionTypes/authActionTypes';
-import { Action, Connect } from '../shared/constants/WeboscketMessageTypes';
+import { Action } from '../shared/constants/WeboscketMessageTypes';
 
 const store = configureStore(routes);
 
 socket.on(Action, store.dispatch);
-socket.on(Connect, () => {
+socket.on('connect', () => {
   const { user } = store.getState();
   socket.emit(Action, { type: Authenticate, payload: user, meta: { user } });
 });
