@@ -9,8 +9,10 @@ import { Action } from '../../shared/constants/WeboscketMessageTypes';
 const dBug = debug('lunch:socket-io');
 const actionHandler = getActionHandler(actionHandlers);
 
-function sendCurrentState(emitter) {
-  return getOptionChoicesMessage().then(action => { emitter.emit(Action, action); });
+export function sendCurrentState(emitter) {
+  return getOptionChoicesMessage().then(action => {
+    emitter.emit(Action, action);
+  });
 }
 
 export default function configureWebsocket(io) {
@@ -27,12 +29,7 @@ export default function configureWebsocket(io) {
 
     socket.on('error', dBug);
     socket.on('close', () => { delete connections[socketId]; });
-    socket.on(Action, (action) => {
-      socketActionHandler(action);
-      // TODO have each action handler send other clients the minimal necessary info,
-      // rather than re-emitting the entire state
-      sendCurrentState(socket);
-    });
+    socket.on(Action, socketActionHandler);
 
     sendCurrentState(socket);
   });

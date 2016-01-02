@@ -8,7 +8,7 @@ const dBug = debug('lunch:actionHandler:onSplitwiseAuth');
 export default function onSplitwiseAuth(io, socket, action) {
   const { meta: { user } } = action;
   dBug(`user: ${user.name} attempted to confirm splitwise auth.`);
-  PersonRepo.getSplitwiseAuth(user.id).then(({ token, secret }) => {
+  return PersonRepo.getSplitwiseAuth(user.id).then(({ token, secret }) => {
     return getSplitwiseUserApi(token, secret).getCurrentUser();
   }).then((splitwiseUser) => {
     socket.emit(Action, splitwiseAuthSuccess(splitwiseUser));

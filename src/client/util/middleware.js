@@ -8,12 +8,16 @@ export const logger = store => next => action => {
 };
 
 export const serverEvent = store => next => action => {
+  let updatedAction;
   if (action.meta && action.meta.isServerAction) {
     const user = store.getState().user;
-    send(Object.assign({}, action, { meta: { user } }));
+    updatedAction = Object.assign({}, action, { meta: { user } });
+    send(updatedAction);
+  } else {
+    updatedAction = action;
   }
 
-  return next(action);
+  return next(updatedAction);
 };
 
 export const actionFormatValidator = store => next => action => {

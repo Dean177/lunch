@@ -53,33 +53,35 @@ export const updateChoiceId = (person, choiceId) => {
 
 export const updateOrderDetails = (person, orderDetails) => {
   dBug(`${person.name} update orderDetails to ${orderDetails}`);
-  const personChoice = findByPersonId(person.id);
-  if (!personChoice) {
-    const message = `${person.name} updated orderDetails without making a selection`;
-    dBug(message);
-    return Promise.reject(message);
-  }
+  return findByPersonId(person.id).then((personChoice) => {
+    if (!personChoice) {
+      const message = `${person.name} updated orderDetails without making a selection`;
+      dBug(message);
+      return Promise.reject(new Error(message));
+    }
 
-  personChoice.orderDetails = orderDetails;
-  return Promise.resolve(personChoice);
+    personChoice.orderDetails = orderDetails;
+    return Promise.resolve(personChoice);
+  });
 };
 
 export const updatePaymentAmount = (person, amount) => {
   dBug(`${person.name} changed paymentAmount to ${amount}`);
-  const personChoice = findByPersonId(person.id);
-  if (!personChoice) {
-    const message = `${person.name} updated payment amount without making a selection`;
-    dBug(message);
-    Promise.reject(message);
-  }
+  return findByPersonId(person.id).then((personChoice) => {
+    if (!personChoice) {
+      const message = `${person.name} updated payment amount without making a selection`;
+      dBug(message);
+      Promise.reject(new Error(message));
+    }
 
-  personChoice.paymentAmount = amount;
-  return Promise.resolve(personChoice);
+    personChoice.paymentAmount = amount;
+    return Promise.resolve(personChoice);
+  });
 };
 
 export const updateWhoIsFetchingLunch = (userId, lunchOptionId) => {
   dBug(`${userId} is getting lunch for option ${lunchOptionId}`);
-  Promise.resolve(
+  return Promise.resolve(
     peopleChoices
       .filter(personChoice => personChoice.choiceId === lunchOptionId)
       .forEach(personChoice => {

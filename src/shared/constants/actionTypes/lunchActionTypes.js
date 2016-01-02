@@ -7,3 +7,4 @@ export const OfferToGetLunch = 'OfferToGetLunch';
 export const GoneToFetchLunch = 'GoneToFetchLunch';
 export const ToggleEnterNewLunchOption = 'ToggleEnterNewLunchOption';
 export const UserLunchChoice = 'UserLunchChoice';
+export const UpdatedPersonChoice = 'UpdatedPersonChoice';

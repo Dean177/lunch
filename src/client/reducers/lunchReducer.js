@@ -3,9 +3,11 @@ import { find } from 'underscore';
 import upsert from '../../shared/util/upsert';
 import {
   AddLunchOption,
+  ChangeOrderDetails,
   EnterLunchOptionName,
   OptionChoices,
   ToggleEnterNewLunchOption,
+  UpdatedPersonChoice,
   UserLunchChoice,
 } from '../../shared/constants/actionTypes/lunchActionTypes';
 
@@ -47,10 +49,31 @@ const lunchReducer = createStateMergeReducer(initialState, {
     };
   },
 
+  [ChangeOrderDetails]({ peopleChoices }, { payload: { orderDetails }, meta: { user } }) {
+    const isUserLunchChoice = (personChoice) => (personChoice.person.id === user.id);
+    const userLunchChoice = find(peopleChoices, isUserLunchChoice);
+    const updatedOrderDetails = { ...userLunchChoice, orderDetails };
+    console.log(updatedOrderDetails);
+    return {
+      peopleChoices: upsert(peopleChoices, isUserLunchChoice, updatedOrderDetails),
+    };
+  },
+
   [OptionChoices](state, { payload: { lunchOptions, peopleChoices } }) {
     return {
       lunchOptions: lunchOptions || [],
       peopleChoices: peopleChoices || [],
+    };
+  },
+
+  [UpdatedPersonChoice]({ peopleChoices }, action) {
+    const updatedChoice = action.payload;
+    return {
+      peopleChoices: upsert(
+        peopleChoices,
+        (personChoice) => (personChoice.person.id === updatedChoice.person.id),
+        updatedChoice
+      ),
     };
   },
 

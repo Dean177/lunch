@@ -19,6 +19,6 @@ export default function getActionHandler(actionHandlers) {
     }
 
     dBug(`Action: ${action.type} from ${action.meta.user.name}`);
-    actionHandlers[action.type](io, socket, action);
+    return actionHandlers[action.type](io, socket, action);
   };
 }

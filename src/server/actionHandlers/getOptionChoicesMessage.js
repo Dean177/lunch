@@ -3,6 +3,8 @@ import { OptionChoices } from '../../shared/constants/actionTypes/lunchActionTyp
 import * as LunchOptionRepo from '../repository/LunchOptionRepo';
 import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
 
+import { sendCurrentState } from '../websocketHandler';
+
 export default function getOptionChoicesMessage() {
   const fourHours = 4 * 60 * 60 * 1000;
   const cutoffTime = new Date().getTime() - fourHours;

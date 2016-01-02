@@ -1,8 +1,10 @@
 import debug from 'debug';
 const dBug = debug('lunch:actionHandlers:onAddLunchOption');
-
 import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
 import * as LunchOptionRepo from '../repository/LunchOptionRepo';
+
+import { sendCurrentState } from '../websocketHandler';
+
 
 export default function onAddLunchOption(io, socket, action) {
   const { payload: { name }, meta: { user } } = action;
@@ -17,5 +19,9 @@ export default function onAddLunchOption(io, socket, action) {
       return LunchOptionRepo.add(name).then(newLunchOption => {
         return PersonChoiceRepo.updateChoiceId(user, newLunchOption.id);
       });
+    })
+    .then(() => {
+      // TODO send the minimal update to connected clients
+      sendCurrentState(io);
     });
 }

@@ -4,6 +4,8 @@ import debug from 'debug';
 import Promise from 'promise';
 const dBug = debug('lunch:actionHandler:onChangeName');
 
+import { sendCurrentState } from '../websocketHandler';
+
 export default function onChangeName(io, socket, action) {
   const { payload: { name }, meta: { user } } = action;
   dBug(`user: ${user.name} changed name to ${name}`);
@@ -12,5 +14,6 @@ export default function onChangeName(io, socket, action) {
     PersonChoiceRepo.updateName(user, name),
   ]).then(() => {
     // TODO broadcast the change
+    sendCurrentState(io);
   });
 }

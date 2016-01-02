@@ -11,7 +11,6 @@ const app = express();
 const dBug = debug('lunch:express');
 
 app.use(favicon(`${__dirname}/favicon.ico`));
-dBug('ENV', process.env);
 dBug(`Running in ${process.env.NODE_ENV}`);
 
 if (process.env.NODE_ENV === JSON.stringify('production')) {
