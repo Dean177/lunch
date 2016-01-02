@@ -1,7 +1,8 @@
-import chai, { expect } from 'chai';
+import chai from 'chai';
 import spies from 'chai-spies';
 import { values } from 'underscore';
 import configureWebsocket, { getActionHandler, validateActionFormat, websocketHandler } from '../../src/server/websocketHandler';
+const { expect } = chai;
 chai.use(spies);
 
 describe('validateActionFormat', () => {
@@ -78,7 +79,7 @@ describe('websocketHandler', () => {
 
   it('Should store each new websocket connection in the provided object', () => {
     websocketHandler(connections, actionHandlerApy)(socketSpy);
-    expect(values(connections)[0].socket).to.equal(socketSpy);
+    expect(values(connections)[0].websocket).to.equal(socketSpy);
   });
 });
 

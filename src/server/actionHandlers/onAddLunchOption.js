@@ -1,27 +1,29 @@
 import debug from 'debug';
 const dBug = debug('lunch:actionHandlers:onAddLunchOption');
-import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
 import * as LunchOptionRepo from '../repository/LunchOptionRepo';
+import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
+import { addLunchOption } from '../../shared/actionCreators/lunchActionCreators';
+import { Action } from '../../shared/constants/WeboscketMessageTypes';
 
-import { sendCurrentState } from '../websocketHandler';
+export function onAddLunchOption(LunchOptionRepo, PersonChoiceRepo) {
+  return (io, socket, action) => {
+    const { payload: { name }, meta: { user } } = action;
+    dBug(`LunchOption: ${name} added by ${user.name}`);
 
-
-export default function onAddLunchOption(io, socket, action) {
-  const { payload: { name }, meta: { user } } = action;
-  dBug(`LunchOption: ${name} added by ${user.name}`);
-
-  return LunchOptionRepo.findByName(name)
-    .then((existingOption) => {
-      if (existingOption) {
-        return PersonChoiceRepo.updateChoiceId(user, existingOption.id);
-      }
-
-      return LunchOptionRepo.add(name).then(newLunchOption => {
-        return PersonChoiceRepo.updateChoiceId(user, newLunchOption.id);
+    return LunchOptionRepo
+      .findByName(name)
+      .then((existingOption) => {
+        if (!existingOption) {
+          return LunchOptionRepo.add(name);
+        }
+        return existingOption;
+      }).then((lunchOption) => {
+        return PersonChoiceRepo.updateChoiceId(user, lunchOption.id).then(() => {
+          io.broadcast.emit(Action, addLunchOption(user, lunchOption.name, lunchOption.id))
+        });
       });
-    })
-    .then(() => {
-      // TODO send the minimal update to connected clients
-      sendCurrentState(io);
-    });
+  }
 }
+
+const withDeps = onAddLunchOption(LunchOptionRepo, PersonChoiceRepo);
+export default withDeps;

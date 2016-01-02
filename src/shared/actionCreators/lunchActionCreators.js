@@ -10,11 +10,11 @@ import {
   UserLunchChoice,
 } from '../constants/actionTypes/lunchActionTypes';
 
-export function addLunchOption(person, name) {
+export function addLunchOption(person, name, id) {
   return {
     type: AddLunchOption,
     payload: {
-      id: uuid(),
+      id: id || uuid(),
       person,
       name,
     },

@@ -39,7 +39,7 @@ export const updateChoiceId = (person, choiceId) => {
   dBug(`${person.name} update choice to ${choiceId}`);
   const personChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === person.id));
   if (!personChoice) {
-    return Promise.resolve(add({ person, choiceId, dateChosen: new Date().getTime(), paymentAmount: '' }));
+    return Promise.resolve(add({ person, choiceId, dateChosen: new Date().getTime(), orderDetails: '', paymentAmount: '' }));
   }
 
   personChoice.dateChosen = new Date().getTime();
