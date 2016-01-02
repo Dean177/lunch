@@ -2,6 +2,7 @@ import * as authTypes from '../../shared/constants/actionTypes/authActionTypes';
 import * as lunchTypes from '../../shared/constants/actionTypes/lunchActionTypes';
 import * as userTypes from '../../shared/constants/actionTypes/userActionTypess';
 import onAddLunchOption from './onAddLunchOption';
+import onAuthenticateUser from './onAuthenticateUser';
 import onChangeImageUrl from './onChangeImageUrl';
 import onChangeName from './onChangeName';
 import onChangeOrderDetails from './onChangeOrderDetails';
@@ -11,6 +12,7 @@ import onUserLunchChoice from './onUserLunchChoice';
 import onOfferToGetLunch from './onOfferToGetLunch';
 
 const actionHandlers = {
+  [authTypes.Authenticate]: onAuthenticateUser,
   [authTypes.SplitwiseAuth]: onSplitwiseAuth,
   [lunchTypes.AddLunchOption]: onAddLunchOption,
   [userTypes.ChangeImageUrl]: onChangeImageUrl,

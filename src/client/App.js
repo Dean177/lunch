@@ -7,22 +7,15 @@ import { ReduxRouter } from 'redux-router';
 import routes from './Routes';
 import configureStore from './util/configureStore';
 import { socket } from './util/socket';
-import { Authenticated } from '../shared/constants/actionTypes/authActionTypes';
-import { Action, Authenticate } from '../shared/constants/WeboscketMessageTypes';
+import { Authenticate } from '../shared/constants/actionTypes/authActionTypes';
+import { Action, Connect } from '../shared/constants/WeboscketMessageTypes';
 
 const store = configureStore(routes);
 
 socket.on(Action, store.dispatch);
-socket.on('connect', () => {
+socket.on(Connect, () => {
   const { user } = store.getState();
-
-  socket.emit(Authenticate, user);
-  socket.on(Authenticated, (payload) => {
-    setTimeout(
-      () => { store.dispatch({ type: Authenticated, payload }); },
-      500
-    );
-  });
+  socket.emit(Action, { type: Authenticate, payload: user, meta: { user } });
 });
 
 

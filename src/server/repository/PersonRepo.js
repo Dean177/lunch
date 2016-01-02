@@ -10,61 +10,60 @@ export const add = (person) => {
   return person;
 };
 
+export const findPerson = (person) => {
+  const existingPerson = find(people, (pers) => (person.id === pers.id || person.name === pers.name));
+  if (!existingPerson) {
+    return add(person);
+  }
+
+  return existingPerson;
+};
+
 export const findById = (personId) => find(people, (person) => (person.id === personId));
 
 export const getAll = () => people;
 
-export const updateImageUrl = (user, imageUrl) => {
-  const matchingUser = findById(user.id);
+export const updateImageUrl = (person, imageUrl) => {
+  const matchingUser = findById(person.id);
   if (!matchingUser) {
-    return add({ ...user, imageUrl });
+    return add({ ...person, imageUrl });
   }
 
-  user.imageUrl = imageUrl;
-  return user;
+  person.imageUrl = imageUrl;
+  return person;
 };
 
-export const updateName = (user, name) => {
-  const matchingUser = findById(user.id);
+export const updateName = (person, name) => {
+  const matchingUser = findById(person.id);
   if (!matchingUser) {
-    return add({ ...user, name });
+    return add({ ...person, name });
   }
 
-  user.name = name;
-  return user;
+  person.name = name;
+  return person;
 };
 
-export const updateSplitwiseAuth = (user, splitwiseAuth) => {
+export const updateSplitwiseAuth = (user, token, secret) => {
+  dBug(`Updated auth for user: ${user.id}`);
   let matchingUser = findById(user.id);
   if (!matchingUser) {
-    dBug(`No existing user with id ${user.id}`);
-    matchingUser = add({
-      ...user,
-      splitwiseAuth,
-    });
-  } else if (matchingUser.splitwiseAuth == null) {
-    matchingUser.splitwiseAuth = splitwiseAuth;
-  } else {
-    matchingUser.splitwiseAuth = { ...matchingUser.splitwiseAuth, ...splitwiseAuth };
+    return dBug(`No existing user with id ${user.id}`);
   }
 
-  const updatedAuth = matchingUser.splitwiseAuth;
-  dBug(`Updated auth for user: ${user.id}`, updatedAuth);
-
-  return updatedAuth;
+  return matchingUser.splitwiseAuth = { token, secret };
 };
 
-export const getSplitwiseAuth = (userId) => {
-  dBug(`Fetching existing auth for user: ${userId}`);
-  const matchingUser = findById(userId);
+export const getSplitwiseAuth = (personId) => {
+  dBug(`Fetching existing auth for: ${personId}`);
+  const matchingUser = findById(personId);
   if (!matchingUser || matchingUser.splitwiseAuth == null) {
-    dBug(`No auth found for : ${userId}`);
+    dBug(`No auth found for: ${personId}`);
     return false;
   }
 
   const { token, secret } = matchingUser.splitwiseAuth;
-  if (!token || !secret || token == null || secret == null) {
-    dBug(`Corrupt auth stored for: ${userId}`);
+  if (!token || !secret) {
+    dBug(`Corrupt auth stored for: ${personId}`);
     return false;
   }
 

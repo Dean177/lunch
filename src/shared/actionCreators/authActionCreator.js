@@ -1,4 +1,14 @@
-import { SplitwiseAuth, SplitwiseAuthFailure, SplitwiseAuthSuccess } from '../constants/actionTypes/authActionTypes';
+import {
+  Authenticated,
+  SplitwiseAuth,
+  SplitwiseAuthFailure,
+  SplitwiseAuthSuccess,
+  SplitwiseAuthToken,
+} from '../constants/actionTypes/authActionTypes';
+
+export function userAuthenticated(isAuthorized) {
+  return { type: Authenticated, payload: { isAuthorized } };
+}
 
 export function splitwiseAuthAttempt() {
   return {
@@ -9,15 +19,19 @@ export function splitwiseAuthAttempt() {
 }
 
 export function splitwiseAuthFailure(message) {
-  return {
-    type: SplitwiseAuthFailure,
-    payload: { message },
-  };
+  return { type: SplitwiseAuthFailure, payload: { message } };
 }
 
 export function splitwiseAuthSuccess(user) {
+  return { type: SplitwiseAuthSuccess, payload: user };
+}
+
+export function splitwiseAuthToken(hasAuthedToken, authLink) {
   return {
-    type: SplitwiseAuthSuccess,
-    payload: user,
+    type: SplitwiseAuthToken,
+    payload: {
+      hasAuthorizedSplitwiseToken: hasAuthedToken,
+      splitwiseAuthorizationLink: authLink ? authLink : '',
+    },
   };
 }
