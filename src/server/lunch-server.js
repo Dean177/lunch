@@ -5,6 +5,7 @@ import { Server } from 'http';
 import socketIo from 'socket.io';
 import path from 'path';
 
+import actionHandlers from './actionHandlers';
 import configureWebsocket from './websocketHandler';
 
 const app = express();
@@ -32,6 +33,7 @@ app.get('/*', (req, res) => {
 });
 
 const lunchServer = new Server(app);
-configureWebsocket(socketIo(lunchServer));
+const websocket = socketIo(lunchServer);
+configureWebsocket(websocket, actionHandlers);
 
 export default lunchServer;

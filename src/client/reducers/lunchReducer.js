@@ -53,10 +53,13 @@ const lunchReducer = createStateMergeReducer(initialState, {
     const isUserLunchChoice = (personChoice) => (personChoice.person.id === user.id);
     const userLunchChoice = find(peopleChoices, isUserLunchChoice);
     const updatedOrderDetails = { ...userLunchChoice, orderDetails };
-    console.log(updatedOrderDetails);
     return {
       peopleChoices: upsert(peopleChoices, isUserLunchChoice, updatedOrderDetails),
     };
+  },
+
+  [EnterLunchOptionName](state, { payload }) {
+    return { optionName: payload.name };
   },
 
   [OptionChoices](state, { payload: { lunchOptions, peopleChoices } }) {
@@ -64,6 +67,10 @@ const lunchReducer = createStateMergeReducer(initialState, {
       lunchOptions: lunchOptions || [],
       peopleChoices: peopleChoices || [],
     };
+  },
+
+  [ToggleEnterNewLunchOption](state) {
+    return { enteringNewOption: !state.enteringNewOption };
   },
 
   [UpdatedPersonChoice]({ peopleChoices }, action) {
@@ -85,14 +92,6 @@ const lunchReducer = createStateMergeReducer(initialState, {
     );
 
     return { peopleChoices: newPeopleChoices };
-  },
-
-  [ToggleEnterNewLunchOption](state) {
-    return { enteringNewOption: !state.enteringNewOption };
-  },
-
-  [EnterLunchOptionName](state, { payload }) {
-    return { optionName: payload.name };
   },
 });
 
