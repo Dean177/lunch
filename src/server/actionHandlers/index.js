@@ -7,9 +7,10 @@ import onChangeImageUrl from './onChangeImageUrl';
 import onChangeName from './onChangeName';
 import onChangeOrderDetails from './onChangeOrderDetails';
 import onChangePaymentAmount from './onChangePaymentAmount';
+import onNotGettingLunch from './onNotGettingLunch';
+import onOfferToGetLunch from './onOfferToGetLunch';
 import onSplitwiseAuth from './onSplitwiseAuth';
 import onUserLunchChoice from './onUserLunchChoice';
-import onOfferToGetLunch from './onOfferToGetLunch';
 
 const actionHandlers = {
   [authTypes.Authenticate]: onAuthenticateUser,
@@ -20,6 +21,7 @@ const actionHandlers = {
   [lunchTypes.ChangeOrderDetails]: onChangeOrderDetails,
   [lunchTypes.EnterPaymentAmount]: onChangePaymentAmount,
   [lunchTypes.UserLunchChoice]: onUserLunchChoice,
+  [lunchTypes.NotGettingLunch]: onNotGettingLunch,
   [lunchTypes.OfferToGetLunch]: onOfferToGetLunch,
 };
 

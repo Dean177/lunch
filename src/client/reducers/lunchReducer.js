@@ -5,6 +5,7 @@ import {
   AddLunchOption,
   ChangeOrderDetails,
   EnterLunchOptionName,
+  NotGettingLunch,
   OptionChoices,
   ToggleEnterNewLunchOption,
   UpdatedPersonChoice,
@@ -60,6 +61,15 @@ const lunchReducer = createStateMergeReducer(initialState, {
 
   [EnterLunchOptionName](state, { payload }) {
     return { optionName: payload.name };
+  },
+
+  [NotGettingLunch]({ peopleChoices }, { payload: { lunchOptionId }, meta: { user } }) {
+    const comparator = (personChoice) => (personChoice.choiceId === lunchOptionId && personChoice.person.id === user.id);
+    const existingChoice = find(peopleChoices, comparator);
+    console.log('exist choices', user, existingChoice);
+    return {
+      peopleChoices: upsert(peopleChoices, comparator, { ...existingChoice, isFetching: false }),
+    };
   },
 
   [OptionChoices](state, { payload: { lunchOptions, peopleChoices } }) {

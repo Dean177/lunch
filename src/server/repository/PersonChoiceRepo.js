@@ -19,6 +19,15 @@ export const add = (personChoice) => {
   return Promise.resolve(personChoice);
 };
 
+export const clearFetchers = (lunchOptionId) => {
+  dBug(`No one is offering to get option ${lunchOptionId}`);
+  return Promise.resolve(
+    peopleChoices
+      .filter(personChoice => personChoice.choiceId === lunchOptionId && personChoice.isFetching)
+      .forEach(personChoice => personChoice.isFetching = false)
+  );
+};
+
 export const updateName = (user, name) => {
   const matchingUser = find(peopleChoices, (personChoice) => (personChoice.person.id === user.id));
   if (!matchingUser) {

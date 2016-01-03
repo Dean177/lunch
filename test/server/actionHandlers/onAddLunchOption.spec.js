@@ -16,8 +16,8 @@ describe('onAddLunchOption', () => {
   const addNonExistingLunchOption = addLunchOption({ id: '1', name: 'Sheep' }, 'Beetroot', '2');
   addNonExistingLunchOption.meta.user = testUser;
 
-  const ioMock = { broadcast: { emit: chai.spy() } };
-  const socketMock = { emit: chai.spy() };
+  const ioMock = { };
+  const socketMock = { emit: chai.spy(), broadcast: { emit: chai.spy() } };
 
   let addSpy;
   let findByNameSpy;
@@ -78,7 +78,7 @@ describe('onAddLunchOption', () => {
   it('Updates other clients once the option has been added', () => {
     return onAddLunchOption(LunchRepoMock, PersonChoiceRepoMock)(ioMock, socketMock, addNonExistingLunchOption)
       .then(() => {
-        expect(ioMock.broadcast.emit).to.have.been.called();
+        expect(socketMock.broadcast.emit).to.have.been.called();
       });
   });
 });

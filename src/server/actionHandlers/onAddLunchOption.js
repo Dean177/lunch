@@ -19,7 +19,7 @@ export function onAddLunchOption(LunchOptionRepo, PersonChoiceRepo) {
         return existingOption;
       }).then((lunchOption) => {
         return PersonChoiceRepo.updateChoiceId(user, lunchOption.id).then(() => {
-          io.broadcast.emit(Action, addLunchOption(user, lunchOption.name, lunchOption.id))
+          socket.broadcast.emit(Action, addLunchOption(user, lunchOption.name, lunchOption.id))
         });
       });
   }

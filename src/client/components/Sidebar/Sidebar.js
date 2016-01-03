@@ -11,6 +11,7 @@ export default class Sidebar extends Component {
     enterPaymentAmount: PropTypes.func.isRequired,
     goneToFetchLunch: PropTypes.func.isRequired,
     hasAuthorizedSplitwiseToken: PropTypes.bool.isRequired,
+    notGettingLunch: PropTypes.func.isRequired,
     offerToGetLunch: PropTypes.func.isRequired,
     peopleChoices: PropTypes.arrayOf(PersonChoice).isRequired,
     userLunchChoice: PersonChoice,
@@ -23,6 +24,7 @@ export default class Sidebar extends Component {
 
   onNoGetLunch = (event) => {
     event.preventDefault();
+    this.props.notGettingLunch(this.props.userLunchChoice.choiceId);
   };
 
   onGone = (event) => {
@@ -44,7 +46,7 @@ export default class Sidebar extends Component {
 
   render() {
     const { peopleChoices, userLunchChoice, hasAuthorizedSplitwiseToken } = this.props;
-    const { isFetching } = userLunchChoice;
+    const isFetching = userLunchChoice ? userLunchChoice.isFetching : false;
 
     if (!userLunchChoice) {
       return <span/>;
@@ -71,7 +73,7 @@ export default class Sidebar extends Component {
                 <button className={classnames('btn btn-secondary i-gone', { hidden: !isFetching })} onClick={this.onGone}>I GONE</button>
               </fieldset>
 
-              <fieldset className={classnames('form-group', { hidden: isFetching })}>
+              <fieldset className='form-group'>
                 <label>I want:</label>
                 <textarea
                   rows='3'

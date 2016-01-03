@@ -23,7 +23,7 @@ export default function configureStore(routes, initialState) {
 
   if (__DEVELOPMENT__ && module.hot) {
     module.hot.accept('../reducers/index', () => {
-      store.replaceReducer(require('../reducers/index'));
+      store.replaceReducer(require('../reducers/index').default);
     });
   }
 

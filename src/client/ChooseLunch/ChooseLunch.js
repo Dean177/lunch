@@ -11,6 +11,7 @@ import {
   enterOptionName,
   enterPaymentAmount,
   goneToFetchLunch,
+  notGettingLunch,
   offerToGetLunch,
   toggleNewOption,
 } from '../../shared/actionCreators/lunchActionCreators';
@@ -77,7 +78,17 @@ class ChooseLunch extends Component {
             hasAuthorizedSplitwiseToken={hasAuthorizedSplitwiseToken}
             peopleChoices={peopleChoices}
             userLunchChoice={userLunchChoice}
-            {...bindActionCreators({ changeOrderDetails, enterPaymentAmount, goneToFetchLunch, offerToGetLunch }, dispatch)} />
+            {...bindActionCreators(
+              {
+                changeOrderDetails,
+                enterPaymentAmount,
+                goneToFetchLunch,
+                notGettingLunch,
+                offerToGetLunch,
+              },
+              dispatch
+            )}
+          />
         </div>
       </div>
     );

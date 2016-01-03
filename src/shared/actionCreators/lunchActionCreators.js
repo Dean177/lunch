@@ -5,6 +5,7 @@ import {
   EnterLunchOptionName,
   EnterPaymentAmount,
   GoneToFetchLunch,
+  NotGettingLunch,
   OfferToGetLunch,
   ToggleEnterNewLunchOption,
   UserLunchChoice,
@@ -53,6 +54,14 @@ export function enterPaymentAmount(amount) {
 export function goneToFetchLunch(lunchOptionId) {
   return {
     type: GoneToFetchLunch,
+    payload: { lunchOptionId },
+    meta: { isServerAction: true },
+  };
+}
+
+export function notGettingLunch(lunchOptionId) {
+  return {
+    type: NotGettingLunch,
     payload: { lunchOptionId },
     meta: { isServerAction: true },
   };
