@@ -7,6 +7,7 @@ import onChangeImageUrl from './onChangeImageUrl';
 import onChangeName from './onChangeName';
 import onChangeOrderDetails from './onChangeOrderDetails';
 import onChangePaymentAmount from './onChangePaymentAmount';
+import onGoneToFetchLunch from './onGoneToFetchLunch';
 import onNotGettingLunch from './onNotGettingLunch';
 import onOfferToGetLunch from './onOfferToGetLunch';
 import onSplitwiseAuth from './onSplitwiseAuth';
@@ -20,6 +21,7 @@ const actionHandlers = {
   [userTypes.ChangeName]: onChangeName,
   [lunchTypes.ChangeOrderDetails]: onChangeOrderDetails,
   [lunchTypes.EnterPaymentAmount]: onChangePaymentAmount,
+  [lunchTypes.GoneToFetchLunch]: onGoneToFetchLunch,
   [lunchTypes.UserLunchChoice]: onUserLunchChoice,
   [lunchTypes.NotGettingLunch]: onNotGettingLunch,
   [lunchTypes.OfferToGetLunch]: onOfferToGetLunch,

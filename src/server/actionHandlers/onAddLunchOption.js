@@ -13,13 +13,18 @@ export function onAddLunchOption(LunchOptionRepo, PersonChoiceRepo) {
     return LunchOptionRepo
       .findByName(name)
       .then((existingOption) => {
+        dBug('is existing option?', !!existingOption);
         if (!existingOption) {
           return LunchOptionRepo.add(name);
         }
         return existingOption;
       }).then((lunchOption) => {
+        dBug('new lunchOption', lunchOption);
         return PersonChoiceRepo.updateChoiceId(user, lunchOption.id).then(() => {
-          socket.broadcast.emit(Action, addLunchOption(user, lunchOption.name, lunchOption.id))
+          dBug('Sending changes', lunchOption);
+          // We must remove the meta.isServerAction or the clients will just send the action back due to the serverActionMiddleware!
+          const newLunchOptionAction = { ...addLunchOption(user, lunchOption.name, lunchOption.id), meta: {} };
+          socket.broadcast.emit(Action, newLunchOptionAction);
         });
       });
   }

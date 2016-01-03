@@ -29,7 +29,7 @@ export default class Sidebar extends Component {
 
   onGone = (event) => {
     event.preventDefault();
-    this.props.goneToFetchLunch();
+    this.props.goneToFetchLunch(this.props.userLunchChoice.choiceId);
   };
 
   onOrderChange = (event) => {

@@ -3,7 +3,7 @@ import Promise from 'promise';
 const dBug = debug('lunch:PersonChoiceRepo');
 import { find } from 'underscore';
 
-const peopleChoices = [];
+let peopleChoices = [];
 
 export const getAll = (cutoffTime) => {
   const peepChoices = peopleChoices.filter(personChoice => (
@@ -97,4 +97,10 @@ export const updateWhoIsFetchingLunch = (userId, lunchOptionId) => {
         personChoice.isFetching = personChoice.person.id === userId;
       })
   );
+};
+
+export const updateGoneToFetchLunch = (userId, lunchOptionId) => {
+  dBug(`${userId} has left to get lunch for option ${lunchOptionId}`);
+  peopleChoices = peopleChoices.filter(personChoice => personChoice.choiceId !== lunchOptionId);
+  return Promise.resolve(peopleChoices);
 };
