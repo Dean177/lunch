@@ -9,9 +9,7 @@ export default function onNotGettingLunch(io, socket, action) {
   dBug(`user: ${user.name} is no longer getting lunch for ${lunchOptionId}`);
 
   return PersonChoiceRepo.clearFetchers(lunchOptionId).then(() => {
-    const newAction = {
-      ...action, meta: { user }
-    };
+    const newAction = { ...action, meta: { user } };
     dBug(newAction);
     socket.broadcast.emit(Action, newAction);
   });

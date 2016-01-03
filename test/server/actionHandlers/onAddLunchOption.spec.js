@@ -7,8 +7,6 @@ import { onAddLunchOption } from '../../../src/server/actionHandlers/onAddLunchO
 import { addLunchOption } from '../../../src/shared/actionCreators/lunchActionCreators';
 
 
-
-
 describe('onAddLunchOption', () => {
   const testUser = { id: '123', name: 'test-user' };
   const addExistingLunchOption = addLunchOption({ id: '1', name: 'Sheep' }, 'Exists', '2');
@@ -28,8 +26,8 @@ describe('onAddLunchOption', () => {
     },
     findByName: (name) => {
       findByNameSpy(name);
-      return Promise.resolve(name === 'Exists' ? { id: '1', name } : undefined)
-    }
+      return Promise.resolve(name === 'Exists' ? { id: '1', name } : undefined);
+    },
   };
 
   let updateChoiceIdSpy;
@@ -37,7 +35,7 @@ describe('onAddLunchOption', () => {
     updateChoiceId: (person, choiceId) => {
       updateChoiceIdSpy(choiceId);
       return Promise.resolve({ person, choiceId });
-    }
+    },
   };
 
   beforeEach(() => {
