@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import classnames from 'classnames';
 import { PersonChoice } from '../../PropTypes';
 import { Motion, spring } from 'react-motion';
 import PersonOrder from './components/PersonOrder';
@@ -20,6 +21,10 @@ export default class Sidebar extends Component {
     this.props.offerToGetLunch(this.props.userLunchChoice.choiceId);
   };
 
+  onNoGetLunch = (event) => {
+    event.preventDefault();
+  };
+
   onGone = (event) => {
     event.preventDefault();
     this.props.goneToFetchLunch();
@@ -39,21 +44,37 @@ export default class Sidebar extends Component {
 
   render() {
     const { peopleChoices, userLunchChoice, hasAuthorizedSplitwiseToken } = this.props;
+    const { isFetching } = userLunchChoice;
+
     if (!userLunchChoice) {
       return <span/>;
     }
 
-    const displayPaymentAmount = hasAuthorizedSplitwiseToken && !userLunchChoice.isFetching;
+    const displayPaymentAmount = hasAuthorizedSplitwiseToken && !isFetching;
 
     return (
-      <Motion defaultStyle={{ xPosition: -500 }} style={{ xPosition: spring(0) }}>
+      <Motion defaultStyle={{ xPosition: -500 }} style={{ xPosition: spring(userLunchChoice ? 0 : -500) }}>
         {value => (
           <div className='Sidebar' style={{ right: value.xPosition }}>
             <form className='User-Prefs'>
-              <fieldset className='form-group'>
-                <label>I would specifically like:</label>
+              <fieldset className='form-group' style={{ display: 'none' }}>
+                <button className='btn btn-primary-outline Ready' onClick={this.onReady}>READY</button>
+              </fieldset>
+
+              <fieldset className='form-group action-buttons'>
+                <button className={classnames('btn btn-secondary i-get', { hidden: isFetching })}
+                        onClick={this.onGetLunch}>
+                  I GET
+                </button>
+                <button className={classnames('btn btn-secondary i-no-get', { hidden: !isFetching })}
+                        onClick={this.onNoGetLunch}>I NO GET</button>
+                <button className={classnames('btn btn-secondary i-gone', { hidden: !isFetching })} onClick={this.onGone}>I GONE</button>
+              </fieldset>
+
+              <fieldset className={classnames('form-group', { hidden: isFetching })}>
+                <label>I want:</label>
                 <textarea
-                  rows='4'
+                  rows='3'
                   className='i-want form-control'
                   onChange={this.onOrderChange}
                   value={userLunchChoice.orderDetails}
@@ -61,7 +82,7 @@ export default class Sidebar extends Component {
               </fieldset>
 
               <fieldset className='form-group' style={{ display: displayPaymentAmount ? '' : 'none' }}>
-                <label>I will pay the buyer:</label>
+                <label>It costs:</label>
                 <div className='input-group'>
                   <div className='input-group-addon'>£</div>
                   <input
@@ -71,15 +92,6 @@ export default class Sidebar extends Component {
                     value={userLunchChoice.paymentAmount || ''}
                   />
                 </div>
-              </fieldset>
-
-              <fieldset className='form-group' style={{ display: 'none' }}>
-                <button className='btn btn-primary-outline Ready' onClick={this.onReady}>READY</button>
-              </fieldset>
-
-              <fieldset className='form-group action-buttons'>
-                <button className='btn btn-secondary IGet' type='button' onClick={this.onGetLunch}>I GET</button>
-                <button className='btn btn-primary IGone' onClick={this.onGone} style={{ display: 'none' }}>I GONE</button>
               </fieldset>
             </form>
 
