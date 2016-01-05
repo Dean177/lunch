@@ -34,7 +34,7 @@
     "bootstrap": "twbs/bootstrap#v4.0.0-alpha",
     "chai": "3.3.0",
     "chai-spies": "0.7.1",
-    "classnames": "2.2.2",
+    "classnames": "2.2.3",
     "compression": "1.6.0",
     "css-loader": "0.23.1",
     "debug": "2.2.0",
