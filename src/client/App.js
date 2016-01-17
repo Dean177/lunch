@@ -4,15 +4,32 @@ import 'font-awesome/scss/font-awesome.scss';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router';
+import { routeActions } from 'redux-simple-router';
+import { find } from 'underscore';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import routes from './Routes';
 import configureStore from './util/configureStore';
 import { socket } from './util/socket';
 import { Authenticate } from '../shared/constants/actionTypes/authActionTypes';
-import { Action } from '../shared/constants/WeboscketMessageTypes';
+import { Action, Connection } from '../shared/constants/WeboscketMessageTypes';
 
 const history = createBrowserHistory();
 const store = configureStore(routes, history);
+
+function navigateIfUserHasChosenLunchOption(action) {
+  console.log('dispatching', action);
+  return (dispatch, getState) => {
+    const { payload: { lunchOptionId }, meta: { navigateTo } } = action;
+    const { user, lunch: { peopleChoices } } = getState();
+    const usersLunchChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === user.id));
+
+    console.log('userLunchChoice', usersLunchChoice, user, peopleChoices);
+    if (usersLunchChoice && usersLunchChoice.choiceId === lunchOptionId) {
+      console.log('action matches');
+      dispatch(routeActions.push(navigateTo));
+    }
+  };
+}
 
 socket.on(Action, (action) => {
   // Actions sent from the server via action creators may include the 'isServerAction' property,
@@ -21,12 +38,16 @@ socket.on(Action, (action) => {
     delete action.meta.isServerAction;
   }
   store.dispatch(action);
+  if (action.meta && action.meta.navigateTo) {
+    console.log('navigate reccd', action);
+    store.dispatch(navigateIfUserHasChosenLunchOption(action));
+  }
 });
-socket.on('connect', () => {
+
+socket.on(Connection, () => {
   const { user } = store.getState();
   socket.emit(Action, { type: Authenticate, payload: user, meta: { user } });
 });
-
 
 class App extends Component {
   render() {

@@ -4,7 +4,10 @@ import send from './socket';
 
 export const logger = store => next => action => {
   const result = next(action);
-  console.log('action', action, 'next state', store.getState());
+  const isAThunk = typeof action == 'function';
+  if (!isAThunk) {
+    console.log('action', action, 'next state', store.getState());
+  }
   return result;
 };
 
@@ -22,8 +25,9 @@ export const serverEvent = store => next => action => {
 };
 
 export const actionFormatValidator = store => next => action => {
+  const isAThunk = typeof action == 'function';
   const isRouterAction = action.type === UPDATE_LOCATION || action.type === TRANSITION;
-  if (!isRouterAction && (!action.payload || !action.type)) {
+  if (!isAThunk && !isRouterAction && (!action.payload || !action.type)) {
     console.error('Action received which does not contain a payload, this is probably a mistake', action);
   }
   return next(action);

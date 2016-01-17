@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import { syncHistory } from 'redux-simple-router';
 import rootReducer from '../reducers/index';
 import { logger, serverEvent, actionFormatValidator } from './middleware';
@@ -12,10 +13,15 @@ export default function configureStore(routes, history, initialState) {
       actionFormatValidator,
       logger,
       serverEvent,
+      thunk,
       reduxRouterMiddleware
     )(createStore);
   } else {
-    createStoreWithMiddleware = applyMiddleware(serverEvent, reduxRouterMiddleware)(createStore);
+    createStoreWithMiddleware = applyMiddleware(
+      serverEvent,
+      thunk,
+      reduxRouterMiddleware
+    )(createStore);
   }
 
   const store = createStoreWithMiddleware(rootReducer, initialState);
