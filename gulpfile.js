@@ -49,7 +49,3 @@ gulp.task('build:server', () => {
     .pipe(sourcemaps.write('.', sourceMapConfig))
     .pipe(gulp.dest('out'));
 });
-
-gulp.task('static-assets', () => {
-  return gulp.src(['src/server/index.html', 'src/server/favicon.ico']).pipe(gulp.dest('out/server'));
-});
