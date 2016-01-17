@@ -5,7 +5,8 @@
   "scripts": {
     "clean": "node tasks/clean",
     "static-assets": "node tasks/static-assets",
-    "build": "npm run static-assets && gulp build:server",
+    "build": "npm run static-assets && npm run build:server",
+    "build:server": "gulp build:server",
     "build:client": "webpack --config webpack.config.prod.js",
     "build:production": "npm run clean && npm run build && npm run build:client",
     "start": "env DEBUG=lunch:* npm run build && node --harmony_destructuring out/server/index",
