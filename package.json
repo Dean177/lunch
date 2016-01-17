@@ -4,11 +4,11 @@
   "description": "Get some lunch",
   "scripts": {
     "clean": "node tasks/clean",
-    "build": "gulp static-assets && npm run build:server",
+    "build": "gulp static-assets && gulp build:server",
     "build:client": "webpack --config webpack.config.prod.js",
-    "build:server": "gulp build:server",
     "build:production": "npm run clean && npm run build && npm run build:client",
-    "start": "env NODE_ENV=production DEBUG=lunch:* npm run build && node --harmony_destructuring out/server/index",
+    "start": "env DEBUG=lunch:* npm run build && node --harmony_destructuring out/server/index",
+    "start:production": "env NODE_ENV=production DEBUG=lunch:* npm run build && node --harmony_destructuring out/server/index",
     "test": "webpack --config webpack.config.test.js && mocha out/test/**/*.spec.js",
     "lint": "eslint src/**/*.js test/**/*.js gulpfile.js webpack.config.*"
   },

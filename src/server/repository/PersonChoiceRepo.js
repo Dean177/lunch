@@ -28,6 +28,18 @@ export const clearFetchers = (lunchOptionId) => {
   );
 };
 
+export const updateImageUrl = (user, url) => {
+  const matchingUser = find(peopleChoices, (personChoice) => (personChoice.person.id === user.id));
+  if (!matchingUser) {
+    const message = `Attempted to update the name of a user which doesn't exist ${user}`;
+    dBug(message);
+    return Promise.reject(new Error(message));
+  }
+
+  matchingUser.person.imageUrl = url;
+  return Promise.resolve(matchingUser);
+};
+
 export const updateName = (user, name) => {
   const matchingUser = find(peopleChoices, (personChoice) => (personChoice.person.id === user.id));
   if (!matchingUser) {

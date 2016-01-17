@@ -12,7 +12,14 @@ import { Action } from '../shared/constants/WeboscketMessageTypes';
 
 const store = configureStore(routes);
 
-socket.on(Action, store.dispatch);
+socket.on(Action, (action) => {
+  // Actions sent from the server via action creators may include the 'isServerAction' property,
+  // need to remove this or the client will send the action back to the server again du to the 'ServerAction' middleware
+  if (action.meta && action.meta.hasOwnProperty('isServerAction')) {
+    delete action.meta.isServerAction;
+  }
+  store.dispatch(action);
+});
 socket.on('connect', () => {
   const { user } = store.getState();
   socket.emit(Action, { type: Authenticate, payload: user, meta: { user } });

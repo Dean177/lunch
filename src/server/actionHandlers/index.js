@@ -1,6 +1,6 @@
 import * as authTypes from '../../shared/constants/actionTypes/authActionTypes';
 import * as lunchTypes from '../../shared/constants/actionTypes/lunchActionTypes';
-import * as userTypes from '../../shared/constants/actionTypes/userActionTypess';
+import * as userTypes from '../../shared/constants/actionTypes/userActionTypes';
 import onAddLunchOption from './onAddLunchOption';
 import onAuthenticateUser from './onAuthenticateUser';
 import onChangeImageUrl from './onChangeImageUrl';

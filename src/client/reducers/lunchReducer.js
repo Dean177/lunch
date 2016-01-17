@@ -2,6 +2,10 @@ import createStateMergeReducer from '../util/createStateMergeReducer';
 import { find } from 'underscore';
 import upsert from '../../shared/util/upsert';
 import {
+  ChangeImageUrl,
+  ChangeName,
+} from '../../shared/constants/actionTypes/userActionTypes';
+import {
   AddLunchOption,
   ChangeOrderDetails,
   EnterLunchOptionName,
@@ -48,6 +52,22 @@ const lunchReducer = createStateMergeReducer(initialState, {
       optionName: '',
       enteringNewOption: false,
       peopleChoices: newPeopleChoices,
+    };
+  },
+
+  [ChangeImageUrl]({ peopleChoices }, { payload: { id, url } }) {
+    const comparator = (pChoice) => (pChoice.person.id === id);
+    const existingChoice = find(peopleChoices, comparator);
+    return {
+      peopleChoices: upsert(peopleChoices, comparator, { ...existingChoice, person: { ...existingChoice.person, imageUrl: url } }),
+    };
+  },
+
+  [ChangeName]({ peopleChoices }, { payload: { id, name } }) {
+    const comparator = (pChoice) => (pChoice.person.id === id);
+    const existingChoice = find(peopleChoices, comparator);
+    return {
+      peopleChoices: upsert(peopleChoices, comparator, { ...existingChoice, person: { ...existingChoice.person, name } }),
     };
   },
 
