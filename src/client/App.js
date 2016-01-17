@@ -17,15 +17,12 @@ const history = createBrowserHistory();
 const store = configureStore(routes, history);
 
 function navigateIfUserHasChosenLunchOption(action) {
-  console.log('dispatching', action);
   return (dispatch, getState) => {
     const { payload: { lunchOptionId }, meta: { navigateTo } } = action;
     const { user, lunch: { peopleChoices } } = getState();
     const usersLunchChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === user.id));
 
-    console.log('userLunchChoice', usersLunchChoice, user, peopleChoices);
     if (usersLunchChoice && usersLunchChoice.choiceId === lunchOptionId) {
-      console.log('action matches');
       dispatch(routeActions.push(navigateTo));
     }
   };
@@ -39,7 +36,6 @@ socket.on(Action, (action) => {
   }
   store.dispatch(action);
   if (action.meta && action.meta.navigateTo) {
-    console.log('navigate reccd', action);
     store.dispatch(navigateIfUserHasChosenLunchOption(action));
   }
 });

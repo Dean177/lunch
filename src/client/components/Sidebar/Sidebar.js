@@ -20,7 +20,7 @@ export default class Sidebar extends Component {
 
   onGetLunch = (event) => {
     event.preventDefault();
-    this.props.offerToGetLunch(this.props.userLunchChoice.choiceId);
+    this.props.offerToGetLunch(this.props.user, this.props.userLunchChoice.choiceId);
   };
 
   onNoGetLunch = (event) => {

@@ -67,10 +67,10 @@ export function notGettingLunch(lunchOptionId) {
   };
 }
 
-export function offerToGetLunch(lunchOptionId) {
+export function offerToGetLunch(user, lunchOptionId) {
   return {
     type: OfferToGetLunch,
-    payload: { lunchOptionId },
+    payload: { user, lunchOptionId },
     meta: { isServerAction: true },
   };
 }

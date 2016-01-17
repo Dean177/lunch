@@ -11,6 +11,7 @@ import {
   EnterLunchOptionName,
   GoneToFetchLunch,
   NotGettingLunch,
+  OfferToGetLunch,
   OptionChoices,
   ToggleEnterNewLunchOption,
   UpdatePaymentAmount,
@@ -97,6 +98,20 @@ const lunchReducer = createStateMergeReducer(initialState, {
     const existingChoice = find(peopleChoices, comparator);
     return {
       peopleChoices: upsert(peopleChoices, comparator, { ...existingChoice, isFetching: false }),
+    };
+  },
+
+  [OfferToGetLunch](state, { payload: { user, lunchOptionId } }) {
+    return {
+      peopleChoices: state.peopleChoices.map((personChoice) => {
+        if (personChoice.choiceId !== lunchOptionId) {
+          return personChoice;
+        } else if (personChoice.person.id !== user.id) {
+          return { ...personChoice, isFetching: false };
+        }
+
+        return { ...personChoice, isFetching: true };
+      }),
     };
   },
 
