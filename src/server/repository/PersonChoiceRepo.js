@@ -1,6 +1,5 @@
-import debug from 'debug';
+const dBug = require('debug')('lunch:PersonChoiceRepo');
 import Promise from 'promise';
-const dBug = debug('lunch:PersonChoiceRepo');
 import { find } from 'underscore';
 
 let peopleChoices = [];

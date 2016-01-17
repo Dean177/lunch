@@ -3,7 +3,7 @@ import {
   AddLunchOption,
   ChangeOrderDetails,
   EnterLunchOptionName,
-  EnterPaymentAmount,
+  UpdatePaymentAmount,
   GoneToFetchLunch,
   NotGettingLunch,
   OfferToGetLunch,
@@ -43,10 +43,10 @@ export function enterOptionName(name) {
   return { type: EnterLunchOptionName, payload: { name } };
 }
 
-export function enterPaymentAmount(amount) {
+export function updatePaymentAmount(user, amount) {
   return {
-    type: EnterPaymentAmount,
-    payload: { amount },
+    type: UpdatePaymentAmount,
+    payload: { amount, user },
     meta: { isServerAction: true },
   };
 }

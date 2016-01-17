@@ -20,7 +20,7 @@ const actionHandlers = {
   [userTypes.ChangeImageUrl]: onChangeImageUrl,
   [userTypes.ChangeName]: onChangeName,
   [lunchTypes.ChangeOrderDetails]: onChangeOrderDetails,
-  [lunchTypes.EnterPaymentAmount]: onChangePaymentAmount,
+  [lunchTypes.UpdatePaymentAmount]: onChangePaymentAmount,
   [lunchTypes.GoneToFetchLunch]: onGoneToFetchLunch,
   [lunchTypes.UserLunchChoice]: onUserLunchChoice,
   [lunchTypes.NotGettingLunch]: onNotGettingLunch,

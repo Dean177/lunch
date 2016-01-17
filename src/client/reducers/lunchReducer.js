@@ -13,6 +13,7 @@ import {
   NotGettingLunch,
   OptionChoices,
   ToggleEnterNewLunchOption,
+  UpdatePaymentAmount,
   UpdatedPersonChoice,
   UserLunchChoice,
 } from '../../shared/constants/actionTypes/lunchActionTypes';
@@ -129,6 +130,19 @@ const lunchReducer = createStateMergeReducer(initialState, {
     );
 
     return { peopleChoices: newPeopleChoices };
+  },
+
+  [UpdatePaymentAmount](state, { payload: { user, amount } }) {
+    const { peopleChoices } = state;
+    const findUserById = (personChoice) => (personChoice.person.id === user.id);
+    const existingUserChoice = find(state.peopleChoices, findUserById);
+    if (!existingUserChoice) {
+      return state;
+    }
+
+    return {
+      peopleChoices: upsert(peopleChoices, findUserById, { ...existingUserChoice, paymentAmount: amount }),
+    };
   },
 });
 
