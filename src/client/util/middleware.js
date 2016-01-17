@@ -1,4 +1,5 @@
 /* eslint no-console:0, no-unused-vars: 0 */
+import { UPDATE_LOCATION, TRANSITION } from 'redux-simple-router';
 import send from './socket';
 
 export const logger = store => next => action => {
@@ -21,7 +22,8 @@ export const serverEvent = store => next => action => {
 };
 
 export const actionFormatValidator = store => next => action => {
-  if (! action.payload || !action.type) {
+  const isRouterAction = action.type === UPDATE_LOCATION || action.type === TRANSITION;
+  if (!isRouterAction && (!action.payload || !action.type)) {
     console.error('Action received which does not contain a payload, this is probably a mistake', action);
   }
   return next(action);

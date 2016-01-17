@@ -3,14 +3,16 @@ import 'font-awesome/scss/font-awesome.scss';
 
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { ReduxRouter } from 'redux-router';
+import { Router } from 'react-router';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
 import routes from './Routes';
 import configureStore from './util/configureStore';
 import { socket } from './util/socket';
 import { Authenticate } from '../shared/constants/actionTypes/authActionTypes';
 import { Action } from '../shared/constants/WeboscketMessageTypes';
 
-const store = configureStore(routes);
+const history = createBrowserHistory();
+const store = configureStore(routes, history);
 
 socket.on(Action, (action) => {
   // Actions sent from the server via action creators may include the 'isServerAction' property,
@@ -31,7 +33,7 @@ class App extends Component {
     return (
       <div className='App'>
         <Provider store={store}>
-          <ReduxRouter>{routes}</ReduxRouter>
+          <Router history={history}>{routes}</Router>
         </Provider>
       </div>
     );
