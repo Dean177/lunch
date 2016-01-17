@@ -68,7 +68,7 @@
     "react": "0.14.6",
     "react-addons-css-transition-group": "0.14.5",
     "react-addons-test-utils": "0.14.5",
-    "react-autosuggest": "3.3.2",
+    "react-autosuggest": "3.3.4",
     "react-dom": "0.14.5",
     "react-measure": "0.3.2",
     "react-motion": "0.3.1",
