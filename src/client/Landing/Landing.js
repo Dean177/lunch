@@ -33,10 +33,12 @@ class Landing extends Component {
 
   onNameChange = compose(this.props.dispatch, enterOptionName);
 
-  getSuggestions = (input, callback) => {
+  getSuggestions = (input) => {
+    if (input.trim().length < 2) {
+      return [];
+    }
     const regex = new RegExp(`^${input}`, 'i');
-    const suggestions = this.props.lunchOptions.filter(option => regex.test(option.name));
-    callback(null, suggestions);
+    return this.props.lunchOptions.filter(option => regex.test(option.name));
   };
 
   render() {
