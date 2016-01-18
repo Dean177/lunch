@@ -12,8 +12,9 @@
     "start": "env NODE_ENV=development DEBUG=lunch:* npm run build && node --harmony_destructuring out/server/index",
     "start:local": "env NODE_ENV=production DEBUG=lunch:* node --harmony_destructuring out/server/index.js",
     "start:production": "env NODE_ENV=production DEBUG=lunch:* npm run build:production && forever start -a -c \"node --harmony_destructuring\" out/server/index.js",
-    "test": "webpack --config webpack.config.test.js && mocha out/test/**/*.spec.js",
-    "lint": "eslint src/**/*.js test/**/*.js gulpfile.js webpack.config.*"
+    "test": "npm run test:unit && npm run test:lint",
+    "test:unit": "webpack --config webpack.config.test.js && mocha out/test/**/*.spec.js",
+    "test:lint": "eslint src/**/*.js test/**/*.js gulpfile.js webpack.config.*"
   },
   "author": "Dean Merchant <deanmerchant@gmail.com>",
   "repository": {

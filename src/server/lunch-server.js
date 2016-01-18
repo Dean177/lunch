@@ -13,7 +13,7 @@ const dBug = debug('lunch:express');
 
 app.use(favicon(`${__dirname}/favicon.ico`));
 dBug(`Running in ${process.env.NODE_ENV}`);
-if (process.env.NODE_ENV == 'production') {
+if (process.env.NODE_ENV === 'production') {
   const assetPath = path.normalize(path.join(__dirname, '../client'));
   dBug(`Serving assets from ${assetPath}`);
   app.use(require('compression')());
@@ -27,7 +27,7 @@ if (process.env.NODE_ENV == 'production') {
   app.use(require('webpack-hot-middleware')(compiler, { noInfo: true }));
 }
 
-app.get('/*', function(req, res) {
+app.get('/*', (req, res) => {
   res.sendFile('/index.html', { root: __dirname });
 });
 

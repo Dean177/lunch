@@ -6,5 +6,5 @@ test:
   override:
     - npm run build:client
     - npm run build:server
-    - npm test
-    - npm run lint
+    - npm test:unit
+    - npm test:lint
