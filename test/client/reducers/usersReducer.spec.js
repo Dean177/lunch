@@ -1,10 +1,6 @@
 /* eslint no-unused-expressions: 0 */
 import { expect } from 'chai';
-import { find } from 'underscore';
-import {
-  ChangeImageUrl,
-  ChangeName
-} from '../../../src/shared/constants/actionTypes/userActionTypes';
+import { ChangeImageUrl, ChangeName } from '../../../src/shared/constants/actionTypes/userActionTypes';
 import { changeImageUrl, changeName } from '../../../src/shared/actionCreators/userActionCreator';
 import lunchReducer from '../../../src/client/reducers/lunchReducer';
 
@@ -24,7 +20,7 @@ const initialState = {
       isFetching: false,
       orderDetails: '',
       paymentAmount: '',
-      person: { id: '1', imageUrl: 'http://example.com/goose.jpg', name: 'Goose' }
+      person: { id: '1', imageUrl: 'http://example.com/goose.jpg', name: 'Goose' },
     },
   ],
 };
@@ -34,7 +30,7 @@ describe('usersReducer', () => {
     it('Should update the specified users imageUrl', () => {
       const firstUserId = initialState.peopleChoices[0].person.id;
       const newImageUrl = 'http://example.com/duck2.png';
-      const action =  changeImageUrl(firstUserId, newImageUrl);
+      const action = changeImageUrl(firstUserId, newImageUrl);
 
       const newState = lunchReducer(initialState, action);
       expect(newState.peopleChoices[0].person.imageUrl).to.equal(newImageUrl);
@@ -47,7 +43,7 @@ describe('usersReducer', () => {
     it('Should update the specified users name', () => {
       const firstUserId = initialState.peopleChoices[0].person.id;
       const newName = 'Donald';
-      const action =  changeName(firstUserId, newName);
+      const action = changeName(firstUserId, newName);
 
       const newState = lunchReducer(initialState, action);
       expect(newState.peopleChoices[0].person.name).to.equal(newName);

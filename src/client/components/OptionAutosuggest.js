@@ -13,11 +13,9 @@ class OptionAutosuggest extends Component {
 
   render() {
     const { value, inputClass, onChange, onBlur, getSuggestions } = this.props;
-    console.log(value, getSuggestions(value));
     return (
       <Autosuggest
-        suggestions={ this.props.getSuggestions(value) }
-        onSuggestionUpdateReqested={console.log}
+        suggestions={ getSuggestions(value) }
         renderSuggestion={(lunchOption) => <span>{lunchOption.name}</span>}
         getSuggestionValue={(lunchOption) => lunchOption.name}
         inputProps={{
