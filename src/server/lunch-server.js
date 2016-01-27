@@ -27,6 +27,8 @@ if (process.env.NODE_ENV === 'production') {
   app.use(require('webpack-hot-middleware')(compiler, { noInfo: true }));
 }
 
+app.get('status', (req, res) => { res.send('hungry'); });
+
 app.get('/*', (req, res) => {
   res.sendFile('/index.html', { root: __dirname });
 });
