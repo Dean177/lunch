@@ -53,7 +53,7 @@
     "file-loader": "0.8.4",
     "font-awesome": "4.5.0",
     "forever": "0.15.1",
-    "fs-extra": "0.26.4",
+    "fs-extra": "0.26.5",
     "gulp": "3.9.0",
     "gulp-babel": "6.1.1",
     "gulp-mocha": "2.1.3",
