@@ -1,11 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
-const { serverPort } = require('./src/shared/constants/config');
+const config = require('./src/shared/constants/config');
 const DefinePlugin = webpack.DefinePlugin;
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const OccurenceOrderPlugin = webpack.optimize.OccurenceOrderPlugin;
 
-const config = {
+module.exports = {
   entry: ['./src/client/index'],
   output: {
     path: path.join(__dirname, 'out/client'),
@@ -17,7 +17,7 @@ const config = {
       __DEVELOPMENT__: false,
       'process.env': {
         'NODE_ENV': JSON.stringify('production'),
-        'PORT': process.env.PORT || serverPort
+        'PORT': process.env.PORT || config.serverPort
       },
     }),
     new UglifyJsPlugin(),
@@ -38,5 +38,3 @@ const config = {
     ],
   },
 };
-
-module.exports = config;
