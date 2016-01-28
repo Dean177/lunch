@@ -1,1 +1,1 @@
-export const serverPort = 3333;
+export const serverPort = process.env.PORT || 3333;

@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const { serverPort } = require('./src/shared/constants/config');
 const DefinePlugin = webpack.DefinePlugin;
 const NoErrorsPlugin = webpack.NoErrorsPlugin;
 const HotModuleReplacementPlugin = webpack.HotModuleReplacementPlugin;
@@ -19,7 +20,13 @@ module.exports = {
   plugins: [
     new HotModuleReplacementPlugin(),
     new NoErrorsPlugin(),
-    new DefinePlugin({ __DEVELOPMENT__: true }),
+    new DefinePlugin({
+      __DEVELOPMENT__: true,
+      'process.env': {
+        'NODE_ENV': JSON.stringify('development'),
+        'PORT': process.env.PORT || serverPort
+      },
+    }),
   ],
   module: {
     loaders: [

@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const { serverPort } = require('./src/shared/constants/config');
 const DefinePlugin = webpack.DefinePlugin;
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const OccurenceOrderPlugin = webpack.optimize.OccurenceOrderPlugin;
@@ -14,7 +15,10 @@ const config = {
   plugins: [
     new DefinePlugin({
       __DEVELOPMENT__: false,
-      'process.env': { 'NODE_ENV': JSON.stringify('production') },
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production'),
+        'PORT': process.env.PORT || serverPort
+      },
     }),
     new UglifyJsPlugin(),
     new OccurenceOrderPlugin(),
