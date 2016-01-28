@@ -1,1 +1,3 @@
-export const serverPort = process.env.PORT || 3333;
+module.exports = {
+  serverPort: process.env.PORT || 3333,
+};
