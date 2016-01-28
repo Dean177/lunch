@@ -14,8 +14,7 @@ class OptionAdder extends Component {
     enterOptionName: PropTypes.func.isRequired,
   };
 
-  onNewOption = (event) => {
-    event.preventDefault();
+  onNewOption = () => {
     this.props.addLunchOption(this.props.user, this.props.optionName);
   };
 
@@ -24,10 +23,12 @@ class OptionAdder extends Component {
     setTimeout(this.props.toggleNewOption, 100);
   };
 
-  getSuggestions = (input, callback) => {
+  getSuggestions = (input) => {
+    if (input.trim().length < 2) {
+      return [];
+    }
     const regex = new RegExp(`^${input}`, 'i');
-    const suggestions = this.props.lunchOptions.filter(option => regex.test(option.name));
-    callback(null, suggestions);
+    return this.props.lunchOptions.filter(option => regex.test(option.name));
   };
 
   render() {

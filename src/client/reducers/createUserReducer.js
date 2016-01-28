@@ -1,5 +1,5 @@
 import createLocalStorageMergeReducer from '../util/createLocalStorageMergeReducer';
-import { ChangeName, ChangeImageUrl } from '../../shared/constants/actionTypes/userActionTypess';
+import { ChangeName, ChangeImageUrl } from '../../shared/constants/actionTypes/userActionTypes';
 import { v4 as uuid } from 'node-uuid';
 
 const initialState = {
@@ -9,12 +9,18 @@ const initialState = {
 };
 
 const createUserReducer = createLocalStorageMergeReducer('lunchUser', initialState, {
-  [ChangeName](state, { payload: { name } }) {
-    return { name };
+  [ChangeImageUrl](state, { payload }) {
+    const { id } = state;
+    const updatedUserId = payload.id;
+
+    return (id === updatedUserId) ? { imageUrl: payload.url } : state;
   },
 
-  [ChangeImageUrl](state, { payload: { url } }) {
-    return { imageUrl: url };
+  [ChangeName](state, { payload }) {
+    const { id } = state;
+    const updatedUserId = payload.id;
+
+    return (id === updatedUserId) ? { name: payload.name } : state;
   },
 });
 

@@ -13,8 +13,7 @@ const dBug = debug('lunch:express');
 
 app.use(favicon(`${__dirname}/favicon.ico`));
 dBug(`Running in ${process.env.NODE_ENV}`);
-
-if (process.env.NODE_ENV === JSON.stringify('production')) {
+if (process.env.NODE_ENV === 'production') {
   const assetPath = path.normalize(path.join(__dirname, '../client'));
   dBug(`Serving assets from ${assetPath}`);
   app.use(require('compression')());
@@ -27,6 +26,8 @@ if (process.env.NODE_ENV === JSON.stringify('production')) {
   app.use(require('webpack-dev-middleware')(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
   app.use(require('webpack-hot-middleware')(compiler, { noInfo: true }));
 }
+
+app.get('/status', (req, res) => { res.send('hungry'); });
 
 app.get('/*', (req, res) => {
   res.sendFile('/index.html', { root: __dirname });

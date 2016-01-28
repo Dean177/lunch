@@ -9,7 +9,7 @@ import {
   changeOrderDetails,
   chooseLunchOption,
   enterOptionName,
-  enterPaymentAmount,
+  updatePaymentAmount,
   goneToFetchLunch,
   notGettingLunch,
   offerToGetLunch,
@@ -77,11 +77,12 @@ class ChooseLunch extends Component {
           <Sidebar
             hasAuthorizedSplitwiseToken={hasAuthorizedSplitwiseToken}
             peopleChoices={peopleChoices}
+            user={user}
             userLunchChoice={userLunchChoice}
             {...bindActionCreators(
               {
                 changeOrderDetails,
-                enterPaymentAmount,
+                updatePaymentAmount,
                 goneToFetchLunch,
                 notGettingLunch,
                 offerToGetLunch,

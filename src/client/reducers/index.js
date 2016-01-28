@@ -1,14 +1,12 @@
 import { combineReducers } from 'redux';
-import { routerStateReducer } from 'redux-router';
+import { routeReducer } from 'redux-simple-router';
 import lunchReducer from './lunchReducer';
 import createUserReducer from './createUserReducer';
 import authenticationReducer from './authenticationReducer';
 
-const rootReducer = combineReducers({
+export default combineReducers({
   auth: authenticationReducer,
   lunch: lunchReducer,
-  router: routerStateReducer,
+  routing: routeReducer,
   user: createUserReducer(window.localStorage),
 });
-
-export default rootReducer;

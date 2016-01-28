@@ -1,6 +1,5 @@
-import debug from 'debug';
+const dBug = require('debug')('lunch:PersonChoiceRepo');
 import Promise from 'promise';
-const dBug = debug('lunch:PersonChoiceRepo');
 import { find } from 'underscore';
 
 let peopleChoices = [];
@@ -26,6 +25,18 @@ export const clearFetchers = (lunchOptionId) => {
       .filter(personChoice => personChoice.choiceId === lunchOptionId && personChoice.isFetching)
       .forEach(personChoice => personChoice.isFetching = false)
   );
+};
+
+export const updateImageUrl = (user, url) => {
+  const matchingUser = find(peopleChoices, (personChoice) => (personChoice.person.id === user.id));
+  if (!matchingUser) {
+    const message = `Attempted to update the name of a user which doesn't exist ${user}`;
+    dBug(message);
+    return Promise.reject(new Error(message));
+  }
+
+  matchingUser.person.imageUrl = url;
+  return Promise.resolve(matchingUser);
 };
 
 export const updateName = (user, name) => {

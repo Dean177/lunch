@@ -1,7 +1,7 @@
 export const AddLunchOption = 'AddLunchOption';
 export const ChangeOrderDetails = 'ChangeOrderDetails';
 export const EnterLunchOptionName = 'EnterLunchOptionName';
-export const EnterPaymentAmount = 'EnterPaymentAmount';
+export const UpdatePaymentAmount = 'UpdatePaymentAmount';
 export const GoneToFetchLunch = 'GoneToFetchLunch';
 export const NotGettingLunch = 'NotGettingLunch';
 export const OptionChoices = 'OptionChoices';

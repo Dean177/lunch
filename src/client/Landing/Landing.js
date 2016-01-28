@@ -2,7 +2,7 @@ import './Landing.scss';
 import React, { Component, PropTypes } from 'react';
 import { Person, LunchOption } from '../PropTypes';
 import { connect } from 'react-redux';
-import { pushState } from 'redux-router';
+import { routeActions } from 'redux-simple-router';
 import { compose } from 'underscore';
 import { enterOptionName, addLunchOption } from '../../shared/actionCreators/lunchActionCreators';
 import OptionAutosuggest from '../components/OptionAutosuggest';
@@ -28,16 +28,17 @@ class Landing extends Component {
       dispatch(addLunchOption(user, optionName));
     }
 
-    const stateNav = pushState(null, '/lunch');
-    dispatch(stateNav);
+    dispatch(routeActions.push('/lunch'));
   };
 
   onNameChange = compose(this.props.dispatch, enterOptionName);
 
-  getSuggestions = (input, callback) => {
+  getSuggestions = (input) => {
+    if (input.trim().length < 2) {
+      return [];
+    }
     const regex = new RegExp(`^${input}`, 'i');
-    const suggestions = this.props.lunchOptions.filter(option => regex.test(option.name));
-    callback(null, suggestions);
+    return this.props.lunchOptions.filter(option => regex.test(option.name));
   };
 
   render() {

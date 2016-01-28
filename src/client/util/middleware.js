@@ -1,9 +1,13 @@
 /* eslint no-console:0, no-unused-vars: 0 */
+import { UPDATE_LOCATION, TRANSITION } from 'redux-simple-router';
 import send from './socket';
 
 export const logger = store => next => action => {
   const result = next(action);
-  console.log('action', action, 'next state', store.getState());
+  const isAThunk = typeof action == 'function';
+  if (!isAThunk) {
+    console.log('action', action, 'next state', store.getState());
+  }
   return result;
 };
 
@@ -21,7 +25,9 @@ export const serverEvent = store => next => action => {
 };
 
 export const actionFormatValidator = store => next => action => {
-  if (! action.payload || !action.type) {
+  const isAThunk = typeof action == 'function';
+  const isRouterAction = action.type === UPDATE_LOCATION || action.type === TRANSITION;
+  if (!isAThunk && !isRouterAction && (!action.payload || !action.type)) {
     console.error('Action received which does not contain a payload, this is probably a mistake', action);
   }
   return next(action);

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
-import { PersonChoice } from '../../PropTypes';
+import { Person, PersonChoice } from '../../PropTypes';
 import { Motion, spring } from 'react-motion';
 import PersonOrder from './components/PersonOrder';
 import SplitwiseIntegration from './components/SplitwiseIntegration';
@@ -8,18 +8,19 @@ import SplitwiseIntegration from './components/SplitwiseIntegration';
 export default class Sidebar extends Component {
   static propTypes = {
     changeOrderDetails: PropTypes.func.isRequired,
-    enterPaymentAmount: PropTypes.func.isRequired,
+    updatePaymentAmount: PropTypes.func.isRequired,
     goneToFetchLunch: PropTypes.func.isRequired,
     hasAuthorizedSplitwiseToken: PropTypes.bool.isRequired,
     notGettingLunch: PropTypes.func.isRequired,
     offerToGetLunch: PropTypes.func.isRequired,
     peopleChoices: PropTypes.arrayOf(PersonChoice).isRequired,
     userLunchChoice: PersonChoice,
+    user: Person,
   };
 
   onGetLunch = (event) => {
     event.preventDefault();
-    this.props.offerToGetLunch(this.props.userLunchChoice.choiceId);
+    this.props.offerToGetLunch(this.props.user, this.props.userLunchChoice.choiceId);
   };
 
   onNoGetLunch = (event) => {
@@ -37,7 +38,7 @@ export default class Sidebar extends Component {
   };
 
   onPaymentAmountChange = (event) => {
-    this.props.enterPaymentAmount(event.target.value);
+    this.props.updatePaymentAmount(this.props.user, event.target.value);
   };
 
   onReady = (event) => {

@@ -3,6 +3,7 @@ const gulp = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');
 const nodemon = require('gulp-nodemon');
 const path = require('path');
+
 const sourceMapConfig = {
   debug: true,
   includeContent: false,
@@ -48,8 +49,4 @@ gulp.task('build:server', () => {
     .pipe(babel())
     .pipe(sourcemaps.write('.', sourceMapConfig))
     .pipe(gulp.dest('out'));
-});
-
-gulp.task('static-assets', () => {
-  return gulp.src(['src/server/index.html', 'src/server/favicon.ico']).pipe(gulp.dest('out/server'));
 });

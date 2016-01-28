@@ -1,9 +1,7 @@
 import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
-import debug from 'debug';
 import { Action } from '../../shared/constants/WeboscketMessageTypes';
 import updatedPersonChoice from '../actionCreators/updatedPersonChoice';
-const dBug = debug('lunch:actionHandler:onChangeOrderDetails');
-
+const dBug = require('debug')('lunch:actionHandler:onChangeOrderDetails');
 
 export default function onChangeOrderDetails(io, socket, action) {
   const { payload: { orderDetails }, meta: { user } } = action;

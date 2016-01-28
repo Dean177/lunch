@@ -2,13 +2,19 @@ import createStateMergeReducer from '../util/createStateMergeReducer';
 import { find } from 'underscore';
 import upsert from '../../shared/util/upsert';
 import {
+  ChangeImageUrl,
+  ChangeName,
+} from '../../shared/constants/actionTypes/userActionTypes';
+import {
   AddLunchOption,
   ChangeOrderDetails,
   EnterLunchOptionName,
   GoneToFetchLunch,
   NotGettingLunch,
+  OfferToGetLunch,
   OptionChoices,
   ToggleEnterNewLunchOption,
+  UpdatePaymentAmount,
   UpdatedPersonChoice,
   UserLunchChoice,
 } from '../../shared/constants/actionTypes/lunchActionTypes';
@@ -51,6 +57,22 @@ const lunchReducer = createStateMergeReducer(initialState, {
     };
   },
 
+  [ChangeImageUrl]({ peopleChoices }, { payload: { id, url } }) {
+    const comparator = (pChoice) => (pChoice.person.id === id);
+    const existingChoice = find(peopleChoices, comparator);
+    return {
+      peopleChoices: upsert(peopleChoices, comparator, { ...existingChoice, person: { ...existingChoice.person, imageUrl: url } }),
+    };
+  },
+
+  [ChangeName]({ peopleChoices }, { payload: { id, name } }) {
+    const comparator = (pChoice) => (pChoice.person.id === id);
+    const existingChoice = find(peopleChoices, comparator);
+    return {
+      peopleChoices: upsert(peopleChoices, comparator, { ...existingChoice, person: { ...existingChoice.person, name } }),
+    };
+  },
+
   [ChangeOrderDetails]({ peopleChoices }, { payload: { orderDetails }, meta: { user } }) {
     const isUserLunchChoice = (personChoice) => (personChoice.person.id === user.id);
     const userLunchChoice = find(peopleChoices, isUserLunchChoice);
@@ -65,9 +87,11 @@ const lunchReducer = createStateMergeReducer(initialState, {
   },
 
   [GoneToFetchLunch]({ peopleChoices }, { payload: { lunchOptionId } }) {
-    return {
+    const newChoices = {
       peopleChoices: peopleChoices.filter(personChoice => personChoice.choiceId !== lunchOptionId),
     };
+
+    return newChoices;
   },
 
   [NotGettingLunch]({ peopleChoices }, { payload: { lunchOptionId }, meta: { user } }) {
@@ -75,6 +99,20 @@ const lunchReducer = createStateMergeReducer(initialState, {
     const existingChoice = find(peopleChoices, comparator);
     return {
       peopleChoices: upsert(peopleChoices, comparator, { ...existingChoice, isFetching: false }),
+    };
+  },
+
+  [OfferToGetLunch](state, { payload: { user, lunchOptionId } }) {
+    return {
+      peopleChoices: state.peopleChoices.map((personChoice) => {
+        if (personChoice.choiceId !== lunchOptionId) {
+          return personChoice;
+        } else if (personChoice.person.id !== user.id) {
+          return { ...personChoice, isFetching: false };
+        }
+
+        return { ...personChoice, isFetching: true };
+      }),
     };
   },
 
@@ -108,6 +146,19 @@ const lunchReducer = createStateMergeReducer(initialState, {
     );
 
     return { peopleChoices: newPeopleChoices };
+  },
+
+  [UpdatePaymentAmount](state, { payload: { user, amount } }) {
+    const { peopleChoices } = state;
+    const findUserById = (personChoice) => (personChoice.person.id === user.id);
+    const existingUserChoice = find(state.peopleChoices, findUserById);
+    if (!existingUserChoice) {
+      return state;
+    }
+
+    return {
+      peopleChoices: upsert(peopleChoices, findUserById, { ...existingUserChoice, paymentAmount: amount }),
+    };
   },
 });
 
