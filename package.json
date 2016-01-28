@@ -9,9 +9,8 @@
     "build:server": "gulp build:server",
     "build:client": "webpack --config webpack.config.prod.js",
     "build:production": "npm run clean && npm run build && npm run build:client",
-    "start": "env NODE_ENV=development DEBUG=lunch:* npm run build && node --harmony_destructuring out/server/index",
-    "start:local": "env NODE_ENV=production DEBUG=lunch:* node --harmony_destructuring out/server/index.js",
-    "start:production": "env NODE_ENV=production DEBUG=lunch:* npm run build:production && node --harmony_destructuring out/server/index.js",
+    "start": "npm run build && node --harmony_destructuring out/server/index.js",
+    "start:production": "npm run build:production && node --harmony_destructuring out/server/index.js",
     "test": "npm run test:unit && npm run test:lint",
     "test:unit": "webpack --config webpack.config.test.js && mocha out/test/**/*.spec.js",
     "test:lint": "eslint src/**/*.js test/**/*.js gulpfile.js webpack.config.*"

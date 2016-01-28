@@ -1,9 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
-const config = require('./src/shared/constants/config');
 const DefinePlugin = webpack.DefinePlugin;
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const OccurenceOrderPlugin = webpack.optimize.OccurenceOrderPlugin;
+
+console.warn("PROCESS PORT", process.env.PORT);
 
 module.exports = {
   entry: ['./src/client/index'],
@@ -15,9 +16,10 @@ module.exports = {
   plugins: [
     new DefinePlugin({
       __DEVELOPMENT__: false,
+      __PORT__: process.env.PORT,
       'process.env': {
         'NODE_ENV': JSON.stringify('production'),
-        'PORT': process.env.PORT || config.serverPort,
+        'PORT': process.env.PORT,
       },
     }),
     new UglifyJsPlugin(),

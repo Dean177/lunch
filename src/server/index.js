@@ -2,7 +2,7 @@ if (process.env.NODE_ENV !== 'production') {
   require('source-map-support').install();
 }
 const debug = require('debug')('lunch:index');
-import { serverPort } from '../shared/constants/config';
+const serverPort = process.env.PORT || 3333;
 import lunchServer from './lunch-server';
 
 lunchServer.listen(serverPort, (err) => {
