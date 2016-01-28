@@ -1,6 +1,5 @@
 import AuthApi from 'splitwise-node';
-import debug from 'debug';
-const dBug = debug('lunch:getSplitwiseAuthApi');
+const dBug = require('debug')('lunch:getSplitwiseAuthApi');
 
 const Key = process.env.SPLITWISE_CONSUMER_KEY;
 const Secret = process.env.SPLITWISE_CONSUMER_SECRET;

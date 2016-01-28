@@ -90,7 +90,8 @@ const lunchReducer = createStateMergeReducer(initialState, {
     const newChoices = {
       peopleChoices: peopleChoices.filter(personChoice => personChoice.choiceId !== lunchOptionId),
     };
-    console.log(newChoices);
+
+    return newChoices;
   },
 
   [NotGettingLunch]({ peopleChoices }, { payload: { lunchOptionId }, meta: { user } }) {

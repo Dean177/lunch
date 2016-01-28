@@ -1,30 +1,30 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { syncHistory } from 'redux-simple-router';
+import { syncHistory } from 'react-router-redux';
 import rootReducer from '../reducers/index';
 import { logger, serverEvent, actionFormatValidator } from './middleware';
 
-export default function configureStore(routes, history, initialState) {
+export default function configureStore(history, initialState) {
   const reduxRouterMiddleware = syncHistory(history);
 
-  let createStoreWithMiddleware;
+  let middleware;
   if (__DEVELOPMENT__) {
-    createStoreWithMiddleware = applyMiddleware(
+    middleware = applyMiddleware(
       actionFormatValidator,
       logger,
       serverEvent,
       thunk,
       reduxRouterMiddleware
-    )(createStore);
+    );
   } else {
-    createStoreWithMiddleware = applyMiddleware(
+    middleware = applyMiddleware(
       serverEvent,
       thunk,
       reduxRouterMiddleware
-    )(createStore);
+    );
   }
 
-  const store = createStoreWithMiddleware(rootReducer, initialState);
+  const store = createStore(rootReducer, initialState, middleware);
 
   if (__DEVELOPMENT__ && module.hot) {
     module.hot.accept('../reducers/index', () => {

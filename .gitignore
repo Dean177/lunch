@@ -3,6 +3,5 @@ npm-debug.log
 node_modules
 out
 build-artifacts
-
-lunch.config.prod.json
-lunch.config.dev.json
+ENV
+.env

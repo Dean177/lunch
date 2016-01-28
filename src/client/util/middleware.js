@@ -1,5 +1,5 @@
 /* eslint no-console:0, no-unused-vars: 0 */
-import { UPDATE_LOCATION, TRANSITION } from 'redux-simple-router';
+import { UPDATE_LOCATION, TRANSITION } from 'react-router-redux';
 import send from './socket';
 
 export const logger = store => next => action => {

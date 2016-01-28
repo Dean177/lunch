@@ -11,10 +11,10 @@ import { Action } from '../../shared/constants/WeboscketMessageTypes';
 const dBug = debug('lunch:actionHandlers:onAuthenticateUser');
 const authApi = getSplitwiseAuthApi();
 
-const onNewAuth = (emitter, user) => ({ token, secret }) => {
+const onNewAuth = (socket, user) => ({ token, secret }) => {
   dBug('Received new splitwise api token for user: ', { token });
   return PersonRepo.updateSplitwiseAuth(user, token, secret).then((updatedAuth) => {
-    emitter.emit(Action, splitwiseAuthToken(false, authApi.getUserAuthorisationUrl(updatedAuth.token)));
+    socket.emit(Action, splitwiseAuthToken(false, authApi.getUserAuthorisationUrl(updatedAuth.token)));
   });
 };
 
