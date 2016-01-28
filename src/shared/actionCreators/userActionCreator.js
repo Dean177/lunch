@@ -1,4 +1,4 @@
-import { ChangeName, ChangeImageUrl } from '../../shared/constants/actionTypes';
+import { ChangeName, ChangeImageUrl } from '../constants/actionTypes/userActionTypes';
 
 export function changeName(id, name) {
   return {

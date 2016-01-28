@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
-import { routerStateReducer } from 'redux-router';
+import { routeReducer } from 'react-router-redux';
 import lunchReducer from './lunchReducer';
 import createUserReducer from './createUserReducer';
+import authenticationReducer from './authenticationReducer';
 
-const rootReducer = combineReducers({
-  router: routerStateReducer,
+export default combineReducers({
+  auth: authenticationReducer,
   lunch: lunchReducer,
+  routing: routeReducer,
   user: createUserReducer(window.localStorage),
 });
-
-export default rootReducer;

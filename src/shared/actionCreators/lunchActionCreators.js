@@ -3,17 +3,19 @@ import {
   AddLunchOption,
   ChangeOrderDetails,
   EnterLunchOptionName,
+  UpdatePaymentAmount,
   GoneToFetchLunch,
+  NotGettingLunch,
   OfferToGetLunch,
   ToggleEnterNewLunchOption,
   UserLunchChoice,
-} from '../../shared/constants/actionTypes';
+} from '../constants/actionTypes/lunchActionTypes';
 
-export function addLunchOption(person, name) {
+export function addLunchOption(person, name, id) {
   return {
     type: AddLunchOption,
     payload: {
-      id: uuid(),
+      id: id || uuid(),
       person,
       name,
     },
@@ -41,6 +43,14 @@ export function enterOptionName(name) {
   return { type: EnterLunchOptionName, payload: { name } };
 }
 
+export function updatePaymentAmount(user, amount) {
+  return {
+    type: UpdatePaymentAmount,
+    payload: { amount, user },
+    meta: { isServerAction: true },
+  };
+}
+
 export function goneToFetchLunch(lunchOptionId) {
   return {
     type: GoneToFetchLunch,
@@ -49,10 +59,18 @@ export function goneToFetchLunch(lunchOptionId) {
   };
 }
 
-export function offerToGetLunch(lunchOptionId) {
+export function notGettingLunch(lunchOptionId) {
+  return {
+    type: NotGettingLunch,
+    payload: { lunchOptionId },
+    meta: { isServerAction: true },
+  };
+}
+
+export function offerToGetLunch(user, lunchOptionId) {
   return {
     type: OfferToGetLunch,
-    payload: { lunchOptionId },
+    payload: { user, lunchOptionId },
     meta: { isServerAction: true },
   };
 }

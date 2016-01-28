@@ -1,0 +1,29 @@
+@import '../../../variables';
+
+.PersonOrder {
+  border-radius: $border-radius;
+  color: $black;
+  margin-bottom: 0.5em;
+  background-color: white;
+  .PersonSquare {
+    position: relative;
+    display: inline;
+    vertical-align: top;
+  }
+  .main {
+    padding-left: 0.5em;
+    display: inline-block;
+
+    .title {
+      margin-bottom: 0.25rem;
+    }
+
+    .description{
+      margin-bottom: 0.2rem;
+    }
+
+    .payment-line {
+      margin-bottom: 0.25rem;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'node-uuid';
 import * as _ from 'underscore';
 import debug from 'debug';
+import Promise from 'promise';
 const dBug = debug('lunch:repository:LunchOptionRepo');
 
 const lunchOptions = [
@@ -11,25 +12,31 @@ const lunchOptions = [
 export const add = (name) => {
   const newLunchOption = { id: uuid(), name, lastChosen: new Date().getTime() };
   lunchOptions.push(newLunchOption);
-  return newLunchOption;
+  return Promise.resolve(newLunchOption);
 };
 
 export const getAll = (cutoffTime) => {
-  return lunchOptions.filter(option => {
-    return option.keep || (option.lastChosen && option.lastChosen > cutoffTime);
-  });
+  const opts = lunchOptions.filter(option => (
+    option.keep || (option.lastChosen && option.lastChosen > cutoffTime)
+  ));
+
+  return Promise.resolve(opts || []);
 };
 
 export const updateLastChosen = (lunchOptionId) => {
   const updatedOption = _.find(lunchOptions, (lunchOption) => lunchOption.id === lunchOptionId);
   if (!updatedOption) {
-    dBug("Attempted to update option which doesn't exist", lunchOptionId);
+    const message = `Attempted to update option which doesn't exist: ${lunchOptionId}`;
+    dBug(message);
+    return Promise.reject(new Error(message));
   }
 
   updatedOption.lastChose = new Date().getTime();
-  return updatedOption;
+  return Promise.resolve(updatedOption);
 };
 
 export const findByName = (optionName) => {
-  return _.find(lunchOptions, (lunchOption) => optionName === lunchOption.name);
+  return Promise.resolve(
+    _.find(lunchOptions, (lunchOption) => optionName === lunchOption.name)
+  );
 };

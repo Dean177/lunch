@@ -1,4 +1,4 @@
-@import '../../colours';
+@import '../../variables';
 
 .LunchPicker {
   display: flex;
@@ -12,5 +12,8 @@
   }
 
   .PeopleChoices {
+    .PersonSquare {
+      position: absolute;
+    }
   }
 }

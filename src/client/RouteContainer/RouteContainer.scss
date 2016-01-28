@@ -1,0 +1,16 @@
+.slide-up-enter {
+  opacity: 0.01;
+}
+
+.slide-up-enter.slide-up-enter-active {
+  top: 0;
+}
+
+.slide-up-leave {
+  top: 0;
+}
+
+.slide-up-leave.slide-up-leave-active {
+  top: -1000px;
+  transition: top 500ms ease-in;
+}

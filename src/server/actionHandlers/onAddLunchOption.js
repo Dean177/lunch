@@ -1,18 +1,34 @@
 import debug from 'debug';
 const dBug = debug('lunch:actionHandlers:onAddLunchOption');
-
-import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
 import * as LunchOptionRepo from '../repository/LunchOptionRepo';
+import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
+import { addLunchOption } from '../../shared/actionCreators/lunchActionCreators';
+import { Action } from '../../shared/constants/WeboscketMessageTypes';
 
-export default function onAddLunchOption(io, socket, action) {
-  const { payload: { name }, meta: { user } } = action;
-  dBug(`LunchOption: ${name} added by ${user.name}`);
+export function onAddLunchOption(lunchOptionRepo, personChoiceRepo) {
+  return (io, socket, action) => {
+    const { payload: { name }, meta: { user } } = action;
+    dBug(`LunchOption: ${name} added by ${user.name}`);
 
-  const existingOption = LunchOptionRepo.findByName(name);
-  if (existingOption) {
-    PersonChoiceRepo.updateChoiceId(user, existingOption.id);
-  } else {
-    const newLunchOption = LunchOptionRepo.add(name);
-    PersonChoiceRepo.updateChoiceId(user, newLunchOption.id);
-  }
+    return lunchOptionRepo
+      .findByName(name)
+      .then((existingOption) => {
+        dBug('is existing option?', !!existingOption);
+        if (!existingOption) {
+          return lunchOptionRepo.add(name);
+        }
+        return existingOption;
+      }).then((lunchOption) => {
+        dBug('new lunchOption', lunchOption);
+        return personChoiceRepo.updateChoiceId(user, lunchOption.id).then(() => {
+          dBug('Sending changes', lunchOption);
+          // We must remove the meta.isServerAction or the clients will just send the action back due to the serverActionMiddleware!
+          const newLunchOptionAction = { ...addLunchOption(user, lunchOption.name, lunchOption.id), meta: {} };
+          socket.broadcast.emit(Action, newLunchOptionAction);
+        });
+      });
+  };
 }
+
+const withDeps = onAddLunchOption(LunchOptionRepo, PersonChoiceRepo);
+export default withDeps;

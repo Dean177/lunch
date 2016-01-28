@@ -1,0 +1,36 @@
+@import '../../variables';
+
+.SplitwiseAuthorizer {
+  .splitwise-authorizer {
+    display: flex;
+  }
+
+  .SplitwiseLogo {
+    height: 3.5em;
+    display: inline-block;
+    box-shadow: $fine-box-shadow;
+  }
+
+  .how-to-steps {
+    display: inline-block;
+    li {
+      padding-bottom: 1em;
+    }
+    p {
+      margin-bottom: 0.25em;
+    }
+  }
+
+  .fail-box {
+    margin-left: 1em;
+    padding: 1em 2em 0.5em;
+    border-left: #ff0a00 solid 0.25em;
+    background-color: #ffdbd6;
+    border-radius: $border-radius;
+    box-shadow: $fine-box-shadow;
+  }
+
+  .success-box {
+    margin-left: 1em;
+  }
+}

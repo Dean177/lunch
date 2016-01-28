@@ -1,10 +1,11 @@
 export const AddLunchOption = 'AddLunchOption';
-export const ChangeImageUrl = 'ChangeImageUrl';
-export const ChangeName = 'ChangeName';
 export const ChangeOrderDetails = 'ChangeOrderDetails';
 export const EnterLunchOptionName = 'EnterLunchOptionName';
+export const UpdatePaymentAmount = 'UpdatePaymentAmount';
+export const GoneToFetchLunch = 'GoneToFetchLunch';
+export const NotGettingLunch = 'NotGettingLunch';
 export const OptionChoices = 'OptionChoices';
 export const OfferToGetLunch = 'OfferToGetLunch';
-export const GoneToFetchLunch = 'GoneToFetchLunch';
 export const ToggleEnterNewLunchOption = 'ToggleEnterNewLunchOption';
 export const UserLunchChoice = 'UserLunchChoice';
+export const UpdatedPersonChoice = 'UpdatedPersonChoice';

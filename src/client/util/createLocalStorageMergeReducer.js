@@ -1,7 +1,7 @@
 import { keys, difference } from 'underscore';
-// Returns a new state object which is the result of merging the current state with the
+// Returns a reducer which produces a new state object which is the result of merging the current state with the
 // object which the action handler returns.
-// Persists this object to the browsers local storage;
+// Persists this object to the browsers local storage each time the reducer is called;
 // (reducerConfig) => (localStorage) => reducer
 export default function createLocalStorageMergeReducer(storageKey, initialState, actionHandler) {
   return function createReducer(localStorage) {

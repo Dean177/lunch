@@ -4,7 +4,17 @@ import { find } from 'underscore';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
-import { changeOrderDetails, goneToFetchLunch, offerToGetLunch, toggleNewOption, addLunchOption, chooseLunchOption, enterOptionName } from '../actionCreators/lunchActionCreators';
+import {
+  addLunchOption,
+  changeOrderDetails,
+  chooseLunchOption,
+  enterOptionName,
+  updatePaymentAmount,
+  goneToFetchLunch,
+  notGettingLunch,
+  offerToGetLunch,
+  toggleNewOption,
+} from '../../shared/actionCreators/lunchActionCreators';
 import LunchPicker from '../components/LunchPicker';
 import Sidebar from '../components/Sidebar';
 
@@ -17,6 +27,7 @@ import Sidebar from '../components/Sidebar';
 
   return {
     enteringNewOption: appState.lunch.enteringNewOption,
+    hasAuthorizedSplitwiseToken: appState.auth.hasAuthorizedSplitwiseToken,
     lunchOptions: appState.lunch.lunchOptions,
     optionName: appState.lunch.optionName,
     peopleChoices: appState.lunch.peopleChoices,
@@ -29,6 +40,7 @@ class ChooseLunch extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
     enteringNewOption: PropTypes.bool,
+    hasAuthorizedSplitwiseToken: PropTypes.bool.isRequired,
     lunchOptions: PropTypes.arrayOf(LunchOption),
     optionName: PropTypes.string,
     peopleChoices: PropTypes.arrayOf(PersonChoice),
@@ -39,13 +51,14 @@ class ChooseLunch extends Component {
 
   render() {
     const {
-      enteringNewOption,
-      optionName,
       dispatch,
-      peopleChoices,
-      userLunchChoice,
-      user,
+      enteringNewOption,
+      hasAuthorizedSplitwiseToken,
       lunchOptions,
+      optionName,
+      peopleChoices,
+      user,
+      userLunchChoice,
     } = this.props;
     return (
       <div className='ChooseLunch'>
@@ -54,17 +67,29 @@ class ChooseLunch extends Component {
         </Link>
         <div className='lunch-body'>
           <LunchPicker
-            user={user}
             enteringNewOption={enteringNewOption}
-            optionName={optionName}
             lunchOptions={lunchOptions}
+            optionName={optionName}
             peopleChoices={peopleChoices}
-            {...bindActionCreators({ toggleNewOption, addLunchOption, chooseLunchOption, enterOptionName }, dispatch)}
+            user={user}
+            {...bindActionCreators({ addLunchOption, chooseLunchOption, enterOptionName, toggleNewOption }, dispatch)}
           />
           <Sidebar
-            userLunchChoice={userLunchChoice}
+            hasAuthorizedSplitwiseToken={hasAuthorizedSplitwiseToken}
             peopleChoices={peopleChoices}
-            {...bindActionCreators({ changeOrderDetails, goneToFetchLunch, offerToGetLunch }, dispatch)} />
+            user={user}
+            userLunchChoice={userLunchChoice}
+            {...bindActionCreators(
+              {
+                changeOrderDetails,
+                updatePaymentAmount,
+                goneToFetchLunch,
+                notGettingLunch,
+                offerToGetLunch,
+              },
+              dispatch
+            )}
+          />
         </div>
       </div>
     );

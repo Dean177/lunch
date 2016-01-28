@@ -1,0 +1,18 @@
+.UserConfig {
+  .form-group {
+    margin-bottom: 2em;
+  }
+
+  .profile-image {
+    display: flex;
+    .PersonSquare {
+      display: inline;
+      margin-right: 0.5em;
+    }
+
+    .url-input {
+      height: 2.5em;
+      display: inline;
+    }
+  }
+}

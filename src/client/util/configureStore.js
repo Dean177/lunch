@@ -1,30 +1,34 @@
-import { createStore, compose, applyMiddleware } from 'redux';
-import { reduxReactRouter } from 'redux-router';
-import createHistory from 'history/lib/createBrowserHistory';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { syncHistory } from 'react-router-redux';
 import rootReducer from '../reducers/index';
 import { logger, serverEvent, actionFormatValidator } from './middleware';
 
-export default function configureStore(routes, initialState) {
-  let createStoreFinal;
+export default function configureStore(history, initialState) {
+  const reduxRouterMiddleware = syncHistory(history);
 
+  let middleware;
   if (__DEVELOPMENT__) {
-    // TODO re-enable devtools https://github.com/gaearon/redux-devtools/tree/v3.0.0
-    createStoreFinal = compose(
-      applyMiddleware(logger, serverEvent, actionFormatValidator),
-      reduxReactRouter({ routes, createHistory })
-    )(createStore);
+    middleware = applyMiddleware(
+      actionFormatValidator,
+      logger,
+      serverEvent,
+      thunk,
+      reduxRouterMiddleware
+    );
   } else {
-    createStoreFinal = compose(
-      applyMiddleware(serverEvent, actionFormatValidator),
-      reduxReactRouter({ routes, createHistory })
-    )(createStore);
+    middleware = applyMiddleware(
+      serverEvent,
+      thunk,
+      reduxRouterMiddleware
+    );
   }
 
-  const store = createStoreFinal(rootReducer, initialState);
+  const store = createStore(rootReducer, initialState, middleware);
 
   if (__DEVELOPMENT__ && module.hot) {
     module.hot.accept('../reducers/index', () => {
-      store.replaceReducer(require('../reducers/index'));
+      store.replaceReducer(require('../reducers/index').default);
     });
   }
 

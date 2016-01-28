@@ -11,39 +11,28 @@ class OptionAutosuggest extends Component {
     onBlur: PropTypes.func,
   };
 
-  componentDidMount() {
-    this.refs.optionText.refs.input.focus();
-  }
-
-  theme = {
-    root: 'react-autosuggest',
-    suggestions: 'react-autosuggest__suggestions',
-    suggestion: 'react-autosuggest__suggestion',
-    suggestionIsFocused: 'react-autosuggest__suggestion--focused',
-    section: 'react-autosuggest__suggestions-section',
-    sectionName: 'react-autosuggest__suggestions-section-name',
-    sectionSuggestions: 'react-autosuggest__suggestions-section-suggestions',
-  };
-
   render() {
-    const inputAttributes = {
-      className: this.props.inputClass,
-      onBlur: this.props.onBlur,
-      onChange: this.props.onChange,
-      placeholder: this.props.placeholder || '',
-      type: 'search',
-    };
-
+    const { value, inputClass, onChange, onBlur, getSuggestions } = this.props;
     return (
       <Autosuggest
-        suggestions={ this.props.getSuggestions }
-        suggestionRenderer={(lunchOption) => lunchOption.name}
-        suggestionValue={(lunchOption) => lunchOption.name}
-        ref='optionText'
-        value={ this.props.value }
-        showWhen={ input => input.trim().length >= 2 }
-        inputAttributes={ inputAttributes }
-        theme={ this.theme }
+        suggestions={ getSuggestions(value) }
+        renderSuggestion={(lunchOption) => <span>{lunchOption.name}</span>}
+        getSuggestionValue={(lunchOption) => lunchOption.name}
+        inputProps={{
+          className: inputClass,
+          value,
+          onChange: (event, { newValue }) => { onChange(newValue); },
+          ref: (input) => { if (input != null && input.focus) { input.focus(); }},
+          onBlur,
+          placeholder: this.props.placeholder || '',
+          type: 'search',
+        }}
+        theme={{
+          container: 'react-autosuggest',
+          suggestionsContainer: 'react-autosuggest__suggestions',
+          suggestion: 'react-autosuggest__suggestion',
+          suggestionFocused: 'react-autosuggest__suggestion--focused',
+        }}
       />
     );
   }

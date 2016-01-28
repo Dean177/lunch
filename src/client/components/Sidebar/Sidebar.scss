@@ -1,7 +1,11 @@
-@import '../../colours';
+@import '../../variables';
+
+.hidden {
+  display: none;
+}
 
 .Sidebar {
-  width: 27em;
+  width: 20em;
   height: 100%;
   position: absolute;
   top: 0;
@@ -20,6 +24,7 @@
       width: 100%;
       padding: 0.5em 1.25em;
       margin-right: 0.5em;
+      margin-bottom: 0.25rem;
     }
   }
 
@@ -28,26 +33,23 @@
   }
 }
 
-.PersonOrder {
-  border-radius: 5px;
-  color: $black;
-  margin-bottom: 0.5em;
-  background-color: white;
-  .PersonSquare {
-    position: relative;
-    display: inline;
-    vertical-align: top;
+
+.SplitwiseIntegration {
+  position: absolute;
+  bottom: 1.5em;
+  padding-right: 4em;
+  width: 100%;
+
+
+  .auth-link {
+    width: 100%;
   }
-  .main {
-    padding-left: 0.5em;
-    display: inline-block;
 
-    .title {
-      margin-bottom: 0.25rem;
-    }
+  .SplitwiseLogo {
+    height: 1em;
+  }
 
-    .description{
-      margin-bottom: 0.5rem;
-    }
+  .auth-text {
+    margin-left: 0.5em;
   }
 }

@@ -3,22 +3,54 @@ import 'font-awesome/scss/font-awesome.scss';
 
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { ReduxRouter } from 'redux-router';
+import { Router } from 'react-router';
+import { routeActions } from 'react-router-redux';
+import { find } from 'underscore';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
 import routes from './Routes';
 import configureStore from './util/configureStore';
 import { socket } from './util/socket';
+import { Authenticate } from '../shared/constants/actionTypes/authActionTypes';
+import { Action, Connection } from '../shared/constants/WeboscketMessageTypes';
 
-const store = configureStore(routes);
-socket.on('message', store.dispatch);
+const history = createBrowserHistory();
+const store = configureStore(history);
+
+function navigateIfUserHasChosenLunchOption(action) {
+  return (dispatch, getState) => {
+    const { payload: { lunchOptionId }, meta: { navigateTo } } = action;
+    const { user, lunch: { peopleChoices } } = getState();
+    const usersLunchChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === user.id));
+
+    if (usersLunchChoice && usersLunchChoice.choiceId === lunchOptionId) {
+      dispatch(routeActions.push(navigateTo));
+    }
+  };
+}
+
+socket.on(Action, (action) => {
+  // Actions sent from the server via action creators may include the 'isServerAction' property,
+  // need to remove this or the client will send the action back to the server again du to the 'ServerAction' middleware
+  if (action.meta && action.meta.hasOwnProperty('isServerAction')) {
+    delete action.meta.isServerAction;
+  }
+  store.dispatch(action);
+  if (action.meta && action.meta.navigateTo) {
+    store.dispatch(navigateIfUserHasChosenLunchOption(action));
+  }
+});
+
+socket.on(Connection, () => {
+  const { user } = store.getState();
+  socket.emit(Action, { type: Authenticate, payload: user, meta: { user } });
+});
 
 class App extends Component {
   render() {
-    // TODO re-enable devtools https://github.com/gaearon/redux-devtools/tree/v3.0.0
-
     return (
       <div className='App'>
         <Provider store={store}>
-          <ReduxRouter>{routes}</ReduxRouter>
+          <Router history={history}>{routes}</Router>
         </Provider>
       </div>
     );

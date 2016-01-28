@@ -1,4 +1,4 @@
-@import '../../colours';
+@import '../../variables';
 
 .OptionAdder {
   align-self: flex-end;
@@ -24,7 +24,7 @@
 
     .option-input {
       border: none;
-      box-shadow: -1px 1px 2px 0 rgba(0,0,0,0.1);
+      box-shadow: $fine-box-shadow;
       border-top-left-radius: 5px;
       border-bottom-left-radius: 5px;
       padding-left: 0.5em;
@@ -32,7 +32,7 @@
 
     .go-button {
       border: none;
-      box-shadow: -1px 1px 2px 0 rgba(0,0,0,0.1);
+      box-shadow: $fine-box-shadow;
       border-top-right-radius: 5px;
       border-bottom-right-radius: 5px;
       background-color: $green;
