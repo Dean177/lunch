@@ -2,6 +2,11 @@ machine:
   node:
     version: 5.1.0
 
+dependencies:
+  override:
+    - npm set progress=false
+    - npm install
+
 test:
   override:
     - npm run build:client
