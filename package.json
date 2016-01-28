@@ -37,7 +37,7 @@
     "babel-register": "6.4.3",
     "babel-runtime": "6.3.19",
     "bootstrap": "twbs/bootstrap#v4.0.0-alpha",
-    "chai": "3.3.0",
+    "chai": "3.5.0",
     "chai-spies": "0.7.1",
     "classnames": "2.2.3",
     "compression": "1.6.1",
