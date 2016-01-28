@@ -1,11 +1,10 @@
 import knex from 'knex';
 
 const db = knex({
-  client: 'sqlite3',
+  client: 'pg',
+  connection: process.env.PG_CONNECTION_STRING,
   debug: true,
-  connection: {
-    filename: './lunch.sqlite',
-  },
+  searchPath: 'knex,public',
 });
 
 export default db;
