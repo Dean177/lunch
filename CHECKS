@@ -1,0 +1,5 @@
+WAIT=10
+ATTEMPTS=10
+TIMEOUT=100
+
+/status hungry
