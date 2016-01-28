@@ -24,7 +24,7 @@ module.exports = {
       __DEVELOPMENT__: true,
       'process.env': {
         'NODE_ENV': JSON.stringify('development'),
-        'PORT': process.env.PORT || config.serverPort
+        'PORT': process.env.PORT || config.serverPort,
       },
     }),
   ],

@@ -17,7 +17,7 @@ module.exports = {
       __DEVELOPMENT__: false,
       'process.env': {
         'NODE_ENV': JSON.stringify('production'),
-        'PORT': process.env.PORT || config.serverPort
+        'PORT': process.env.PORT || config.serverPort,
       },
     }),
     new UglifyJsPlugin(),
