@@ -4,7 +4,7 @@ import 'font-awesome/scss/font-awesome.scss';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router';
-import { routeActions } from 'redux-simple-router';
+import { routeActions } from 'react-router-redux';
 import { find } from 'underscore';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import routes from './Routes';
@@ -14,7 +14,7 @@ import { Authenticate } from '../shared/constants/actionTypes/authActionTypes';
 import { Action, Connection } from '../shared/constants/WeboscketMessageTypes';
 
 const history = createBrowserHistory();
-const store = configureStore(routes, history);
+const store = configureStore(history);
 
 function navigateIfUserHasChosenLunchOption(action) {
   return (dispatch, getState) => {

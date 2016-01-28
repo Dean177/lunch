@@ -2,7 +2,7 @@ import './Landing.scss';
 import React, { Component, PropTypes } from 'react';
 import { Person, LunchOption } from '../PropTypes';
 import { connect } from 'react-redux';
-import { routeActions } from 'redux-simple-router';
+import { routeActions } from 'react-router-redux';
 import { compose } from 'underscore';
 import { enterOptionName, addLunchOption } from '../../shared/actionCreators/lunchActionCreators';
 import OptionAutosuggest from '../components/OptionAutosuggest';

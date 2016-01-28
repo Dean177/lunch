@@ -9,7 +9,7 @@ import actionHandlers from './actionHandlers';
 import configureWebsocket from './websocketHandler';
 
 const app = express();
-const dBug = debug('lunch:express');
+const dBug = require('debug')('lunch:express');
 
 app.use(favicon(`${__dirname}/favicon.ico`));
 dBug(`Running in ${process.env.NODE_ENV}`);
