@@ -1,4 +1,4 @@
-if (process.env.NODE_ENV == 'production') {
+if (process.env.NODE_ENV !== 'production') {
   require('source-map-support').install();
 }
 import debug from 'debug';
