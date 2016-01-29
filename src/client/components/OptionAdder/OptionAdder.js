@@ -14,7 +14,8 @@ class OptionAdder extends Component {
     enterOptionName: PropTypes.func.isRequired,
   };
 
-  onNewOption = () => {
+  onNewOption = (event) => {
+    event.preventDefault();
     this.props.addLunchOption(this.props.user, this.props.optionName);
   };
 
