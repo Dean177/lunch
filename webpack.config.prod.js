@@ -4,8 +4,6 @@ const DefinePlugin = webpack.DefinePlugin;
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const OccurenceOrderPlugin = webpack.optimize.OccurenceOrderPlugin;
 
-console.warn("PROCESS PORT", process.env.PORT);
-
 module.exports = {
   entry: ['./src/client/index'],
   output: {

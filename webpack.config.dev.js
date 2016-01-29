@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const config = require('./src/shared/constants/config');
 const DefinePlugin = webpack.DefinePlugin;
 const NoErrorsPlugin = webpack.NoErrorsPlugin;
 const HotModuleReplacementPlugin = webpack.HotModuleReplacementPlugin;
