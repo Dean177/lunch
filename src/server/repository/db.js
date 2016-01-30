@@ -1,6 +1,3 @@
-module.exports = require('knex')({
-  client: 'pg',
-  connection: process.env.DATABASE_URL,
-  debug: true,
-  searchPath: 'knex,public',
-});
+require('dotenv').config({ path: './ENV' });
+const config = require('../../../knexfile');
+module.exports = require('knex')(config);
