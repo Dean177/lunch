@@ -1,5 +1,4 @@
-import debug from 'debug';
-const dBug = debug('lunch:actionHandlers:onAddLunchOption');
+const dBug = require('debug')('lunch:actionHandlers:onAddLunchOption');
 import * as LunchOptionRepo from '../repository/LunchOptionRepo';
 import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
 import { addLunchOption } from '../../shared/actionCreators/lunchActionCreators';
