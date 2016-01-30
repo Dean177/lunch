@@ -3,11 +3,8 @@ const db = require('./db');
 import { find } from 'underscore';
 import Promise from 'promise';
 
-const people = [];
-
 export const add = (person) => {
   debug(`Created new user ${person.name}`);
-  people.push(person);
   return db('users')
     .insert({ id: person.id, name: person.name })
     .then(() => { return Promise.resolve(person); });
@@ -39,7 +36,7 @@ export const updateImageUrl = (person, imageUrl) => {
     if (!matchingUser) {
       return add({ ...person, imageUrl });
     }
-    return db('users').where({ id: person.id }).update({ imageUrl })
+    return db('users').where({ id: person.id }).update({ imageUrl });
   }).then(() => {
     return {
       ...person,
@@ -62,30 +59,43 @@ export const updateName = (person, name) => {
   });
 };
 
-export const updateSplitwiseAuth = (user, token, secret) => {
-  debug(`Updated auth for user: ${user.id}`);
-  return findById(user.id).then(matchingUser => {
-    if (!matchingUser) {
-      return debug(`No existing user with id ${user.id}`);
+const findTokenByUserId = (userId) => {
+  return db.select().from('splitwise_tokens').where({ userId }).then((tokens) => {});
+};
+
+export const getSplitwiseAuth = (userId) => {
+  debug(`Fetching existing auth for: ${userId}`);
+  return findTokenByUserId(userId).then((tokens) => {
+    if (!tokens.length) {
+      return Promise.reject(new Error(`No auth found for: ${userId}`));
     }
 
-    matchingUser.splitwiseAuth = { token, secret };
-    return Promise.resolve({ token, secret });
+    return tokens[0];
   });
 };
 
-export const getSplitwiseAuth = (personId) => {
-  debug(`Fetching existing auth for: ${personId}`);
-  return findById(personId).then((matchingUser) => {
-    if (!matchingUser || matchingUser.splitwiseAuth == null) {
-      return Promise.reject(new Error(`No auth found for: ${personId}`));
+export const addSplitwiseToken = (userId, token, secret) => {
+  return db('splitwise_tokens')
+    .insert({ userId, token, secret, hasAuthorizedSplitwiseToken: false })
+    .then(() => { return { token, secret } });
+};
+
+export const authorizeToken = (userId) => {
+  return db('splitwise_tokens')
+    .where({ user_id: person.id })
+    .update({ hasAuthorizedSplitwiseToken: true })
+};
+
+export const updateSplitwiseAuth = (user, token, secret) => {
+  debug(`Updating auth for user: ${user.id}`);
+  return findTokenByUserId(user.id).then((tokens) => {
+    if (!tokens.length) {
+      debug(`No existing user with id ${user.id}`);
+      return addSplitwiseToken(userId, token, secret);
     }
 
-    const { token, secret } = matchingUser.splitwiseAuth;
-    if (!token || !secret) {
-      return Promise.reject(new Error(`Corrupt auth stored for: ${personId}`));
-    }
-
-    return Promise.resolve({ token, secret });
+    return db('splitwise_tokens').where({ user_id: person.id })
+      .update({ token, secret, hasAuthorizedSplitwiseToken: false })
+      .then(() => { return { token, secret } });
   });
 };
