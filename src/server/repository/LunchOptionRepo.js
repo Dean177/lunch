@@ -1,42 +1,32 @@
 import { v4 as uuid } from 'node-uuid';
-import * as _ from 'underscore';
-import debug from 'debug';
-import Promise from 'promise';
-const dBug = debug('lunch:repository:LunchOptionRepo');
+const debug = require('debug')('lunch:repository:LunchOptionRepo');
+const db = require('./db');
 
-const lunchOptions = [
-  { id: '1', name: 'Boots', lastChosen: new Date().getTime(), keep: true },
-  { id: '2', name: 'Chinese', lastChosen: new Date().getTime(), keep: true },
-];
-
-export const add = (name) => {
-  const newLunchOption = { id: uuid(), name, lastChosen: new Date().getTime() };
-  lunchOptions.push(newLunchOption);
-  return Promise.resolve(newLunchOption);
-};
-
-export const getAll = (cutoffTime) => {
-  const opts = lunchOptions.filter(option => (
-    option.keep || (option.lastChosen && option.lastChosen > cutoffTime)
-  ));
-
-  return Promise.resolve(opts || []);
+export const isExistingOption = (optionName) => {
+  return db('lunch_options')
+    .where('name', 'ilike', optionName)
+    .select()
+    .limit(1)
+    .then((existingOptions) => (existingOptions.length === 1 ? existingOptions[0] : false));
 };
 
 export const updateLastChosen = (lunchOptionId) => {
-  const updatedOption = _.find(lunchOptions, (lunchOption) => lunchOption.id === lunchOptionId);
-  if (!updatedOption) {
-    const message = `Attempted to update option which doesn't exist: ${lunchOptionId}`;
-    dBug(message);
-    return Promise.reject(new Error(message));
-  }
-
-  updatedOption.lastChose = new Date().getTime();
-  return Promise.resolve(updatedOption);
+  return db('lunch_options').where({ id: lunchOptionId }).update({ lastChosen: new Date().getTime() });
 };
 
-export const findByName = (optionName) => {
-  return Promise.resolve(
-    _.find(lunchOptions, (lunchOption) => optionName === lunchOption.name)
-  );
+export const add = (name) => {
+  return isExistingOption(name).then((existingOption) => {
+    if (existingOption) {
+      debug(`${name} already exists, updating last chosen`);
+      return updateLastChosen(existingOption.id).then(() => existingOption);
+    }
+
+    const newLunchOption = { id: uuid(), name, lastChosen: new Date().getTime() };
+    debug(`${name} already exists, updating last chosen`);
+    return db('lunch_options').insert(newLunchOption).then(() => {
+      return newLunchOption;
+    });
+  });
 };
+
+export const getAll = (cutoffTime) => db('lunch_options').where('lastChosen', '>', cutoffTime);

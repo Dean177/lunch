@@ -1,10 +1,10 @@
 const dBug = require('debug')('lunch:PersonChoiceRepo');
 import Promise from 'promise';
-import { find } from 'underscore';
 
 let peopleChoices = [];
 
 export const getAll = (cutoffTime) => {
+
   const peepChoices = peopleChoices.filter(personChoice => (
     personChoice.dateChosen && personChoice.dateChosen > cutoffTime)
   );
