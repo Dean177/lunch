@@ -8,7 +8,8 @@ const people = [];
 export const add = (person) => {
   debug(`Created new user ${person.name}`);
   people.push(person);
-  return db('users').insert({ id: person.id, name: person.name })
+  return db('users')
+    .insert({ id: person.id, name: person.name })
     .then(() => { return Promise.resolve(person); });
 };
 
@@ -27,29 +28,38 @@ export const findPerson = (person) => {
 };
 
 export const findById = (personId) => {
-  return Promise.resolve(find(people, (person) => (person.id === personId)));
+  return db.select()
+    .from('users')
+    .where({ id: personId })
+    .then((users) => { return users[0] });
 };
 
-export const getAll = () => Promise.resolve(people);
-
 export const updateImageUrl = (person, imageUrl) => {
-  const matchingUser = findById(person.id);
-  if (!matchingUser) {
-    return add({ ...person, imageUrl });
-  }
-
-  person.imageUrl = imageUrl;
-  return Promise.resolve(person);
+  return findById(person.id).then((matchingUser) => {
+    if (!matchingUser) {
+      return add({ ...person, imageUrl });
+    }
+    return db('users').where({ id: person.id }).update({ imageUrl })
+  }).then(() => {
+    return {
+      ...person,
+      imageUrl
+    };
+  });
 };
 
 export const updateName = (person, name) => {
-  const matchingUser = findById(person.id);
-  if (!matchingUser) {
-    return add({ ...person, name });
-  }
-
-  person.name = name;
-  return Promise.resolve(person);
+  return findById(person.id).then((matchingUser) => {
+    if (!matchingUser) {
+      return add({ ...person, imageUrl });
+    }
+    return db('users').where({ id: person.id }).update({ name })
+  }).then(() => {
+    return {
+      ...person,
+      name
+    };
+  });
 };
 
 export const updateSplitwiseAuth = (user, token, secret) => {
