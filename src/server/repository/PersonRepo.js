@@ -1,23 +1,29 @@
-import debug from 'debug';
-import Promise from 'promise';
+const debug = require('debug')('lunch:PersonRepo');
+const db = require('./db');
 import { find } from 'underscore';
-const dBug = debug('lunch:PersonRepo');
+import Promise from 'promise';
 
 const people = [];
 
 export const add = (person) => {
-  dBug(`Created new user ${person.name}`);
+  debug(`Created new user ${person.name}`);
   people.push(person);
-  return Promise.resolve(person);
+  return db('users').insert({ id: person.id, name: person.name })
+    .then(() => { return Promise.resolve(person); });
 };
 
 export const findPerson = (person) => {
-  const existingPerson = find(people, (pers) => (person.id === pers.id || person.name === pers.name));
-  if (!existingPerson) {
-    return add(person);
-  }
-
-  return Promise.resolve(existingPerson);
+  return db.select()
+    .from('users')
+    .where({ id: person.id })
+    .then((users) => {
+      debug('users', users);
+      if (!users.length) {
+        return add(person);
+      } else {
+        return users[0];
+      }
+    });
 };
 
 export const findById = (personId) => {
@@ -47,10 +53,10 @@ export const updateName = (person, name) => {
 };
 
 export const updateSplitwiseAuth = (user, token, secret) => {
-  dBug(`Updated auth for user: ${user.id}`);
+  debug(`Updated auth for user: ${user.id}`);
   return findById(user.id).then(matchingUser => {
     if (!matchingUser) {
-      return dBug(`No existing user with id ${user.id}`);
+      return debug(`No existing user with id ${user.id}`);
     }
 
     matchingUser.splitwiseAuth = { token, secret };
@@ -59,7 +65,7 @@ export const updateSplitwiseAuth = (user, token, secret) => {
 };
 
 export const getSplitwiseAuth = (personId) => {
-  dBug(`Fetching existing auth for: ${personId}`);
+  debug(`Fetching existing auth for: ${personId}`);
   return findById(personId).then((matchingUser) => {
     if (!matchingUser || matchingUser.splitwiseAuth == null) {
       return Promise.reject(new Error(`No auth found for: ${personId}`));
