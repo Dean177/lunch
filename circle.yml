@@ -1,6 +1,14 @@
 machine:
+  environment:
+    DATABASE_URL: postgres://ubuntu@localhost:5432/circle_test
+    DEBUG: lunch:*
+    NODE_ENV: development
+    SPLITWISE_CONSUMER_KEY:
+    SPLITWISE_CONSUMER_SECRET:
   node:
     version: 5.1.0
+  services:
+    - postgresql
 
 dependencies:
   override:
