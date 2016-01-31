@@ -1,6 +1,4 @@
 import * as PersonRepo from '../repository/PersonRepo';
-import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
-import Promise from 'promise';
 import { changeName } from '../../shared/actionCreators/userActionCreator';
 import { Action } from '../../shared/constants/WeboscketMessageTypes';
 const debug = require('debug')('lunch:actionHandler:onChangeName');

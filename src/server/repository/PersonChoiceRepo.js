@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'node-uuid';
 const db = require('./db');
 const debug = require('debug')('lunch:PersonChoiceRepo');
 
@@ -9,7 +10,7 @@ export const add = ({ person, choiceId, orderDetails, paymentAmount, isFetching 
     id: uuid(),
     orderDetails: orderDetails || '',
     paymentAmount: paymentAmount || '',
-    isFetching: isFetching|| false,
+    isFetching: isFetching || false,
     userId: person.id,
     lunchOptionId: choiceId,
     dateChosen: new Date().getTime(),
@@ -31,7 +32,7 @@ export const clearFetchers = (userId, lunchOptionId) => {
     .update({ isFetching: false });
 };
 
-//TODO also filter by cutoff amount?
+// TODO also filter by cutoff amount?
 export const findByPersonId = (userId) => {
   return db('people_choices').where({ userId }).then((users) => users.length ? users[0] : false);
 };
@@ -55,7 +56,7 @@ export const updateOrderDetails = (userId, orderDetails) => {
   debug(`${userId} update orderDetails to ${orderDetails}`);
   return findByPersonId(userId).then((personChoice) => {
     if (!personChoice) {
-      return Promise.reject(new Error(`${user.name} updated orderDetails without making a selection`));
+      return Promise.reject(new Error(`${userId} updated orderDetails without making a selection`));
     }
 
     return db()
@@ -69,7 +70,7 @@ export const updatePaymentAmount = (userId, paymentAmount) => {
   debug(`${userId} changed paymentAmount to ${paymentAmount}`);
   return findByPersonId(userId).then((personChoice) => {
     if (!personChoice) {
-      return Promise.reject(new Error(`${user.name} updated payment without making a selection`));
+      return Promise.reject(new Error(`${userId} updated payment without making a selection`));
     }
 
     return db('people_choices')
@@ -89,7 +90,7 @@ export const updateWhoIsFetchingLunch = (userId, lunchOptionId) => {
     db('peopleChoices')
       .where({ userId })
       .andWhere({ lunchOptionId })
-      .update({ isFetching: true })
+      .update({ isFetching: true }),
   ]);
 };
 
