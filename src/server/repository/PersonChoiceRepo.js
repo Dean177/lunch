@@ -1,117 +1,99 @@
-const dBug = require('debug')('lunch:PersonChoiceRepo');
-import Promise from 'promise';
+const db = require('./db');
+const debug = require('debug')('lunch:PersonChoiceRepo');
 
-let peopleChoices = [];
+export const getAll = (cutoffTime) => db('people_choices').where('dateChosen', '>', cutoffTime);
 
-export const getAll = (cutoffTime) => {
+export const add = ({ person, choiceId, orderDetails, paymentAmount, isFetching }) => {
+  debug(`User: ${person.name} has made initial choice ${choiceId}`);
+  const newPersonChoice = {
+    id: uuid(),
+    orderDetails: orderDetails || '',
+    paymentAmount: paymentAmount || '',
+    isFetching: isFetching|| false,
+    userId: person.id,
+    lunchOptionId: choiceId,
+    dateChosen: new Date().getTime(),
+  };
 
-  const peepChoices = peopleChoices.filter(personChoice => (
-    personChoice.dateChosen && personChoice.dateChosen > cutoffTime)
-  );
-
-  return Promise.resolve(peepChoices || []);
+  return db('people_choices').insert(newPersonChoice).then(() => newPersonChoice);
 };
 
-export const add = (personChoice) => {
-  dBug(`User: ${personChoice.person.name} has made initial choice ${personChoice.choiceId}`);
-  peopleChoices.push(personChoice);
-  return Promise.resolve(personChoice);
+export const clearFetchers = (userId, lunchOptionId) => {
+  debug(`${userId} is no longer offering to get option ${lunchOptionId}`);
+
+  // TODO move this to a shared file
+  const fourHours = 4 * 60 * 60 * 1000;
+  const cutoffTime = new Date().getTime() - fourHours;
+
+  return db('people_choices')
+    .where('dateChosen', '>', cutoffTime)
+    .andWhere({ userId, lunchOptionId })
+    .update({ isFetching: false });
 };
 
-export const clearFetchers = (lunchOptionId) => {
-  dBug(`No one is offering to get option ${lunchOptionId}`);
-  return Promise.resolve(
-    peopleChoices
-      .filter(personChoice => personChoice.choiceId === lunchOptionId && personChoice.isFetching)
-      .forEach(personChoice => personChoice.isFetching = false)
-  );
+//TODO also filter by cutoff amount?
+export const findByPersonId = (userId) => {
+  return db('people_choices').where({ userId }).then((users) => users.length ? users[0] : false);
 };
 
-export const updateImageUrl = (user, url) => {
-  const matchingUser = find(peopleChoices, (personChoice) => (personChoice.person.id === user.id));
-  if (!matchingUser) {
-    const message = `Attempted to update the name of a user which doesn't exist ${user}`;
-    dBug(message);
-    return Promise.reject(new Error(message));
-  }
-
-  matchingUser.person.imageUrl = url;
-  return Promise.resolve(matchingUser);
-};
-
-export const updateName = (user, name) => {
-  const matchingUser = find(peopleChoices, (personChoice) => (personChoice.person.id === user.id));
-  if (!matchingUser) {
-    const message = `Attempted to update the name of a user which doesn't exist ${user}`;
-    dBug(message);
-    return Promise.reject(new Error(message));
-  }
-
-  matchingUser.person.name = name;
-  return Promise.resolve(matchingUser);
-};
-
-export const findByPersonId = (personId) => {
-  return Promise.resolve(find(peopleChoices, (personChoice) => personChoice.person.id === personId));
-};
-
-export const updateChoiceId = (person, choiceId) => {
-  dBug(`${person.name} update choice to ${choiceId}`);
-  const personChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === person.id));
-  if (!personChoice) {
-    return Promise.resolve(add({ person, choiceId, dateChosen: new Date().getTime(), orderDetails: '', paymentAmount: '' }));
-  }
-
-  personChoice.dateChosen = new Date().getTime();
-  if (personChoice.choiceId !== choiceId) {
-    personChoice.choiceId = choiceId;
-    personChoice.isFetching = false;
-  }
-
-  return Promise.resolve(personChoice);
-};
-
-export const updateOrderDetails = (person, orderDetails) => {
-  dBug(`${person.name} update orderDetails to ${orderDetails}`);
-  return findByPersonId(person.id).then((personChoice) => {
+export const updateChoiceId = (userId, lunchOptionId) => {
+  debug(`${userId} update choice to ${lunchOptionId}`);
+  return findByPersonId(userId).then((personChoice) => {
     if (!personChoice) {
-      const message = `${person.name} updated orderDetails without making a selection`;
-      dBug(message);
-      return Promise.reject(new Error(message));
+      return add(userId, lunchOptionId);
     }
 
-    personChoice.orderDetails = orderDetails;
-    return Promise.resolve(personChoice);
+    const personChoiceUpdate = { lunchOptionId, dateChosen: new Date().getTime() };
+    return db()
+      .where({ userId, lunchOptionId: personChoice.lunchOptionId })
+      .update(personChoiceUpdate)
+      .then(() => ({ ...personChoice, ...personChoiceUpdate }));
   });
 };
 
-export const updatePaymentAmount = (person, amount) => {
-  dBug(`${person.name} changed paymentAmount to ${amount}`);
-  return findByPersonId(person.id).then((personChoice) => {
+export const updateOrderDetails = (userId, orderDetails) => {
+  debug(`${userId} update orderDetails to ${orderDetails}`);
+  return findByPersonId(userId).then((personChoice) => {
     if (!personChoice) {
-      const message = `${person.name} updated payment amount without making a selection`;
-      dBug(message);
-      Promise.reject(new Error(message));
+      return Promise.reject(new Error(`${user.name} updated orderDetails without making a selection`));
     }
 
-    personChoice.paymentAmount = amount;
-    return Promise.resolve(personChoice);
+    return db()
+      .where({ userId, lunchOptionId: personChoice.lunchOptionId })
+      .update({ orderDetails })
+      .then(() => ({ ...personChoice, orderDetails }));
+  });
+};
+
+export const updatePaymentAmount = (userId, paymentAmount) => {
+  debug(`${userId} changed paymentAmount to ${paymentAmount}`);
+  return findByPersonId(userId).then((personChoice) => {
+    if (!personChoice) {
+      return Promise.reject(new Error(`${user.name} updated payment without making a selection`));
+    }
+
+    return db('people_choices')
+      .where({ userId, lunchOptionId: personChoice.lunchOptionId })
+      .update({ paymentAmount })
+      .then(() => ({ ...personChoice, paymentAmount }));
   });
 };
 
 export const updateWhoIsFetchingLunch = (userId, lunchOptionId) => {
-  dBug(`${userId} is getting lunch for option ${lunchOptionId}`);
-  return Promise.resolve(
-    peopleChoices
-      .filter(personChoice => personChoice.choiceId === lunchOptionId)
-      .forEach(personChoice => {
-        personChoice.isFetching = personChoice.person.id === userId;
-      })
-  );
+  debug(`${userId} is getting lunch for option ${lunchOptionId}`);
+  return Promise.all([
+    db('peopleChoices')
+      .whereNot({ userId })
+      .andWhere({ lunchOptionId })
+      .update({ isFetching: false }),
+    db('peopleChoices')
+      .where({ userId })
+      .andWhere({ lunchOptionId })
+      .update({ isFetching: true })
+  ]);
 };
 
 export const updateGoneToFetchLunch = (userId, lunchOptionId) => {
-  dBug(`${userId} has left to get lunch for option ${lunchOptionId}`);
-  peopleChoices = peopleChoices.filter(personChoice => personChoice.choiceId !== lunchOptionId);
-  return Promise.resolve(peopleChoices);
+  debug(`${userId} has left to get lunch for option ${lunchOptionId}`);
+  return Promise.resolve(true);
 };

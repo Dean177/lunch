@@ -8,10 +8,7 @@ const debug = require('debug')('lunch:actionHandler:onChangeName');
 export default function onChangeName(io, socket, action) {
   const { payload: { name }, meta: { user } } = action;
   debug(`user: ${user.name} changed name to ${name}`);
-  return Promise.all([
-    PersonRepo.updateName(user, name),
-    PersonChoiceRepo.updateName(user, name),
-  ]).then(() => {
+  return PersonRepo.updateName(user, name).then(() => {
     socket.broadcast.emit(Action, changeName(user.id, name));
   });
 
