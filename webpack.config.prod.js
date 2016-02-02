@@ -34,8 +34,8 @@ module.exports = {
             'babel-plugin-transform-react-constant-elements',
             'babel-plugin-transform-react-inline-elements',
             'babel-plugin-transform-react-remove-prop-types',
-            'transform-decorators-legacy'
-          ]
+            'transform-decorators-legacy',
+          ],
         },
       },
       { test: /\.(css)(\?.+)$/, loaders: ['style-loader', 'css-loader'] },
