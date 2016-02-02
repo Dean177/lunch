@@ -1,3 +1,4 @@
+require('dotenv').config({ path: './ENV', silent: true });
 if (process.env.NODE_ENV !== 'production') {
   require('source-map-support').install();
 }
