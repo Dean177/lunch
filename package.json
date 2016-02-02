@@ -83,7 +83,7 @@
     "react-redux": "4.2.0",
     "react-router": "1.0.3",
     "react-router-redux": "2.1.0",
-    "react-transform-catch-errors": "1.0.1",
+    "react-transform-catch-errors": "1.0.2",
     "react-transform-hmr": "1.0.1",
     "redbox-react": "1.2.2",
     "redux": "3.2.1",
