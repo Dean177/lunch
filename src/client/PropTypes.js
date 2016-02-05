@@ -20,7 +20,7 @@ export const Person = PropTypes.shape({
 });
 
 export const PersonChoice = PropTypes.shape({
-  choiceId: PropTypes.string,
+  lunchOptionId: PropTypes.string,
   dateChosen: PropTypes.number,
   isFetching: PropTypes.bool,
   orderDetails: PropTypes.string,

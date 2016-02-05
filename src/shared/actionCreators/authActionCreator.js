@@ -22,15 +22,16 @@ export function splitwiseAuthFailure(message) {
   return { type: SplitwiseAuthFailure, payload: { message } };
 }
 
-export function splitwiseAuthSuccess(user) {
-  return { type: SplitwiseAuthSuccess, payload: user };
+export function splitwiseAuthSuccess(splitwiseUser) {
+  return { type: SplitwiseAuthSuccess, payload: splitwiseUser };
 }
 
-export function splitwiseAuthToken(hasAuthedToken, authLink) {
+export function splitwiseAuthToken(hasAuthedToken, authLink, userId) {
   return {
     type: SplitwiseAuthToken,
     payload: {
       hasAuthorizedSplitwiseToken: hasAuthedToken,
+      userId,
       splitwiseAuthorizationLink: authLink ? authLink : '',
     },
   };

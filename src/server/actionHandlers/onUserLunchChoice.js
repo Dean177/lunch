@@ -1,17 +1,18 @@
 import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
 import * as LunchOptionRepo from '../repository/LunchOptionRepo';
-const debug = require('debug')('lunch:actionHandler:onUserLunchChoice');
-
-import { sendCurrentState } from '../websocketHandler';
+import { Action } from '../../shared/constants/WeboscketMessageTypes';
+import { chooseLunchOption } from '../../shared/actionCreators/lunchActionCreators';
+const logger = require('../../../logger-config');
 
 export default function onUserLunchChoice(io, socket, action) {
-  const { payload: { choiceId }, meta: { user } } = action;
-  debug(`${user.name} made choice: ${choiceId}`);
+  const { payload: { lunchOptionId }, meta: { user } } = action;
+  logger.info(`${user.name} made choice: ${lunchOptionId}`);
   return Promise.all([
-    LunchOptionRepo.updateLastChosen(choiceId),
-    PersonChoiceRepo.updateChoiceId(user.id, choiceId),
-  ]).then(() => {
-    // TODO update clients
-    sendCurrentState(io);
+    PersonChoiceRepo.updateLunchOptionId(user.id, lunchOptionId),
+    LunchOptionRepo.updateLastChosen(lunchOptionId),
+  ]).then(([person, choiceId]) => {
+    socket.broadcast.emit(Action, chooseLunchOption(person, choiceId));
+  }).catch((err) => {
+    logger.error(err);
   });
 }

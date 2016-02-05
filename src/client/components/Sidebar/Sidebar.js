@@ -20,17 +20,17 @@ export default class Sidebar extends Component {
 
   onGetLunch = (event) => {
     event.preventDefault();
-    this.props.offerToGetLunch(this.props.user, this.props.userLunchChoice.choiceId);
+    this.props.offerToGetLunch(this.props.user, this.props.userLunchChoice.lunchOptionId);
   };
 
   onNoGetLunch = (event) => {
     event.preventDefault();
-    this.props.notGettingLunch(this.props.userLunchChoice.choiceId);
+    this.props.notGettingLunch(this.props.userLunchChoice.lunchOptionId);
   };
 
   onGone = (event) => {
     event.preventDefault();
-    this.props.goneToFetchLunch(this.props.userLunchChoice.choiceId);
+    this.props.goneToFetchLunch(this.props.userLunchChoice.lunchOptionId);
   };
 
   onOrderChange = (event) => {
@@ -100,7 +100,7 @@ export default class Sidebar extends Component {
 
             <div className='OthersOrders'>
               {peopleChoices
-                .filter((personChoice) => personChoice.choiceId === userLunchChoice.choiceId)
+                .filter((personChoice) => personChoice.lunchOptionId === userLunchChoice.lunchOptionId)
                 .map(personChoice => (
                   <PersonOrder key={personChoice.person.id} personChoice={personChoice} />
                 ))}

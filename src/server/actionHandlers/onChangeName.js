@@ -1,14 +1,15 @@
 import * as PersonRepo from '../repository/PersonRepo';
 import { changeName } from '../../shared/actionCreators/userActionCreator';
 import { Action } from '../../shared/constants/WeboscketMessageTypes';
-const debug = require('debug')('lunch:actionHandler:onChangeName');
+const logger = require('../../../logger-config');
 
 export default function onChangeName(io, socket, action) {
   const { payload: { name }, meta: { user } } = action;
-  debug(`user: ${user.name} changed name to ${name}`);
+  logger.info(`user: ${user.name} changed name to ${name}`);
   return PersonRepo.updateName(user, name).then(() => {
     socket.broadcast.emit(Action, changeName(user.id, name));
+  }).catch((err) => {
+    logger.error(err);
+    // TODO notify the client their name update failed?
   });
-
-  // TODO catch error and notify the client their name update failed?
 }

@@ -22,27 +22,27 @@ export default class LunchPicker extends Component {
 
   state = { squareDimension: 0 };
 
-  onOptionSelected(choiceId) {
-    this.props.chooseLunchOption(this.props.user, choiceId);
+  onOptionSelected(lunchOptionId) {
+    this.props.chooseLunchOption(this.props.user, lunchOptionId);
   }
 
-  getChooserCount(peopleChoices, personId, userChoiceId) {
+  getChooserCount(peopleChoices, personId, userlunchOptionId) {
     return peopleChoices
-      .filter(({ choiceId }) => (choiceId === userChoiceId))
+      .filter(({ lunchOptionId }) => (lunchOptionId === userlunchOptionId))
       .map(({ person }) => (person.id))
       .indexOf(personId);
   }
 
-  getChoiceIndex(lunchOptions, choiceId) {
+  getChoiceIndex(lunchOptions, lunchOptionId) {
     return lunchOptions
       .map(({ id }) => (id))
-      .indexOf(choiceId);
+      .indexOf(lunchOptionId);
   }
 
   lunchOptionsWithCountChosen(lunchOptions, peopleChoices) {
     return lunchOptions.map((lunchOption) => {
       const chosenCount = peopleChoices
-        .filter(({ choiceId }) => (choiceId === lunchOption.id))
+        .filter(({ lunchOptionId }) => (lunchOptionId === lunchOption.id))
         .length;
 
       return { ...lunchOption, chosenCount };
@@ -51,11 +51,11 @@ export default class LunchPicker extends Component {
 
   peopleChoicesWithCoordinates(lunchOptions, peopleChoices, squareDimension) {
     return peopleChoices
-      .filter(({ choiceId }) => !!choiceId)
+      .filter(({ lunchOptionId }) => !!lunchOptionId)
       .map((personChoice) => {
-        const { person, choiceId } = personChoice;
-        const xPos = squareDimension * this.getChooserCount(peopleChoices, person.id, choiceId);
-        const yPos = squareDimension * this.getChoiceIndex(lunchOptions, choiceId);
+        const { person, lunchOptionId } = personChoice;
+        const xPos = squareDimension * this.getChooserCount(peopleChoices, person.id, lunchOptionId);
+        const yPos = squareDimension * this.getChoiceIndex(lunchOptions, lunchOptionId);
 
         return {
           ...personChoice,

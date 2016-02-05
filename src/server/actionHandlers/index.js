@@ -16,7 +16,7 @@ import onUserLunchChoice from './onUserLunchChoice';
 const actionHandlers = {
   [authTypes.Authenticate]: onAuthenticateUser,
   [authTypes.SplitwiseAuth]: onSplitwiseAuth,
-  [lunchTypes.AddLunchOption]: onAddLunchOption,
+  [lunchTypes.AddLunchOption]: onAddLunchOption(),
   [userTypes.ChangeImageUrl]: onChangeImageUrl,
   [userTypes.ChangeName]: onChangeName,
   [lunchTypes.ChangeOrderDetails]: onChangeOrderDetails,

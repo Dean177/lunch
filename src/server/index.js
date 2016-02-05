@@ -3,17 +3,21 @@ if (process.env.NODE_ENV !== 'production') {
   require('source-map-support').install();
 }
 
-const debug = require('debug')('lunch:index');
+const logger = require('../../logger-config');
 const db = require('./repository/db');
 import lunchServer from './lunch-server';
 const serverPort = process.env.PORT || 3333;
 
-debug('Running migrations');
+logger.info('Running migrations');
 db.migrate.latest().then(() => {
-  debug('Migrations completed successfully');
-  debug('Starting Lunch');
+  logger.info('Migrations completed successfully');
+}).then(() => {
+  logger.info('Starting Lunch');
   lunchServer.listen(serverPort, (err) => {
     if (err) { throw err; }
-    debug(`Lunch listening on port ${serverPort}`);
+    logger.info(`Lunch listening on port ${serverPort}`);
   });
+}).catch((err) => {
+  logger.error(err);
+  process.exit(1);
 });

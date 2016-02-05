@@ -31,10 +31,10 @@ export function changeOrderDetails(orderDetails) {
   };
 }
 
-export function chooseLunchOption(person, choiceId) {
+export function chooseLunchOption(person, lunchOptionId) {
   return {
     type: UserLunchChoice,
-    payload: { person, choiceId },
+    payload: { person, lunchOptionId },
     meta: { isServerAction: true },
   };
 }

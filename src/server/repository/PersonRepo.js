@@ -1,33 +1,19 @@
-const debug = require('debug')('lunch:PersonRepo');
-const db = require('./db');
 import Promise from 'promise';
+const db = require('./db');
+const logger = require('../../../logger-config');
 
 export const add = (person) => {
-  debug(`Created new user ${person.name}`);
+  logger.info(`Created new user ${person.name}`);
   return db('users')
     .insert({ id: person.id, name: person.name })
     .then(() => { return Promise.resolve(person); });
-};
-
-export const findPerson = (person) => {
-  return db.select()
-    .from('users')
-    .where({ id: person.id })
-    .then((users) => {
-      debug('users', users);
-      if (!users.length) {
-        return add(person);
-      }
-
-      return users[0];
-    });
 };
 
 export const findById = (personId) => {
   return db.select()
     .from('users')
     .where({ id: personId })
-    .then((users) => { return users[0]; });
+    .then((users) => { return users.length ? users[0] : false; });
 };
 
 export const updateImageUrl = (person, imageUrl) => {
@@ -58,23 +44,15 @@ export const updateName = (person, name) => {
   });
 };
 
-const findTokenByUserId = (userId) => {
+export const findSplitwiseAuthByUserId = (userId) => {
   return db
     .select()
     .from('splitwise_tokens')
     .where({ userId })
-    .then((tokens) => tokens.length ? tokens[0] : false);
-};
-
-export const getSplitwiseAuth = (userId) => {
-  debug(`Fetching existing auth for: ${userId}`);
-  return findTokenByUserId(userId).then((tokens) => {
-    if (!tokens.length) {
-      return Promise.reject(new Error(`No auth found for: ${userId}`));
-    }
-
-    return tokens[0];
-  });
+    .then((tokens) => {
+      logger.info(`Tokens found for ${userId}`, tokens);
+      return tokens.length ? tokens[0] : false;
+    });
 };
 
 export const addSplitwiseToken = (userId, token, secret) => {
@@ -92,10 +70,10 @@ export const authorizeToken = (userId) => {
 };
 
 export const updateSplitwiseAuth = (user, token, secret) => {
-  debug(`Updating auth for user: ${user.id}`);
-  return findTokenByUserId(user.id).then((tokens) => {
-    if (!tokens.length) {
-      debug(`No existing user with id ${user.id}`);
+  logger.info(`Updating auth for user: ${user.id}`);
+  return findSplitwiseAuthByUserId(user.id).then((userToken) => {
+    if (!userToken) {
+      logger.info(`No existing user with id ${user.id}`);
       return addSplitwiseToken(user.id, token, secret);
     }
 

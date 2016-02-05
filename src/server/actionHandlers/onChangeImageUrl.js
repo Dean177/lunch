@@ -1,14 +1,15 @@
 import * as PersonRepo from '../repository/PersonRepo';
 import { changeImageUrl } from '../../shared/actionCreators/userActionCreator';
 import { Action } from '../../shared/constants/WeboscketMessageTypes';
-const debug = require('debug')('lunch:actionHandler:onChangeImageUrl');
+const logger = require('../../../logger-config');
 
 export default function onChangeImageUrl(io, socket, action) {
   const { payload: { url }, meta: { user } } = action;
-  debug(`user: ${user.name} changed url to ${url}`);
+  logger.info(`user: ${user.name} changed url to ${url}`);
   return PersonRepo.updateImageUrl(user, url).then(() => {
     socket.broadcast.emit(Action, changeImageUrl(user.id, url));
+  }).catch((err) => {
+    // TODO notify the client their name update failed?
+    logger.error(err);
   });
-
-  // TODO catch error and notify the client their name update failed?
 }

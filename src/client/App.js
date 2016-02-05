@@ -22,7 +22,7 @@ function navigateIfUserHasChosenLunchOption(action) {
     const { user, lunch: { peopleChoices } } = getState();
     const usersLunchChoice = find(peopleChoices, (pChoice) => (pChoice.person.id === user.id));
 
-    if (usersLunchChoice && usersLunchChoice.choiceId === lunchOptionId) {
+    if (usersLunchChoice && usersLunchChoice.lunchOptionId === lunchOptionId) {
       dispatch(routeActions.push(navigateTo));
     }
   };

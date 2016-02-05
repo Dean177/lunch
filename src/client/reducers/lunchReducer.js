@@ -46,7 +46,7 @@ const lunchReducer = createStateMergeReducer(initialState, {
     const newPeopleChoices = upsert(
       state.peopleChoices,
       (personChoice) => (personChoice.person.id === payload.person.id),
-      { person: payload.person, choiceId: option ? option.id : payload.id }
+      { person: payload.person, lunchOptionId: option ? option.id : payload.id }
     );
 
     return {
@@ -88,14 +88,14 @@ const lunchReducer = createStateMergeReducer(initialState, {
 
   [GoneToFetchLunch]({ peopleChoices }, { payload: { lunchOptionId } }) {
     const newChoices = {
-      peopleChoices: peopleChoices.filter(personChoice => personChoice.choiceId !== lunchOptionId),
+      peopleChoices: peopleChoices.filter(personChoice => personChoice.lunchOptionId !== lunchOptionId),
     };
 
     return newChoices;
   },
 
   [NotGettingLunch]({ peopleChoices }, { payload: { lunchOptionId }, meta: { user } }) {
-    const comparator = (personChoice) => (personChoice.choiceId === lunchOptionId && personChoice.person.id === user.id);
+    const comparator = (personChoice) => (personChoice.lunchOptionId === lunchOptionId && personChoice.person.id === user.id);
     const existingChoice = find(peopleChoices, comparator);
     return {
       peopleChoices: upsert(peopleChoices, comparator, { ...existingChoice, isFetching: false }),
@@ -105,7 +105,7 @@ const lunchReducer = createStateMergeReducer(initialState, {
   [OfferToGetLunch](state, { payload: { user, lunchOptionId } }) {
     return {
       peopleChoices: state.peopleChoices.map((personChoice) => {
-        if (personChoice.choiceId !== lunchOptionId) {
+        if (personChoice.lunchOptionId !== lunchOptionId) {
           return personChoice;
         } else if (personChoice.person.id !== user.id) {
           return { ...personChoice, isFetching: false };
@@ -138,11 +138,11 @@ const lunchReducer = createStateMergeReducer(initialState, {
     };
   },
 
-  [UserLunchChoice]({ peopleChoices }, { payload: { person, choiceId } }) {
+  [UserLunchChoice]({ peopleChoices }, { payload: { person, lunchOptionId } }) {
     const newPeopleChoices = upsert(
       peopleChoices,
       (personChoice) => (personChoice.person.id === person.id),
-      { person, choiceId }
+      { person, lunchOptionId }
     );
 
     return { peopleChoices: newPeopleChoices };

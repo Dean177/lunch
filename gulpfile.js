@@ -39,11 +39,12 @@ gulp.task('server:dev', () => {
   });
 });
 
-gulp.task('build:server', () => {
+gulp.task('build', () => {
   return gulp.src([
     'src/server/**/*.js',
     'src/shared/**/*.js',
-    'src/tests/**/*.js',
+    'src/client/**/*.js',
+    'src/test/**/*.js',
   ], { base: './src' })
     .pipe(sourcemaps.init())
     .pipe(babel())

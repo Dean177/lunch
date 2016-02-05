@@ -1,9 +1,7 @@
-import debug from 'debug';
 import { v4 as uuid } from 'node-uuid';
 import getOptionChoicesMessage from './actionCreators/getOptionChoicesMessage';
 import { Action } from '../shared/constants/WeboscketMessageTypes';
-
-const dBug = debug('lunch:configureWebsockets');
+const logger = require('../../logger-config');// ('lunch:configureWebsockets');
 
 export function validateActionFormat(action, onError) {
   if (!action.type || !action.payload || !action.meta || !action.meta.user) {
@@ -12,17 +10,17 @@ export function validateActionFormat(action, onError) {
 }
 
 function onInvalidAction(action) {
-  dBug('Potentially malformed action received', JSON.stringify(action, null, 2));
+  logger.info('Potentially malformed action received', JSON.stringify(action, null, 2));
 }
 
 export function configureActionHandlers(actionHandlers, websockets) {
   return (socket) => (action) => {
     validateActionFormat(action, onInvalidAction);
     if (!actionHandlers.hasOwnProperty(action.type)) {
-      return dBug('Unrecognised client action', action);
+      return logger.info('Unrecognised client action', action);
     }
 
-    dBug(`Action: ${action.type} from ${action.meta.user.name}`);
+    logger.info(`Action: ${action.type} from ${action.meta.user.name}`);
     return actionHandlers[action.type](websockets, socket, action);
   };
 }
@@ -36,7 +34,7 @@ export function sendCurrentState(emitter) {
 export const getWebsocketHandler = (connections, getActionHandlerForSocket) => (websocket) => {
   const socketId = uuid();
   connections[socketId] = { websocket };
-  websocket.on('error', dBug);
+  websocket.on('error', (err) => { logger.error(err); });
   websocket.on('close', () => { delete connections[socketId]; });
   websocket.on(Action, getActionHandlerForSocket(websocket));
 
