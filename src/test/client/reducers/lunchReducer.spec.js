@@ -1,5 +1,6 @@
-/* eslint no-unused-expressions: 0 */
-import { expect } from 'chai';
+const chai = require('chai');
+chai.use(require('dirty-chai'));
+const expect = chai.expect;
 import { find } from 'underscore';
 import {
   AddLunchOption,
@@ -7,8 +8,8 @@ import {
   OptionChoices,
   ToggleEnterNewLunchOption,
   UserLunchChoice,
-} from '../../../src/shared/constants/actionTypes/lunchActionTypes';
-import lunchReducer from '../../../src/client/reducers/lunchReducer';
+} from '../../../shared/constants/actionTypes/lunchActionTypes';
+import lunchReducer from '../../../client/reducers/lunchReducer';
 
 const initialState = {
   optionName: 'Name for the new option',
@@ -35,7 +36,7 @@ describe('lunchReducer', () => {
     it('Selects the newly added lunch option', () => {
       expect(newState.peopleChoices.length).to.equal(initialState.peopleChoices.length + 1);
       const personChoice = find(newState.peopleChoices, (pChoice) => pChoice.person.id === ferret.id);
-      expect(personChoice.choiceId).to.equal(lunchOption.id);
+      expect(personChoice.lunchOptionId).to.equal(lunchOption.id);
     });
 
     it('Clears the text used to store the name', () => {
@@ -70,7 +71,7 @@ describe('lunchReducer', () => {
         type: OptionChoices,
         payload: {
           lunchOptions: [{ id: '0', name: 'Market' }, { id: '0', name: 'Chinese' }],
-          peopleChoices: [{ person: { id: '0', name: 'Boar' }, choiceId: '0' }],
+          peopleChoices: [{ person: { id: '0', name: 'Boar' }, lunchOptionId: '0' }],
         },
       };
       const newState = lunchReducer(initialState, peopleChoicesAction);
@@ -91,21 +92,21 @@ describe('lunchReducer', () => {
 
   describe(UserLunchChoice, () => {
     const egret = { id: 4, name: 'Egret' };
-    const choiceId = 'iiii-chos-eyou';
-    const chooseLunchOptionAction = { type: UserLunchChoice, payload: { choiceId, person: egret } };
+    const lunchOptionId = 'iiii-chos-eyou';
+    const chooseLunchOptionAction = { type: UserLunchChoice, payload: { lunchOptionId, person: egret } };
     const firstChoiceState = lunchReducer(initialState, chooseLunchOptionAction);
 
     it('Adds the lunchChoice when the person has made no previous selection', () => {
       const personChoice = find(firstChoiceState.peopleChoices, (pChoice) => pChoice.person.id === egret.id);
-      expect(firstChoiceState.peopleChoices).not.to.be.empty;
-      expect(personChoice.choiceId).to.equal(choiceId);
+      expect(firstChoiceState.peopleChoices).not.to.be.empty();
+      expect(personChoice.lunchOptionId).to.equal(lunchOptionId);
     });
 
-    it('Updates the choiceId when person has already made a choice', () => {
-      const secondChoice = { type: UserLunchChoice, payload: { choiceId: '0', person: egret } };
+    it('Updates the lunchOptionId when person has already made a choice', () => {
+      const secondChoice = { type: UserLunchChoice, payload: { lunchOptionId: '0', person: egret } };
       const secondChoiceState = lunchReducer(firstChoiceState, secondChoice);
       expect(secondChoiceState.peopleChoices.length).to.equal(firstChoiceState.peopleChoices.length);
-      expect(secondChoiceState.peopleChoices[0].choiceId).to.equal('0');
+      expect(secondChoiceState.peopleChoices[0].lunchOptionId).to.equal('0');
     });
   });
 });

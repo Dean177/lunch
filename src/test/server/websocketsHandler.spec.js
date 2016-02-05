@@ -1,9 +1,9 @@
 import chai from 'chai';
 import spies from 'chai-spies';
-import { values } from 'underscore';
-import configureWebsocket, { configureActionHandlers, validateActionFormat, getWebsocketHandler } from '../../src/server/websocketHandler';
 const { expect } = chai;
 chai.use(spies);
+import { values } from 'underscore';
+import configureWebsocket, { configureActionHandlers, validateActionFormat, getWebsocketHandler } from '../../server/websocketHandler';
 
 describe('validateActionFormat', () => {
   let onError;

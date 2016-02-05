@@ -1,6 +1,7 @@
-/* eslint no-unused-expressions: 0 */
-import createStateMergeReducer from '../../../src/client/util/createStateMergeReducer';
-import { expect } from 'chai';
+const chai = require('chai');
+chai.use(require('dirty-chai'));
+const expect = chai.expect;
+import createStateMergeReducer from '../../../client/util/createStateMergeReducer';
 
 
 describe('createStateMergeReducer', () => {
@@ -18,7 +19,7 @@ describe('createStateMergeReducer', () => {
     const action = { type: SomeActionType, payload: { key: 'key', value: 'value' } };
     const newState = reducer(initialState, action);
 
-    expect(newState.key).to.not.be.undefined;
+    expect(newState.key).to.not.be.undefined();
     expect(newState.key).to.equal(action.payload.value);
   });
 

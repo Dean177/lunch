@@ -1,7 +1,7 @@
-import { expect } from 'chai';
+const expect = require('chai').expect;
 import mockLocalStorage from '../../testingUtil/mockLocalStorage';
-import createUserReducer from '../../../src/client/reducers/createUserReducer';
-import { changeName, changeImageUrl } from '../../../src/shared/actionCreators/userActionCreator';
+import createUserReducer from '../../../client/reducers/createUserReducer';
+import { changeName, changeImageUrl } from '../../../shared/actionCreators/userActionCreator';
 
 const initialState = {
   id: '110ec58a-a0f2-4ac4-8393-c866d813b8d1',

@@ -3,8 +3,8 @@ import spies from 'chai-spies';
 import Promise from 'promise';
 chai.use(spies);
 const { expect } = chai;
-import { onAddLunchOption } from '../../../src/server/actionHandlers/onAddLunchOption';
-import { addLunchOption } from '../../../src/shared/actionCreators/lunchActionCreators';
+import onAddLunchOption from '../../../server/actionHandlers/onAddLunchOption';
+import { addLunchOption } from '../../../shared/actionCreators/lunchActionCreators';
 
 
 describe('onAddLunchOption', () => {
@@ -30,36 +30,21 @@ describe('onAddLunchOption', () => {
     },
   };
 
-  let updateChoiceIdSpy;
+  let updateLunchOptionIdSpy;
   const PersonChoiceRepoMock = {
-    updateChoiceId: (person, choiceId) => {
-      updateChoiceIdSpy(choiceId);
-      return Promise.resolve({ person, choiceId });
+    updateLunchOptionId: (person, lunchOptionId) => {
+      updateLunchOptionIdSpy(lunchOptionId);
+      return Promise.resolve({ person, lunchOptionId });
     },
   };
 
   beforeEach(() => {
     addSpy = chai.spy();
     findByNameSpy = chai.spy();
-    updateChoiceIdSpy = chai.spy();
+    updateLunchOptionIdSpy = chai.spy();
   });
 
-  it("Checks the lunch option doesn't already exist", () => {
-    const onAddLunchWithMocks = onAddLunchOption(LunchRepoMock, PersonChoiceRepoMock);
-    return onAddLunchWithMocks(ioMock, socketMock, addExistingLunchOption).then(() => {
-      expect(findByNameSpy).to.have.been.called();
-    });
-  });
-
-  it("Doesn't create the lunch option if it already exist", () => {
-    const onAddLunchWithMocks = onAddLunchOption(LunchRepoMock, PersonChoiceRepoMock);
-    return onAddLunchWithMocks(ioMock, socketMock, addExistingLunchOption).then(() => {
-      expect(findByNameSpy).to.have.been.called();
-      expect(addSpy).not.to.have.been.called();
-    });
-  });
-
-  it("Creates a new option if it doesn't exist", () => {
+  it('Creates the option', () => {
     const onAddLunchWithMocks = onAddLunchOption(LunchRepoMock, PersonChoiceRepoMock);
     return onAddLunchWithMocks(ioMock, socketMock, addNonExistingLunchOption).then(() => {
       expect(addSpy).to.have.been.called();
@@ -69,7 +54,7 @@ describe('onAddLunchOption', () => {
   it('Updates the users choice', () => {
     const onAddLunchWithMocks = onAddLunchOption(LunchRepoMock, PersonChoiceRepoMock);
     return onAddLunchWithMocks(ioMock, socketMock, addNonExistingLunchOption).then(() => {
-      expect(updateChoiceIdSpy).to.have.been.called();
+      expect(updateLunchOptionIdSpy).to.have.been.called();
     });
   });
 
