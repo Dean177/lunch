@@ -11,6 +11,7 @@
     "build:production": "npm run clean && npm run build && npm run build:client",
     "start": "npm run build && node out/server/index.js",
     "start:production": "npm run build:production && node out/server/index.js",
+    "seed-file": "knex seed:make --",
     "test": "npm run test:unit && npm run test:lint",
     "test:unit": "webpack --config webpack.config.test.js && mocha out/test/**/*.spec.js",
     "test:lint": "eslint src/**/*.js test/**/*.js gulpfile.js webpack.config.*"
@@ -41,7 +42,6 @@
     "classnames": "2.2.3",
     "compression": "1.6.1",
     "css-loader": "0.23.1",
-    "debug": "2.2.0",
     "dotenv": "2.0.0",
     "enzyme": "1.4.1",
     "eslint": "1.10.3",
@@ -99,6 +99,7 @@
     "url-loader": "0.5.6",
     "webpack": "1.12.12",
     "webpack-dev-middleware": "1.5.1",
-    "webpack-hot-middleware": "2.6.4"
+    "webpack-hot-middleware": "2.6.4",
+    "winston": "2.1.1"
   }
 }
