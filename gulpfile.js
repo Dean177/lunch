@@ -13,8 +13,8 @@ const sourceMapConfig = {
 gulp.task('server:prod', () => {
   nodemon({
     env: {
-      'NODE_ENV': JSON.stringify('production'),
-      'DEBUG': 'lunch:*',
+      NODE_ENV: JSON.stringify('production'),
+      DEBUG: 'lunch:*',
     },
     script: 'out/server/index.js',
     verbose: false,
@@ -27,8 +27,8 @@ gulp.task('server:prod', () => {
 gulp.task('server:dev', () => {
   nodemon({
     env: {
-      'NODE_ENV': JSON.stringify('development'),
-      'DEBUG': 'lunch:*',
+      NODE_ENV: JSON.stringify('development'),
+      DEBUG: 'lunch:*',
     },
     delay: 10,
     script: 'out/server/index.js',
