@@ -2,23 +2,25 @@ const uuid = require('node-uuid').v4;
 const db = require('./db');
 const logger = require('../../../logger-config');
 
+export const mapPersonChoiceJoinUserRowToPersonChoice = ({ id, orderDetails, paymentAmount, isFetching, dateChosen, lunchOptionId, userId, name, imageUrl }) => {
+  return {
+    id,
+    orderDetails,
+    paymentAmount,
+    isFetching,
+    dateChosen: parseInt(dateChosen),
+    lunchOptionId,
+    person: { id: userId, name, imageUrl },
+  };
+};
+
 export const getAll = (cutoffTime) => db('people_choices')
   .where('dateChosen', '>', cutoffTime)
   .leftJoin('users', 'people_choices.userId', 'users.id')
-  .map(({ id, orderDetails, paymentAmount, isFetching, dateChosen, lunchOptionId, userId, name, imageUrl }) => {
-    return {
-      id,
-      orderDetails,
-      paymentAmount,
-      isFetching,
-      dateChosen: parseInt(dateChosen),
-      lunchOptionId,
-      person: { id: userId, name, imageUrl },
-    };
-  }).then((result) => {
+  .map(mapPersonChoiceJoinUserRowToPersonChoice)
+  .then((result) => {
     return result;
   });
-
 
 export const add = (userId, lunchOptionId, orderDetails = '', paymentAmount = '', isFetching = false) => {
   logger.info(`User: ${userId} has made initial choice ${lunchOptionId}`);
@@ -51,7 +53,12 @@ export const clearFetchers = (userId, lunchOptionId) => {
 };
 
 export const findByPersonId = (userId) => {
-  return db('people_choices').where({ userId }).limit(1).then((users) => users.length ? users[0] : false);
+  return db('people_choices')
+    .leftJoin('users', 'people_choices.userId', 'users.id')
+    .where({ userId })
+    .limit(1)
+    .map(mapPersonChoiceJoinUserRowToPersonChoice)
+    .then((users) => users.length ? users[0] : false);
 };
 
 export const updateLunchOptionId = (userId, lunchOptionId) => {
@@ -62,7 +69,11 @@ export const updateLunchOptionId = (userId, lunchOptionId) => {
       return add(userId, lunchOptionId);
     }
 
-    const personChoiceUpdate = { lunchOptionId, dateChosen: new Date().getTime() };
+    const personChoiceUpdate = {
+      lunchOptionId,
+      isFetching: false,
+      dateChosen: new Date().getTime(),
+    };
     return db('people_choices')
       .where({ userId, lunchOptionId: personChoice.lunchOptionId })
       .update(personChoiceUpdate)

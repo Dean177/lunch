@@ -34,20 +34,23 @@ const lunchReducer = createStateMergeReducer(initialState, {
     if (option) {
       lunchOptions = state.lunchOptions;
     } else {
-      lunchOptions = [
-        ...state.lunchOptions,
-        {
-          id: payload.id,
-          name: payload.name,
-        },
-      ];
+      lunchOptions = [...state.lunchOptions, { id: payload.id, name: payload.name }];
     }
 
-    const newPeopleChoices = upsert(
-      state.peopleChoices,
-      (personChoice) => (personChoice.person.id === payload.person.id),
-      { person: payload.person, lunchOptionId: option ? option.id : payload.id }
-    );
+    const comparator = (personChoice) => (personChoice.person.id === payload.person.id);
+    const existingPersonChoice = find(state.peopleChoices, comparator);
+    let newPeopleChoices;
+    if (!existingPersonChoice) {
+      const newPersonChoice = { person: payload.person, lunchOptionId: option ? option.id : payload.id };
+      newPeopleChoices = [...state.peopleChoices, newPersonChoice];
+    } else {
+      const newPersonChoice = { ...existingPersonChoice, lunchOptionId: option ? option.id : payload.id };
+      newPeopleChoices = upsert(
+        state.peopleChoices,
+        comparator,
+        newPersonChoice
+      );
+    }
 
     return {
       lunchOptions,
@@ -139,11 +142,14 @@ const lunchReducer = createStateMergeReducer(initialState, {
   },
 
   [UserLunchChoice]({ peopleChoices }, { payload: { person, lunchOptionId } }) {
-    const newPeopleChoices = upsert(
-      peopleChoices,
-      (personChoice) => (personChoice.person.id === person.id),
-      { person, lunchOptionId }
-    );
+    const comparator = (personChoice) => (personChoice.person.id === person.id);
+    const existingLunchOption = find(peopleChoices, comparator);
+    let newPeopleChoices;
+    if (!existingLunchOption) {
+      newPeopleChoices = [...peopleChoices, { person, lunchOptionId }];
+    } else {
+      newPeopleChoices = upsert(peopleChoices, comparator, { ...existingLunchOption, lunchOptionId });
+    }
 
     return { peopleChoices: newPeopleChoices };
   },

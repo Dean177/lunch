@@ -10,8 +10,8 @@ export default function onUserLunchChoice(io, socket, action) {
   return Promise.all([
     PersonChoiceRepo.updateLunchOptionId(user.id, lunchOptionId),
     LunchOptionRepo.updateLastChosen(lunchOptionId),
-  ]).then(([person, choiceId]) => {
-    socket.broadcast.emit(Action, chooseLunchOption(person, choiceId));
+  ]).then(([personChoice, choiceId]) => {
+    socket.broadcast.emit(Action, chooseLunchOption(user, choiceId));
   }).catch((err) => {
     logger.error(err);
   });

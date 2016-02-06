@@ -12,7 +12,7 @@ export default function onAddLunchOption(lunchOptionRepo = LunchOptionRepo, pers
     const addedLunchOption = lunchOptionRepo.add(name);
     const updatedLunchChoice = addedLunchOption.then((lunchOption) => {
       logger.info(`User `, lunchOption);
-      return personChoiceRepo.updateLunchOptionId(user, lunchOption.id);
+      return personChoiceRepo.updateLunchOptionId(user.id, lunchOption.id);
     });
 
     return Promise
