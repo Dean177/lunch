@@ -29,6 +29,14 @@ module.exports = {
         test: /\.jsx?$/,
         loader: 'babel',
         include: [path.join(__dirname, 'src', 'client'), path.join(__dirname, 'src', 'shared')],
+        query: {
+          plugins: [
+            'babel-plugin-transform-react-constant-elements',
+            'babel-plugin-transform-react-inline-elements',
+            'babel-plugin-transform-react-remove-prop-types',
+            'transform-decorators-legacy',
+          ],
+        },
       },
       { test: /\.(css)(\?.+)$/, loaders: ['style-loader', 'css-loader'] },
       { test: /\.scss$/, loader: 'style!css!sass' },
