@@ -22,6 +22,7 @@ class LunchPicker extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
+    // TODO navigate back to user page
   };
 
   onImageChange = (event) => {
