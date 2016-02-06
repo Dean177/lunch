@@ -16,11 +16,11 @@ module.exports = {
       __DEVELOPMENT__: false,
       __PORT__: process.env.PORT,
       'process.env': {
-        'NODE_ENV': JSON.stringify('production'),
-        'PORT': process.env.PORT,
+        NODE_ENV: JSON.stringify('production'),
+        PORT: process.env.PORT,
       },
     }),
-    new UglifyJsPlugin(),
+    new UglifyJsPlugin({ output: { comments: false } }),
     new OccurenceOrderPlugin(),
   ],
   module: {
