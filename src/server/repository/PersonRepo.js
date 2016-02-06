@@ -6,14 +6,14 @@ export const add = (person) => {
   logger.info(`Created new user ${person.name}`);
   return db('users')
     .insert({ id: person.id, name: person.name })
-    .then(() => { return Promise.resolve(person); });
+    .then(() => person);
 };
 
-export const findById = (personId) => {
+export const findById = (id) => {
   return db.select()
     .from('users')
-    .where({ id: personId })
-    .then((users) => { return users.length ? users[0] : false; });
+    .where({ id })
+    .then((persons) => { return persons.length ? persons[0] : false; });
 };
 
 export const updateImageUrl = (person, imageUrl) => {
@@ -49,10 +49,7 @@ export const findSplitwiseAuthByUserId = (userId) => {
     .select()
     .from('splitwise_tokens')
     .where({ userId })
-    .then((tokens) => {
-      logger.info(`Tokens found for ${userId}`, tokens);
-      return tokens.length ? tokens[0] : false;
-    });
+    .then((tokens) => tokens.length ? tokens[0] : false);
 };
 
 export const addSplitwiseToken = (userId, token, secret) => {
@@ -69,15 +66,15 @@ export const authorizeToken = (userId) => {
     .update({ hasAuthorizedSplitwiseToken: true });
 };
 
-export const updateSplitwiseAuth = (user, token, secret) => {
-  logger.info(`Updating auth for user: ${user.id}`);
-  return findSplitwiseAuthByUserId(user.id).then((userToken) => {
+export const updateSplitwiseAuth = (userId, token, secret) => {
+  logger.info(`Updating auth for user: ${userId}`);
+  return findSplitwiseAuthByUserId(userId).then((userToken) => {
     if (!userToken) {
-      logger.info(`No existing user with id ${user.id}`);
-      return addSplitwiseToken(user.id, token, secret);
+      logger.info(`No existing user with id ${userId}`);
+      return addSplitwiseToken(userId, token, secret);
     }
 
-    return db('splitwise_tokens').where({ userId: user.id })
+    return db('splitwise_tokens').where({ userId })
       .update({ token, secret, hasAuthorizedSplitwiseToken: false })
       .then(() => { return { token, secret }; });
   });
