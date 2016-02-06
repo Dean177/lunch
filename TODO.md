@@ -19,7 +19,10 @@
 ###PersonChoiceRepo: 
   - updateWhoIsfetchingLunch in a single query
   
-###Client: 
+###Client:   
+  - Move to lodash and `import find from 'lodash/find` syntax
+  - remove bootstrap entirely (What am I even using it for?)
+  - Remove fontawesome (Again, I must be using 2 icons total)
   - Make somthing happen on gone to fetch lunch
   - Autosuggest previous options!
   - Navigate the user back to the lunch page of they submit the UserConfig form with enter
@@ -42,6 +45,7 @@
   - Testing splitwise integration? 
   - Set up test parallelism on CI
   - publish test artifacts (test & lint results )
+  - Publish bundle size analysis
 
 ###Problems to solve:
   - SS debugging

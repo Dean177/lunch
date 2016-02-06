@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const DefinePlugin = webpack.DefinePlugin;
+const DedupePlugin = webpack.optimize.DedupePlugin;
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const OccurenceOrderPlugin = webpack.optimize.OccurenceOrderPlugin;
 
@@ -20,7 +21,11 @@ module.exports = {
         PORT: process.env.PORT,
       },
     }),
-    new UglifyJsPlugin({ output: { comments: false } }),
+    new DedupePlugin(),
+    new UglifyJsPlugin({
+      compress: { warnings: false },
+      output: { comments: false },
+    }),
     new OccurenceOrderPlugin(),
   ],
   module: {
