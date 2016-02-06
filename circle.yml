@@ -21,3 +21,7 @@ test:
     - npm run build:server
     - npm run test:unit
     - npm run test:lint
+
+general:
+  artifacts:
+    - "out/buildstats.json"
