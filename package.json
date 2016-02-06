@@ -6,7 +6,7 @@
     "clean": "node tasks/clean",
     "static-assets": "node tasks/static-assets",
     "build": "npm run static-assets && npm run build:server",
-    "build:server": "gulp build:server",
+    "build:server": "gulp build",
     "build:client": "webpack --config webpack.config.prod.js",
     "build:production": "npm run clean && npm run build && npm run build:client",
     "start": "npm run build && node out/server/index.js",
