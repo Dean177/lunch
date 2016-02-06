@@ -21,8 +21,7 @@
   
 ###Client:   
   - Move to lodash and `import find from 'lodash/find` syntax
-  - remove bootstrap entirely (What am I even using it for?)
-  - Remove fontawesome (Again, I must be using 2 icons total)
+  - Remove fontawesome (I must be using 2 icons total)
   - Make somthing happen on gone to fetch lunch
   - Autosuggest previous options!
   - Navigate the user back to the lunch page of they submit the UserConfig form with enter
@@ -31,6 +30,7 @@
   - separate userReducer from userChoiceReducer
   - Account for a person volunteering to fetch dropping past the cutoff time.
   - Cache busting bundle urls: https://webpack.github.io/docs/long-term-caching.html
+  - Don't send onLunchChoice events when the choice hasn't changed!
   - debounce imageUrl changes
 	
 ### testing:

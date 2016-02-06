@@ -1,4 +1,12 @@
 .UserConfig {
+  .container {
+    max-width: 60rem;
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
   .form-group {
     margin-bottom: 2em;
   }

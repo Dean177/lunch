@@ -25,7 +25,7 @@ class OptionAutosuggest extends Component {
           ref: (input) => { if (input != null && input.focus) { input.focus(); }},
           onBlur,
           placeholder: this.props.placeholder || '',
-          type: 'search',
+          type: 'text',
         }}
         theme={{
           container: 'react-autosuggest',

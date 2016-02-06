@@ -1,11 +1,9 @@
 @import 'variables';
+@import 'reset';
 
 @font-face {
   font-family: 'Signika';
   src: url('./Signika-Regular.ttf') format('truetype');
-}
-* {
-  -webkit-user-select: none;
 }
 
 .App {
@@ -23,12 +21,72 @@
 }
 
 .btn {
-  border-radius: 3px;
-  box-shadow: 0px 0px 5px 0px rgba(64,64,64,0.4);
+  cursor: pointer;
+  border-radius: $border-radius;
+  border: .0625rem solid transparent;
+  box-shadow: 0 0 5px 0 rgba(64,64,64,0.4);
 
   &.btn-primary {
+    color: white;
     border: none;
     font-weight: 500;
     background-color: $green;
+  }
+
+  &.btn-secondary {
+    //color: white;
+    //border: none;
+    //font-weight: 500;
+    background-color: white;
+  }
+
+  &.btn-primary-outline {
+    color: #0275d8;
+    background: transparent none;
+    border-color: #0275d8;
+  }
+
+  &.btn-lg {
+    padding: .75rem 1.25rem;
+    font-size: 1.25rem;
+    line-height: 1.33333;
+    border-radius: $border-radius;
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #55595c;
+  background-color: #fff;
+  background-image: none;
+  border: .0625rem solid #ccc;
+  border-radius: $border-radius;
+}
+
+.InputAddOn {
+  display: flex;
+
+  .AddOn {
+    /* item styles */
+    padding: 0.5em 0.75em;
+    background-color: white;
+    color: $black;
+    border-top-left-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+  }
+
+  .Field {
+    flex: 1;
+    border: none;
+    color: $black;
+    /* field styles */
   }
 }

@@ -60,11 +60,11 @@ export default class Sidebar extends Component {
         {value => (
           <div className='Sidebar' style={{ right: value.xPosition }}>
             <form className='User-Prefs'>
-              <fieldset className='form-group' style={{ display: 'none' }}>
+              <div className='form-group' style={{ display: 'none' }}>
                 <button className='btn btn-primary-outline Ready' onClick={this.onReady}>READY</button>
-              </fieldset>
+              </div>
 
-              <fieldset className='form-group action-buttons'>
+              <div className='form-group action-buttons'>
                 <button className={classnames('btn btn-secondary i-get', { hidden: isFetching })}
                         onClick={this.onGetLunch}>
                   I GET
@@ -72,9 +72,9 @@ export default class Sidebar extends Component {
                 <button className={classnames('btn btn-secondary i-no-get', { hidden: !isFetching })}
                         onClick={this.onNoGetLunch}>I NO GET</button>
                 <button className={classnames('btn btn-secondary i-gone', { hidden: !isFetching })} onClick={this.onGone}>I GONE</button>
-              </fieldset>
+              </div>
 
-              <fieldset className='form-group'>
+              <div className='form-group'>
                 <label>I want:</label>
                 <textarea
                   rows='3'
@@ -82,20 +82,20 @@ export default class Sidebar extends Component {
                   onChange={this.onOrderChange}
                   value={userLunchChoice.orderDetails}
                 />
-              </fieldset>
+              </div>
 
-              <fieldset className='form-group' style={{ display: displayPaymentAmount ? '' : 'none' }}>
+              <div className='form-group' style={{ display: displayPaymentAmount ? '' : 'none' }}>
                 <label>It costs:</label>
-                <div className='input-group'>
-                  <div className='input-group-addon'>£</div>
+                <div className='InputAddOn'>
+                  <div className='AddOn'>£</div>
                   <input
                     type='text'
-                    className='i-pay form-control'
+                    className='i-pay Field'
                     onChange={this.onPaymentAmountChange}
                     value={userLunchChoice.paymentAmount || ''}
                   />
                 </div>
-              </fieldset>
+              </div>
             </form>
 
             <div className='OthersOrders'>
