@@ -24,6 +24,8 @@
   cursor: pointer;
   border-radius: $border-radius;
   border: .0625rem solid transparent;
+  padding: .375rem 1rem;
+  line-height: 1.5;
   box-shadow: 0 0 5px 0 rgba(64,64,64,0.4);
 
   &.btn-primary {

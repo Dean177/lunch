@@ -51,7 +51,7 @@ export default class SplitwiseAuthorizer extends Component {
             </a>
           </li>
           <li>
-            <p>Then click here once you have allowed lunch to access your account</p>
+            <p>Then click here once you have authenticated with Splitwise</p>
             <button className={classNames('btn btn-primary-outline', { 'disabled': isAuthorizing })} onClick={this.onAttemptSplitwiseAuth}>
               Confirm auth <i className={classNames({ 'fa fa-circle-o-notch fa-spin': isAuthorizing }, { 'hidden': !isAuthorizing })} />
             </button>
