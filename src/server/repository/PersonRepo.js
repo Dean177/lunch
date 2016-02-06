@@ -1,4 +1,3 @@
-import Promise from 'promise';
 const db = require('./db');
 const logger = require('../../../logger-config');
 

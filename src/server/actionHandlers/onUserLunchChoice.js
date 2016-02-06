@@ -11,7 +11,7 @@ export default function onUserLunchChoice(io, socket, action) {
     PersonChoiceRepo.updateLunchOptionId(user.id, lunchOptionId),
     LunchOptionRepo.updateLastChosen(lunchOptionId),
   ]).then(([personChoice, choiceId]) => {
-    logger.info(`${user.name} successfully updated choice to: ${choiceId}`);
+    logger.info(`${user.name} successfully updated choice to: ${choiceId}`, personChoice);
     socket.broadcast.emit(Action, chooseLunchOption(user, choiceId));
   }).catch((err) => {
     logger.error(err);
