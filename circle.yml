@@ -1,7 +1,6 @@
 machine:
   environment:
     DATABASE_URL: postgres://ubuntu@localhost:5432/circle_test
-    DEBUG: lunch:*
     NODE_ENV: development
     SPLITWISE_CONSUMER_KEY:
     SPLITWISE_CONSUMER_SECRET:
@@ -19,8 +18,8 @@ test:
   override:
     - npm run build:server
     - npm run build:client
-    - npm run test:unit
-    - npm run test:lint
+    - npm run test:unit -- --reporter mocha-junit-reporter --reporter-options mochaFile=$CIRCLE_TEST_REPORTS/mocha/unit.xml
+    - npm run test:lint -- -o $CIRCLE_TEST_REPORTS/lint/eslint.xml -f junit
 
 general:
   artifacts:
