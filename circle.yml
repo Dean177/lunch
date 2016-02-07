@@ -18,7 +18,7 @@ test:
   override:
     - npm run build:server
     - npm run build:client
-    - npm run test:unit -- --reporter mocha-junit-reporter --reporter-options mochaFile=out/testresults/unit.xml
+    - npm run test:unit
     - npm run test:lint -- -o out/testresults/eslint.xml -f junit
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
