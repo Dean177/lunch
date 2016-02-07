@@ -3,18 +3,18 @@
   "version": "0.0.1",
   "description": "Get some lunch",
   "scripts": {
-    "clean": "node tasks/clean",
-    "static-assets": "node tasks/static-assets",
     "build": "npm run static-assets && npm run build:server",
-    "build:server": "gulp build",
     "build:client": "webpack --config webpack.config.prod.js --json > out/buildstats.json",
     "build:production": "npm run clean && npm run build && npm run build:client",
+    "build:server": "gulp build",
+    "clean": "node tasks/clean",
+    "seed-file": "knex seed:make --",
     "start": "npm run build && node out/server/index.js",
     "start:production": "npm run build:production && node out/server/index.js",
-    "seed-file": "knex seed:make --",
+    "static-assets": "node tasks/static-assets",
     "test": "npm run test:unit && npm run test:lint",
-    "test:unit": "gulp build && mocha out/test/**/*.spec.js",
-    "test:lint": "eslint src/**/*.js test/**/*.js gulpfile.js webpack.config.*"
+    "test:lint": "eslint src/**/*.js test/**/*.js gulpfile.js webpack.config.*",
+    "test:unit": "gulp build && mocha out/test/**/*.spec.js"
   },
   "author": "Dean Merchant <deanmerchant@gmail.com>",
   "repository": {

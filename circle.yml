@@ -17,8 +17,8 @@ dependencies:
 
 test:
   override:
-    - npm run build:client
     - npm run build:server
+    - npm run build:client
     - npm run test:unit
     - npm run test:lint
 
