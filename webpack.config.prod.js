@@ -24,7 +24,7 @@ module.exports = {
     new DedupePlugin(),
     new UglifyJsPlugin({
       compress: { warnings: false },
-      output: { comments: false }
+      output: { comments: false },
     }),
     new OccurenceOrderPlugin(),
   ],

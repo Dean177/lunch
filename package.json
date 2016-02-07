@@ -8,7 +8,7 @@
     "build:production": "npm run clean && npm run build && npm run build:client",
     "build:server": "gulp build",
     "clean": "node tasks/clean",
-    "seed-file": "knex seed:make --",
+    "seed-file": "knex seed:make",
     "start": "npm run build && node out/server/index.js",
     "start:production": "npm run build:production && node out/server/index.js",
     "static-assets": "node tasks/static-assets",
