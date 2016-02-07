@@ -20,7 +20,6 @@
   - updateWhoIsfetchingLunch in a single query
   
 ###Client:   
-  - Move to lodash and `import find from 'lodash/find` syntax
   - Remove fontawesome (I must be using 2 icons total)
   - Make somthing happen on gone to fetch lunch
   - Autosuggest previous options!
