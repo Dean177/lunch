@@ -13,10 +13,13 @@ import onOfferToGetLunch from './onOfferToGetLunch';
 import onSplitwiseAuth from './onSplitwiseAuth';
 import onUserLunchChoice from './onUserLunchChoice';
 
+const LunchOptionRepo = require('../repository/LunchOptionRepo');
+const PersonChoiceRepo = require('../repository/PersonChoiceRepo');
+
 const actionHandlers = {
   [authTypes.Authenticate]: onAuthenticateUser,
   [authTypes.SplitwiseAuth]: onSplitwiseAuth,
-  [lunchTypes.AddLunchOption]: onAddLunchOption(),
+  [lunchTypes.AddLunchOption]: onAddLunchOption(LunchOptionRepo, PersonChoiceRepo),
   [userTypes.ChangeImageUrl]: onChangeImageUrl,
   [userTypes.ChangeName]: onChangeName,
   [lunchTypes.ChangeOrderDetails]: onChangeOrderDetails,

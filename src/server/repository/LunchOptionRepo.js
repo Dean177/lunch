@@ -2,6 +2,8 @@ import { v4 as uuid } from 'node-uuid';
 const db = require('./db');
 const logger = require('../../../logger-config');
 
+logger.warn('accessed LOR');
+
 export const isExistingOption = (optionName) => {
   return db('lunch_options')
     .where('name', 'ilike', optionName)
