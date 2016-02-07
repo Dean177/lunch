@@ -18,9 +18,13 @@ test:
   override:
     - npm run build:server
     - npm run build:client
-    - npm run test:unit -- --reporter mocha-junit-reporter --reporter-options mochaFile=$CIRCLE_TEST_REPORTS/mocha/unit.xml
-    - npm run test:lint -- -o $CIRCLE_TEST_REPORTS/lint/eslint.xml -f junit
+    - npm run test:unit -- --reporter mocha-junit-reporter --reporter-options mochaFile=out/testresults/unit.xml
+    - npm run test:lint -- -o out/testresults/eslint.xml -f junit
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/out/testresults/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 
 general:
   artifacts:
     - "out/buildstats.json"
+    - "out/testresults"

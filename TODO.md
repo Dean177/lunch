@@ -43,7 +43,6 @@
   - Full integration tests: http://nightwatchjs.org/
   - Testing splitwise integration? 
   - Set up test parallelism on CI
-  - publish test artifacts (test & lint results )
   - Publish bundle size analysis
 
 ###Problems to solve:
