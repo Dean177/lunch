@@ -1,7 +1,7 @@
 machine:
   environment:
     DATABASE_URL: postgres://ubuntu@localhost:5432/circle_test
-    NODE_ENV: development
+    NODE_ENV: production
     SPLITWISE_CONSUMER_KEY:
     SPLITWISE_CONSUMER_SECRET:
   node:
