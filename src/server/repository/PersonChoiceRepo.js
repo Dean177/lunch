@@ -2,6 +2,8 @@ const uuid = require('node-uuid').v4;
 const db = require('./db');
 const logger = require('../../../logger-config');
 
+logger.warn('accessed PCR');
+
 export const mapPersonChoiceJoinUserRowToPersonChoice = ({ id, orderDetails, paymentAmount, isFetching, dateChosen, lunchOptionId, userId, name, imageUrl }) => {
   return {
     id,
