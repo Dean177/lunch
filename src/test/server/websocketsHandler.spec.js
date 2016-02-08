@@ -3,7 +3,7 @@ import spies from 'chai-spies';
 const { expect } = chai;
 chai.use(spies);
 import { values } from 'underscore';
-import configureWebsocket, { configureActionHandlers, validateActionFormat, getWebsocketHandler } from '../../server/websocketHandler';
+import configureWebsocket, { getSocketActionHandler, validateActionFormat, getWebsocketHandler } from '../../server/websocketHandler';
 
 describe('validateActionFormat', () => {
   let onError;
@@ -33,7 +33,7 @@ describe('validateActionFormat', () => {
   });
 });
 
-describe('configureActionHandlers', () => {
+describe('getSocketActionHandler', () => {
   const spyAction = { type: 'SPY_ACTION_TYPE', payload: {}, meta: { user: {} } };
   let actionHandler;
   let spyIo;
@@ -44,7 +44,7 @@ describe('configureActionHandlers', () => {
     spyIo = chai.spy();
     socket = chai.spy();
     onActionType = chai.spy();
-    actionHandler = configureActionHandlers({ [spyAction.type]: onActionType }, spyIo)(socket);
+    actionHandler = getSocketActionHandler({ [spyAction.type]: onActionType }, spyIo)(socket);
   });
 
   it('Should call the handler matching an actions type', () => {

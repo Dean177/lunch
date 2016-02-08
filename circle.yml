@@ -1,11 +1,11 @@
 machine:
-  environment:
-    DATABASE_URL: postgres://ubuntu@localhost:5432/circle_test
-    NODE_ENV: development
-    SPLITWISE_CONSUMER_KEY:
-    SPLITWISE_CONSUMER_SECRET:
   node:
     version: 5.1.0
+  environment:
+    DATABASE_URL: postgres://ubuntu@localhost:5432/circle_test
+    NODE_ENV: production
+    SPLITWISE_CONSUMER_KEY:
+    SPLITWISE_CONSUMER_SECRET:
   services:
     - postgresql
 
@@ -16,9 +16,11 @@ dependencies:
 
 test:
   override:
+    - node -v & npm -v
     - npm run build:server
     - npm run build:client
     - npm run test:unit
+    - npm run test:unit -- --reporter mocha-junit-reporter --reporter-options mochaFile=out/testresults/unit.xml
     - npm run test:lint -- -o out/testresults/eslint.xml -f junit
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/

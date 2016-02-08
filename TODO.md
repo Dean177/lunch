@@ -21,7 +21,7 @@
   
 ###Client:   
   - Remove fontawesome (I must be using 2 icons total)
-  - Make somthing happen on gone to fetch lunch
+  - Make something happen on gone to fetch lunch
   - Autosuggest previous options!
   - Navigate the user back to the lunch page of they submit the UserConfig form with enter
   - makeSure clients can handle users 'adding' an existing option (Especially if it is just a different casing etc)
