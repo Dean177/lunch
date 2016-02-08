@@ -13,7 +13,7 @@ function onInvalidAction(action) {
   logger.info('Potentially malformed action received', JSON.stringify(action, null, 2));
 }
 
-export function configureActionHandlers(actionHandlers, websockets) {
+export function getSocketActionHandler(actionHandlers, websockets) {
   return (socket) => (action) => {
     validateActionFormat(action, onInvalidAction);
     if (!actionHandlers.hasOwnProperty(action.type)) {
@@ -46,7 +46,8 @@ export default function configureWebsockets(websockets, actionHandlers) {
   // Necessary because old lunchOptions & personChoices are pruned regularly
   setInterval(sendCurrentState.bind(this, websockets), 60 * 1000);
 
-  websockets.on('connection', getWebsocketHandler(connections, configureActionHandlers(actionHandlers, websockets)));
+  const socketActionHandler = getSocketActionHandler(actionHandlers, websockets);
+  websockets.on('connection', getWebsocketHandler(connections, socketActionHandler));
 
   return websockets;
 }

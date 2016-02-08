@@ -1,10 +1,8 @@
-import * as LunchOptionRepo from '../repository/LunchOptionRepo';
-import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
 import { addLunchOption } from '../../shared/actionCreators/lunchActionCreators';
 import { Action } from '../../shared/constants/WeboscketMessageTypes';
 const logger = require('../../../logger-config');
 
-export default function onAddLunchOption(lunchOptionRepo = LunchOptionRepo, personChoiceRepo = PersonChoiceRepo) {
+export default function onAddLunchOption(lunchOptionRepo, personChoiceRepo) {
   return (io, socket, action) => {
     const { payload: { name }, meta: { user } } = action;
     logger.info(`LunchOption added by ${user.name}: ${name}`);
