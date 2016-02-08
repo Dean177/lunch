@@ -1,11 +1,11 @@
 machine:
+  node:
+    version: 5.1.0
   environment:
     DATABASE_URL: postgres://ubuntu@localhost:5432/circle_test
     NODE_ENV: production
     SPLITWISE_CONSUMER_KEY:
     SPLITWISE_CONSUMER_SECRET:
-  node:
-    version: 5.1.0
   services:
     - postgresql
 
@@ -16,6 +16,7 @@ dependencies:
 
 test:
   override:
+    - node -v & npm -v
     - npm run build:server
     - npm run build:client
     - npm run test:unit
