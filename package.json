@@ -64,7 +64,7 @@
     "history": "1.17.0",
     "http": "0.0.0",
     "imports-loader": "0.6.5",
-    "jsdom": "8.0.2",
+    "jsdom": "8.0.4",
     "knex": "0.10.0",
     "mocha": "2.4.5",
     "mocha-junit-reporter": "1.9.0",
