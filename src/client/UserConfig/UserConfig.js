@@ -48,21 +48,31 @@ class LunchPicker extends Component {
           <form onSubmit={this.onSubmit}>
             <div className='form-group'>
               <label>Name</label>
-              <input onChange={this.onNameChange} value={user.name} type='text' className='form-control' />
+              <input
+                onChange={this.onNameChange}
+                value={user.name}
+                type='text'
+                className='form-control' />
             </div>
 
             <div className='form-group'>
               <label>Image Url</label>
               <div className='profile-image'>
                 <PersonSquare person={user} />
-                <input onChange={this.onImageChange} value={user.imageUrl} type='text' className='form-control url-input' />
+                <input
+                  onChange={this.onImageChange}
+                  value={user.imageUrl}
+                  type='text'
+                  className='form-control url-input' />
               </div>
             </div>
 
             <div className='form-group'>
               <SplitwiseAuthorizer
                 authorizationLink={auth.splitwiseAuthorizationLink}
-                attemptSplitwiseAuth={bindActionCreators(splitwiseAuthAttempt, this.props.dispatch)}
+                attemptSplitwiseAuth={
+                  bindActionCreators(splitwiseAuthAttempt, this.props.dispatch)
+                }
                 authFailureMessage={auth.splitwiseAuthFailureMessage}
                 isAuthorized={auth.hasAuthorizedSplitwiseToken}
                 isAuthorizing={auth.isAttemptingSplitwiseAuthentication}

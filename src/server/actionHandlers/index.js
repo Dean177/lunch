@@ -16,7 +16,7 @@ import onUserLunchChoice from './onUserLunchChoice';
 const LunchOptionRepo = require('../repository/LunchOptionRepo');
 const PersonChoiceRepo = require('../repository/PersonChoiceRepo');
 
-const actionHandlers = {
+module.exports = {
   [authTypes.Authenticate]: onAuthenticateUser,
   [authTypes.SplitwiseAuth]: onSplitwiseAuth,
   [lunchTypes.AddLunchOption]: onAddLunchOption(LunchOptionRepo, PersonChoiceRepo),
@@ -29,5 +29,3 @@ const actionHandlers = {
   [lunchTypes.NotGettingLunch]: onNotGettingLunch,
   [lunchTypes.OfferToGetLunch]: onOfferToGetLunch,
 };
-
-export default actionHandlers;

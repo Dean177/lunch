@@ -56,22 +56,34 @@ export default class Sidebar extends Component {
     const displayPaymentAmount = hasAuthorizedSplitwiseToken && !isFetching;
 
     return (
-      <Motion defaultStyle={{ xPosition: -500 }} style={{ xPosition: spring(userLunchChoice ? 0 : -500) }}>
+      <Motion defaultStyle={{ xPosition: -500 }}
+              style={{ xPosition: spring(userLunchChoice ? 0 : -500) }}>
         {value => (
           <div className='Sidebar' style={{ right: value.xPosition }}>
             <form className='User-Prefs'>
               <div className='form-group' style={{ display: 'none' }}>
-                <button className='btn btn-primary-outline Ready' onClick={this.onReady}>READY</button>
+                <button className='btn btn-primary-outline Ready'
+                        onClick={this.onReady}>
+                  READY
+                </button>
               </div>
 
               <div className='form-group action-buttons'>
-                <button className={classnames('btn btn-secondary i-get', { hidden: isFetching })}
-                        onClick={this.onGetLunch}>
+                <button
+                   className={classnames('btn btn-secondary i-get', { hidden: isFetching })}
+                   onClick={this.onGetLunch}>
                   I GET
                 </button>
-                <button className={classnames('btn btn-secondary i-no-get', { hidden: !isFetching })}
-                        onClick={this.onNoGetLunch}>I NO GET</button>
-                <button className={classnames('btn btn-secondary i-gone', { hidden: !isFetching })} onClick={this.onGone}>I GONE</button>
+                <button
+                    className={classnames('btn btn-secondary i-no-get', { hidden: !isFetching })}
+                    onClick={this.onNoGetLunch}>
+                  I NO GET
+                </button>
+                <button
+                    className={classnames('btn btn-secondary i-gone', { hidden: !isFetching })}
+                    onClick={this.onGone}>
+                  I GONE
+                </button>
               </div>
 
               <div className='form-group'>
@@ -100,7 +112,7 @@ export default class Sidebar extends Component {
 
             <div className='OthersOrders'>
               {peopleChoices
-                .filter((personChoice) => personChoice.lunchOptionId === userLunchChoice.lunchOptionId)
+                .filter((pChoice) => pChoice.lunchOptionId === userLunchChoice.lunchOptionId)
                 .map(personChoice => (
                   <PersonOrder key={personChoice.person.id} personChoice={personChoice} />
                 ))}

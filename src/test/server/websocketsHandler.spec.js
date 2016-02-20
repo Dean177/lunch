@@ -2,8 +2,11 @@ import chai from 'chai';
 import spies from 'chai-spies';
 const { expect } = chai;
 chai.use(spies);
-import { values } from 'underscore';
-import configureWebsocket, { getSocketActionHandler, validateActionFormat, getWebsocketHandler } from '../../server/websocketHandler';
+import {
+  getSocketActionHandler,
+  validateActionFormat,
+  getWebsocketHandler,
+} from '../../server/websocketHandler';
 
 describe('validateActionFormat', () => {
   let onError;
@@ -63,30 +66,15 @@ describe('getSocketActionHandler', () => {
 
 describe('getWebsocketHandler', () => {
   let actionHandlerApy;
-  let connections;
   let socketSpy;
 
   beforeEach(() => {
     actionHandlerApy = chai.spy();
-    connections = {};
     socketSpy = { on: chai.spy() };
   });
 
   it('Gets a new action handler for every websocket connection', () => {
-    getWebsocketHandler(connections, actionHandlerApy)(socketSpy);
+    getWebsocketHandler(actionHandlerApy)(socketSpy);
     expect(actionHandlerApy).to.have.been.called.with(socketSpy);
-  });
-
-  it('Should store each new websocket connection in the provided object', () => {
-    getWebsocketHandler(connections, actionHandlerApy)(socketSpy);
-    expect(values(connections)[0].websocket).to.equal(socketSpy);
-  });
-});
-
-describe('configureWebsockets', () => {
-  it('Should attach the "connection" handler', () => {
-    const spyIo = { on: chai.spy() };
-    configureWebsocket(spyIo, {});
-    expect(spyIo.on).to.have.been.called.with('connection');
   });
 });

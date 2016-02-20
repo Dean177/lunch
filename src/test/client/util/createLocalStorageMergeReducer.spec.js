@@ -21,7 +21,7 @@ describe('createLocalStorageMergeReducer', () => {
     expect(localStorage.getItem(stateKey)).to.equal(JSON.stringify(initialState));
   });
 
-  it('Will attempt to get its initial state from localStorage, falling back to the provided initial state', () => {
+  it('Attempts to use localStorage, falling back to the provided initial state', () => {
     const localStorage = mockLocalStorage();
     const localStorageState = { aKey: 'savedA', bKey: 'savedB' };
     localStorage.setItem(stateKey, JSON.stringify(localStorageState));
@@ -32,21 +32,27 @@ describe('createLocalStorageMergeReducer', () => {
     expect(savedState).to.deep.equal(localStorageState);
   });
 
-  it('Will merge state returned by the reducerObject into its current state to produce a new state object', () => {
-    const action = { type: SomeActionType, payload: { key: 'bKey', value: 'newBValue' } };
-    const reducer = createReducer(mockLocalStorage());
-    const nextState = reducer(initialState, action);
-    expect(nextState).to.deep.equal({ aKey: initialState.aKey, bKey: action.payload.value });
-  });
+  it(
+    'Merges state returned by the reducerObject into the current state to produce the new state',
+    () => {
+      const action = { type: SomeActionType, payload: { key: 'bKey', value: 'newBValue' } };
+      const reducer = createReducer(mockLocalStorage());
+      const nextState = reducer(initialState, action);
+      expect(nextState).to.deep.equal({ aKey: initialState.aKey, bKey: action.payload.value });
+    }
+  );
 
-  it(`Will fall back to using initial state where the retrieved localStorage doesn't match the shape of the initial state`, () => {
-    const localStorage = mockLocalStorage();
-    const localStorageState = { cKey: 'savedC' };
-    localStorage.setItem(stateKey, JSON.stringify(localStorageState));
+  it(
+    `Falls back to the initial state if localStorage doesn't match the shape`,
+    () => {
+      const localStorage = mockLocalStorage();
+      const localStorageState = { cKey: 'savedC' };
+      localStorage.setItem(stateKey, JSON.stringify(localStorageState));
 
-    const reducer = createReducer(localStorage);
-    const savedState = reducer(undefined, { type: '', payload: {} });
+      const reducer = createReducer(localStorage);
+      const savedState = reducer(undefined, { type: '', payload: {} });
 
-    expect(savedState).to.deep.equal(initialState);
-  });
+      expect(savedState).to.deep.equal(initialState);
+    }
+  );
 });
