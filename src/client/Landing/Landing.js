@@ -1,37 +1,30 @@
 import './Landing.scss';
 import React, { Component, PropTypes } from 'react';
 import { Person, LunchOption } from '../PropTypes';
-import { connect } from 'react-redux';
-import { routeActions } from 'react-router-redux';
-import { compose } from 'underscore';
-import { enterOptionName, addLunchOption } from '../../shared/actionCreators/lunchActionCreators';
 import OptionAutosuggest from '../components/OptionAutosuggest';
 
-@connect(state => ({
-  optionName: state.lunch.optionName,
-  lunchOptions: state.lunch.lunchOptions,
-  user: state.user,
-}))
 class Landing extends Component {
   static propTypes = {
     optionName: PropTypes.string.isRequired,
     lunchOptions: PropTypes.arrayOf(LunchOption).isRequired,
     user: Person.isRequired,
-    dispatch: PropTypes.func.isRequired,
+    addLunchOption: PropTypes.func.isRequired,
+    enterOptionName: PropTypes.func.isRequired,
+    navigateToRoute: PropTypes.func.isRequired,
   };
 
   onSubmit = (event) => {
     event.preventDefault();
-    const { dispatch, user, optionName } = this.props;
+    const { addLunchOption, user, optionName } = this.props;
 
     if (optionName.length > 0) {
-      dispatch(addLunchOption(user, optionName));
+      addLunchOption(user, optionName);
     }
 
-    dispatch(routeActions.push('/lunch'));
+    this.props.navigateToRoute('/lunch');
   };
 
-  onNameChange = compose(this.props.dispatch, enterOptionName);
+  onNameChange = this.props.enterOptionName;
 
   getSuggestions = (input) => {
     if (input.trim().length < 2) {

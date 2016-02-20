@@ -1,44 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { Person, LunchOption, PersonChoice } from '../PropTypes';
-import { find } from 'underscore';
-import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { bindActionCreators } from 'redux';
-import {
-  addLunchOption,
-  changeOrderDetails,
-  chooseLunchOption,
-  enterOptionName,
-  updatePaymentAmount,
-  goneToFetchLunch,
-  notGettingLunch,
-  offerToGetLunch,
-  toggleNewOption,
-} from '../../shared/actionCreators/lunchActionCreators';
 import LunchPicker from '../components/LunchPicker';
 import Sidebar from '../components/Sidebar';
 
-
-@connect(appState => {
-  const userLunchChoice = find(
-    appState.lunch.peopleChoices,
-    (personChoice) => (personChoice.person.id === appState.user.id)
-  );
-
-  return {
-    enteringNewOption: appState.lunch.enteringNewOption,
-    hasAuthorizedSplitwiseToken: appState.auth.hasAuthorizedSplitwiseToken,
-    lunchOptions: appState.lunch.lunchOptions,
-    optionName: appState.lunch.optionName,
-    peopleChoices: appState.lunch.peopleChoices,
-    selectedOptionId: appState.lunch.selectedOptionId,
-    user: appState.user,
-    userLunchChoice,
-  };
-})
 class ChooseLunch extends Component {
   static propTypes = {
-    dispatch: PropTypes.func,
     enteringNewOption: PropTypes.bool,
     hasAuthorizedSplitwiseToken: PropTypes.bool.isRequired,
     lunchOptions: PropTypes.arrayOf(LunchOption),
@@ -47,11 +14,20 @@ class ChooseLunch extends Component {
     selectedOptionId: PropTypes.string,
     user: Person,
     userLunchChoice: PersonChoice,
+
+    addLunchOption: PropTypes.func,
+    changeOrderDetails: PropTypes.func,
+    chooseLunchOption: PropTypes.func,
+    enterOptionName: PropTypes.func,
+    goneToFetchLunch: PropTypes.func,
+    notGettingLunch: PropTypes.func,
+    offerToGetLunch: PropTypes.func,
+    toggleNewOption: PropTypes.func,
+    updatePaymentAmount: PropTypes.func,
   };
 
   render() {
     const {
-      dispatch,
       enteringNewOption,
       hasAuthorizedSplitwiseToken,
       lunchOptions,
@@ -59,6 +35,18 @@ class ChooseLunch extends Component {
       peopleChoices,
       user,
       userLunchChoice,
+    } = this.props;
+
+    const {
+      addLunchOption,
+      changeOrderDetails,
+      chooseLunchOption,
+      enterOptionName,
+      goneToFetchLunch,
+      notGettingLunch,
+      offerToGetLunch,
+      toggleNewOption,
+      updatePaymentAmount,
     } = this.props;
     return (
       <div className='ChooseLunch'>
@@ -72,26 +60,25 @@ class ChooseLunch extends Component {
             optionName={optionName}
             peopleChoices={peopleChoices}
             user={user}
-            {...bindActionCreators(
-              { addLunchOption, chooseLunchOption, enterOptionName, toggleNewOption },
-              dispatch
-            )}
+            { ...{
+              addLunchOption,
+              chooseLunchOption,
+              enterOptionName,
+              toggleNewOption,
+            } }
           />
           <Sidebar
             hasAuthorizedSplitwiseToken={hasAuthorizedSplitwiseToken}
             peopleChoices={peopleChoices}
             user={user}
             userLunchChoice={userLunchChoice}
-            {...bindActionCreators(
-              {
-                changeOrderDetails,
-                updatePaymentAmount,
-                goneToFetchLunch,
-                notGettingLunch,
-                offerToGetLunch,
-              },
-              dispatch
-            )}
+            { ...{
+              changeOrderDetails,
+              goneToFetchLunch,
+              offerToGetLunch,
+              notGettingLunch,
+              updatePaymentAmount,
+            } }
           />
         </div>
       </div>

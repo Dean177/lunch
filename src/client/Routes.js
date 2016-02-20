@@ -14,7 +14,6 @@ const routes = (
     <Route path='gone' component={LunchFetching} />
     <Redirect from='authorized-splitwise' to='user' />
   </Route>
-
 );
 
 export default routes;

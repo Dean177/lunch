@@ -15,15 +15,12 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   const webpack = require('webpack');
   const webpackConfig = require('../../webpack.config.dev.js');
+  const devMiddleware = require('webpack-dev-middleware');
+  const hotloaderMiddleware = require('webpack-hot-middleware');
   const compiler = webpack(webpackConfig);
   logger.info('Serving assets from webpack');
-  app.use(
-    require('webpack-dev-middleware')(
-      compiler,
-      { noInfo: true, publicPath: webpackConfig.output.publicPath }
-    )
-  );
-  app.use(require('webpack-hot-middleware')(compiler, { noInfo: true }));
+  app.use(devMiddleware(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
+  app.use(hotloaderMiddleware(compiler));
 }
 
 app.get('/status', (req, res) => { res.send('hungry'); });
@@ -33,10 +30,7 @@ app.get('/*', (req, res) => {
 });
 
 const lunchServer = new Server(app);
-
-
-const actionHandlers = require('./actionHandlers');
 const configureWebsocket = require('./websocketHandler').default;
-configureWebsocket(lunchServer, actionHandlers);
+configureWebsocket(lunchServer);
 
 module.exports = lunchServer;

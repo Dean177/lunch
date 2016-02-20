@@ -1,40 +1,35 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
 import { Auth, Person } from '../PropTypes';
-import { changeName, changeImageUrl } from '../../shared/actionCreators/userActionCreator';
-import { splitwiseAuthAttempt } from '../../shared/actionCreators/authActionCreator';
 import PersonSquare from '../components/PersonSquare';
 import SplitwiseAuthorizer from './components/SplitwiseAuthorizer';
 
 
-@connect(appState => ({
-  auth: appState.auth,
-  user: appState.user,
-}))
 class LunchPicker extends Component {
   static propTypes = {
     auth: Auth.isRequired,
     user: Person.isRequired,
-    dispatch: PropTypes.func.isRequired,
+    changeImageUrl: PropTypes.func.isRequired,
+    changeName: PropTypes.func.isRequired,
+    navigateToRoute: PropTypes.func.isRequired,
+    splitwiseAuthAttempt: PropTypes.func.isRequired,
   };
 
   onSubmit = (event) => {
     event.preventDefault();
-    // TODO navigate back to user page
+    this.props.navigateToRoute('/lunch');
   };
 
   onImageChange = (event) => {
-    this.props.dispatch(changeImageUrl(this.props.user.id, event.target.value));
+    this.props.changeImageUrl(this.props.user.id, event.target.value);
   };
 
   onNameChange = (event) => {
-    this.props.dispatch(changeName(this.props.user.id, event.target.value));
+    this.props.changeName(this.props.user.id, event.target.value);
   };
 
   render() {
-    const { auth, user } = this.props;
+    const { auth, user, splitwiseAuthAttempt } = this.props;
 
     return (
       <div className='UserConfig'>
@@ -70,9 +65,7 @@ class LunchPicker extends Component {
             <div className='form-group'>
               <SplitwiseAuthorizer
                 authorizationLink={auth.splitwiseAuthorizationLink}
-                attemptSplitwiseAuth={
-                  bindActionCreators(splitwiseAuthAttempt, this.props.dispatch)
-                }
+                attemptSplitwiseAuth={splitwiseAuthAttempt}
                 authFailureMessage={auth.splitwiseAuthFailureMessage}
                 isAuthorized={auth.hasAuthorizedSplitwiseToken}
                 isAuthorizing={auth.isAttemptingSplitwiseAuthentication}
