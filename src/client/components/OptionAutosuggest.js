@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import Autosuggest from 'react-autosuggest';
 
+const renderSuggestion = (lunchOption) => <span>{lunchOption.name}</span>;
+const getSuggestionValue = (lunchOption) => lunchOption.name;
+
 class OptionAutosuggest extends Component {
   static propTypes = {
     placeholder: PropTypes.string,
@@ -16,8 +19,8 @@ class OptionAutosuggest extends Component {
     return (
       <Autosuggest
         suggestions={ getSuggestions(value) }
-        renderSuggestion={(lunchOption) => <span>{lunchOption.name}</span>}
-        getSuggestionValue={(lunchOption) => lunchOption.name}
+        renderSuggestion={renderSuggestion}
+        getSuggestionValue={getSuggestionValue}
         inputProps={{
           className: inputClass,
           value,

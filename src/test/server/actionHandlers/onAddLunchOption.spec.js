@@ -12,7 +12,11 @@ describe('onAddLunchOption', () => {
   const testUser = { id: '123', name: 'test-user' };
   const addExistingLunchOptionAction = addLunchOption({ id: '1', name: 'Sheep' }, 'Exists', '2');
   addExistingLunchOptionAction.meta.user = testUser;
-  const addNonExistingLunchOptionAction = addLunchOption({ id: '1', name: 'Sheep' }, 'Beetroot', '2');
+  const addNonExistingLunchOptionAction = addLunchOption(
+    { id: '1', name: 'Sheep' },
+    'Beetroot',
+    '2'
+  );
   addNonExistingLunchOptionAction.meta.user = testUser;
 
   const ioMock = { };
@@ -51,9 +55,9 @@ describe('onAddLunchOption', () => {
   });
 
   it('Updates other clients once the option has been added', () => {
-    return onAddLunchOption(LunchRepoMock, PersonChoiceRepoMock)(ioMock, socketMock, addNonExistingLunchOptionAction)
-      .then(() => {
-        expect(socketMock.broadcast.emit).to.have.been.called();
-      });
+    const onAddLunchWithMocks = onAddLunchOption(LunchRepoMock, PersonChoiceRepoMock);
+    return onAddLunchWithMocks(ioMock, socketMock, addNonExistingLunchOptionAction).then(() => {
+      expect(socketMock.broadcast.emit).to.have.been.called();
+    });
   });
 });

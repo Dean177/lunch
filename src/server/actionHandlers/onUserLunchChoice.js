@@ -2,7 +2,7 @@ import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
 import * as LunchOptionRepo from '../repository/LunchOptionRepo';
 import { Action } from '../../shared/constants/WeboscketMessageTypes';
 import { chooseLunchOption } from '../../shared/actionCreators/lunchActionCreators';
-const logger = require('../../../logger-config');
+const logger = require('../logger')('onUserLunchChoice');
 
 export default function onUserLunchChoice(io, socket, action) {
   const { payload: { lunchOptionId }, meta: { user } } = action;

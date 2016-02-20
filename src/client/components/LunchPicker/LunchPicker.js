@@ -20,15 +20,26 @@ export default class LunchPicker extends Component {
     user: Person.isRequired,
   };
 
+  constructor() {
+    super();
+    this.onMeasureState = this.onMeasureState.bind(this);
+    this.onOptionSelected = this.onOptionSelected.bind(this);
+  }
+
   state = { squareDimension: 0 };
+
+
+  onMeasureState(dimensions) {
+    this.setState({ squareDimension: dimensions.height });
+  }
 
   onOptionSelected(lunchOptionId) {
     this.props.chooseLunchOption(this.props.user, lunchOptionId);
   }
 
-  getChooserCount(peopleChoices, personId, userlunchOptionId) {
+  getChooserCount(peopleChoices, personId, userLunchOptionId) {
     return peopleChoices
-      .filter(({ lunchOptionId }) => (lunchOptionId === userlunchOptionId))
+      .filter(({ lunchOptionId }) => (lunchOptionId === userLunchOptionId))
       .map(({ person }) => (person.id))
       .indexOf(personId);
   }
@@ -54,7 +65,8 @@ export default class LunchPicker extends Component {
       .filter(({ lunchOptionId }) => !!lunchOptionId)
       .map((personChoice) => {
         const { person, lunchOptionId } = personChoice;
-        const xPos = squareDimension * this.getChooserCount(peopleChoices, person.id, lunchOptionId);
+        const chooserCount = this.getChooserCount(peopleChoices, person.id, lunchOptionId);
+        const xPos = squareDimension * chooserCount;
         const yPos = squareDimension * this.getChoiceIndex(lunchOptions, lunchOptionId);
 
         return {
@@ -77,8 +89,15 @@ export default class LunchPicker extends Component {
       enterOptionName,
     } = this.props;
 
-    const lunchOptionsWithCountChosen = this.lunchOptionsWithCountChosen(lunchOptions, peopleChoices);
-    const choices = this.peopleChoicesWithCoordinates(lunchOptions, peopleChoices, this.state.squareDimension);
+    const lunchOptionsWithCountChosen = this.lunchOptionsWithCountChosen(
+      lunchOptions,
+      peopleChoices
+    );
+    const choices = this.peopleChoicesWithCoordinates(
+      lunchOptions,
+      peopleChoices,
+      this.state.squareDimension
+    );
 
     const previousDaysLunchOptions = [...lunchOptions, { id: '23', name: 'zzzzz' }]; // TODO
     const autoSuggestOptions = difference(previousDaysLunchOptions, lunchOptions);
@@ -87,12 +106,14 @@ export default class LunchPicker extends Component {
       <div className='LunchPicker'>
         <div className='LunchOptions'>
           {lunchOptionsWithCountChosen.map(({ id, name, chosenCount }) =>
-            <LunchOption optionName={name}
-                         chosenCount={chosenCount}
-                         key={id}
-                         onChosen={this.onOptionSelected.bind(this, id)} />
+            <LunchOption
+              optionId={id}
+              optionName={name}
+              chosenCount={chosenCount}
+              key={id}
+              onChosen={this.onOptionSelected} />
           )}
-          <Measure whitelist={['height']} onMeasure={(dimensions) => this.setState({ squareDimension: dimensions.height })} >
+          <Measure whitelist={['height']} onMeasure={this.onMeasureState} >
             <OptionAdder
               user={user}
               lunchOptions={autoSuggestOptions}
@@ -105,10 +126,10 @@ export default class LunchPicker extends Component {
         <div className='PeopleChoices'>
           {choices.map(({ person, isFetching, xPos, yPos }) =>
             <Motion key={person.id} style={{ person, xPos: spring(xPos), yPos: spring(yPos) }}>
-              {(interpolatedChoice) =>
+              {(choicePos) =>
                 <PersonSquare person={person} isFetching={isFetching} style={{
-                  transform: `translate3d(${interpolatedChoice.xPos}px, ${interpolatedChoice.yPos}px, 0)`,
-                  zIndex: interpolatedChoice.yPos,
+                  transform: `translate3d(${choicePos.xPos}px, ${choicePos.yPos}px, 0)`,
+                  zIndex: choicePos.yPos,
                 }} />
               }
             </Motion>

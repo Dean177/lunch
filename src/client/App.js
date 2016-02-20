@@ -5,14 +5,14 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import { routeActions } from 'react-router-redux';
 import { find } from 'underscore';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
+import { browserHistory } from 'react-router';
 import routes from './Routes';
 import configureStore from './util/configureStore';
 import { socket } from './util/socket';
 import { Authenticate } from '../shared/constants/actionTypes/authActionTypes';
 import { Action, Connection } from '../shared/constants/WeboscketMessageTypes';
 
-const history = createBrowserHistory();
+const history = browserHistory;
 const store = configureStore(history);
 
 function navigateIfUserHasChosenLunchOption(action) {
@@ -29,13 +29,16 @@ function navigateIfUserHasChosenLunchOption(action) {
 
 socket.on(Action, (action) => {
   // Actions sent from the server via action creators may include the 'isServerAction' property,
-  // need to remove this or the client will send the action back to the server again du to the 'ServerAction' middleware
-  if (action.meta && action.meta.hasOwnProperty('isServerAction')) {
-    delete action.meta.isServerAction;
-  }
-  store.dispatch(action);
+  // need to remove this or the client will send the action back to the server again due to the
+  // 'ServerAction' middleware
+  const isFromServer = action.meta && action.meta.hasOwnProperty('isServerAction');
+  const remoteAction = isFromServer ?
+    { ...action, meta: { ...action.meta, isServerAction: false } } :
+    action;
+
+  store.dispatch(remoteAction);
   if (action.meta && action.meta.navigateTo) {
-    store.dispatch(navigateIfUserHasChosenLunchOption(action));
+    store.dispatch(navigateIfUserHasChosenLunchOption(remoteAction));
   }
 });
 
