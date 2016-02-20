@@ -1,6 +1,6 @@
 import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
 import { Action } from '../../shared/constants/WeboscketMessageTypes';
-const logger = require('../../../logger-config');
+const logger = require('../logger')('onNotGettingLunch');
 
 export default function onNotGettingLunch(io, socket, action) {
   const { payload: { lunchOptionId }, meta: { user } } = action;

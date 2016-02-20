@@ -1,7 +1,7 @@
 import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
 import { Action } from '../../shared/constants/WeboscketMessageTypes';
 import updatedPersonChoice from '../actionCreators/updatedPersonChoice';
-const logger = require('../../../logger-config');
+const logger = require('../logger')('onChangeOrderDetails');
 
 export default function onChangeOrderDetails(io, socket, action) {
   const { payload: { orderDetails }, meta: { user } } = action;

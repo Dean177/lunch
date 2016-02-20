@@ -20,7 +20,8 @@ class OptionAdder extends Component {
   };
 
   onBlur = () => {
-    // If the 'toggleNewOption' function is fired immediately, go button will be hidden before the click can be registered.
+    // If the 'toggleNewOption' function is fired immediately the go button will be hidden before
+    // the click can be registered.
     setTimeout(this.props.toggleNewOption, 100);
   };
 
@@ -36,7 +37,12 @@ class OptionAdder extends Component {
     let childElement;
     if (!this.props.isAdding) {
       childElement = (
-        <button className='btn btn-primary add-button' type='button' onClick={this.props.toggleNewOption}>+</button>
+        <button
+            className='btn btn-primary add-button'
+            type='button'
+            onClick={this.props.toggleNewOption}>
+          +
+        </button>
       );
     } else {
       childElement = (

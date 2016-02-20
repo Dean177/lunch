@@ -1,30 +1,39 @@
 const uuid = require('node-uuid').v4;
 const db = require('./db');
-const logger = require('../../../logger-config');
+const logger = require('../logger')('PersonChoiceRepo');
 
-logger.warn('accessed PCR');
-
-export const mapPersonChoiceJoinUserRowToPersonChoice = ({ id, orderDetails, paymentAmount, isFetching, dateChosen, lunchOptionId, userId, name, imageUrl }) => {
-  return {
-    id,
-    orderDetails,
-    paymentAmount,
-    isFetching,
-    dateChosen: parseInt(dateChosen),
-    lunchOptionId,
-    person: { id: userId, name, imageUrl },
-  };
-};
+export const mapPersonChoiceJoinUserRowToPersonChoice = ({
+  id,
+  orderDetails,
+  paymentAmount,
+  isFetching,
+  dateChosen,
+  lunchOptionId,
+  userId,
+  name,
+  imageUrl,
+}) => ({
+  id,
+  orderDetails,
+  paymentAmount,
+  isFetching,
+  dateChosen: parseInt(dateChosen),
+  lunchOptionId,
+  person: { id: userId, name, imageUrl },
+});
 
 export const getAll = (cutoffTime) => db('people_choices')
   .where('dateChosen', '>', cutoffTime)
   .leftJoin('users', 'people_choices.userId', 'users.id')
-  .map(mapPersonChoiceJoinUserRowToPersonChoice)
-  .then((result) => {
-    return result;
-  });
+  .map(mapPersonChoiceJoinUserRowToPersonChoice);
 
-export const add = (userId, lunchOptionId, orderDetails = '', paymentAmount = '', isFetching = false) => {
+export const add = (
+  userId,
+  lunchOptionId,
+  orderDetails = '',
+  paymentAmount = '',
+  isFetching = false
+) => {
   logger.info(`User: ${userId} has made initial choice ${lunchOptionId}`);
   const newPersonChoice = {
     id: uuid(),
@@ -54,14 +63,12 @@ export const clearFetchers = (userId, lunchOptionId) => {
     .update({ isFetching: false });
 };
 
-export const findByPersonId = (userId) => {
-  return db('people_choices')
+export const findByPersonId = (userId) => db('people_choices')
     .leftJoin('users', 'people_choices.userId', 'users.id')
     .where({ userId })
     .limit(1)
     .map(mapPersonChoiceJoinUserRowToPersonChoice)
     .then((users) => users.length ? users[0] : false);
-};
 
 export const updateLunchOptionId = (userId, lunchOptionId) => {
   logger.info(`${userId} update choice to ${lunchOptionId}`);
@@ -87,7 +94,9 @@ export const updateOrderDetails = (userId, orderDetails) => {
   logger.info(`${userId} update orderDetails to ${orderDetails}`);
   return findByPersonId(userId).then((personChoice) => {
     if (!personChoice) {
-      return Promise.reject(new Error(`${userId} updated orderDetails without making a selection`));
+      return Promise.reject(
+        new Error(`${userId} updated orderDetails without making a selection`)
+      );
     }
 
     return db('people_choices')
