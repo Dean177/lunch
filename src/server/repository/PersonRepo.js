@@ -1,5 +1,5 @@
 const db = require('./db');
-const logger = require('../../../logger-config');
+const logger = require('../logger')('PersonRepo');
 
 export const add = (person) => {
   logger.info(`Created new user ${person.name}`);
@@ -8,62 +8,43 @@ export const add = (person) => {
     .then(() => person);
 };
 
-export const findById = (id) => {
-  return db.select()
+export const findById = (id) => db.select()
     .from('users')
     .where({ id })
-    .then((persons) => { return persons.length ? persons[0] : false; });
-};
+    .then((persons) => persons.length ? persons[0] : false);
 
-export const updateImageUrl = (person, imageUrl) => {
-  return findById(person.id).then((matchingUser) => {
+export const updateImageUrl = (person, imageUrl) => findById(person.id)
+  .then((matchingUser) => {
     if (!matchingUser) {
       return add({ ...person, imageUrl });
     }
     return db('users').where({ id: person.id }).update({ imageUrl });
-  }).then(() => {
-    return {
-      ...person,
-      imageUrl,
-    };
-  });
-};
+  }).then(() => ({ ...person, imageUrl }));
 
-export const updateName = (person, name) => {
-  return findById(person.id).then((matchingUser) => {
+export const updateName = (person, name) => findById(person.id)
+  .then((matchingUser) => {
     if (!matchingUser) {
       return add({ ...person, name });
     }
     return db('users').where({ id: person.id }).update({ name });
-  }).then(() => {
-    return {
-      ...person,
-      name,
-    };
-  });
-};
+  }).then(() => ({
+    ...person,
+    name,
+  }));
 
-export const findSplitwiseAuthByUserId = (userId) => {
-  return db
+export const findSplitwiseAuthByUserId = (userId) => db
     .select()
     .from('splitwise_tokens')
     .where({ userId })
     .then((tokens) => tokens.length ? tokens[0] : false);
-};
 
-export const addSplitwiseToken = (userId, token, secret) => {
-  return db('splitwise_tokens')
+export const addSplitwiseToken = (userId, token, secret) => db('splitwise_tokens')
     .insert({ userId, token, secret, hasAuthorizedSplitwiseToken: false })
-    .then(() => {
-      return { token, secret };
-    });
-};
+    .then(() => ({ token, secret }));
 
-export const authorizeToken = (userId) => {
-  return db('splitwise_tokens')
+export const authorizeToken = (userId) => db('splitwise_tokens')
     .where({ userId })
     .update({ hasAuthorizedSplitwiseToken: true });
-};
 
 export const updateSplitwiseAuth = (userId, token, secret) => {
   logger.info(`Updating auth for user: ${userId}`);
@@ -73,8 +54,9 @@ export const updateSplitwiseAuth = (userId, token, secret) => {
       return addSplitwiseToken(userId, token, secret);
     }
 
-    return db('splitwise_tokens').where({ userId })
+    return db('splitwise_tokens')
+      .where({ userId })
       .update({ token, secret, hasAuthorizedSplitwiseToken: false })
-      .then(() => { return { token, secret }; });
+      .then(() => ({ token, secret }));
   });
 };

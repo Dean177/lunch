@@ -1,7 +1,7 @@
 import * as PersonRepo from '../repository/PersonRepo';
 import { changeImageUrl } from '../../shared/actionCreators/userActionCreator';
 import { Action } from '../../shared/constants/WeboscketMessageTypes';
-const logger = require('../../../logger-config');
+const logger = require('../logger')('onChangeImageUrl');
 
 export default function onChangeImageUrl(io, socket, action) {
   const { payload: { url }, meta: { user } } = action;

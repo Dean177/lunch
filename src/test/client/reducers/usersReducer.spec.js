@@ -34,8 +34,10 @@ describe('usersReducer', () => {
 
       const newState = lunchReducer(initialState, action);
       expect(newState.peopleChoices[0].person.imageUrl).to.equal(newImageUrl);
-      expect(newState.peopleChoices[0].lunchOptionId).to.equal(initialState.peopleChoices[0].lunchOptionId);
-      expect(newState.peopleChoices[1].person.imageUrl).to.equal(initialState.peopleChoices[1].person.imageUrl);
+      expect(newState.peopleChoices[0].lunchOptionId)
+        .to.equal(initialState.peopleChoices[0].lunchOptionId);
+      expect(newState.peopleChoices[1].person.imageUrl)
+        .to.equal(initialState.peopleChoices[1].person.imageUrl);
     });
   });
 
@@ -47,8 +49,10 @@ describe('usersReducer', () => {
 
       const newState = lunchReducer(initialState, action);
       expect(newState.peopleChoices[0].person.name).to.equal(newName);
-      expect(newState.peopleChoices[0].lunchOptionId).to.equal(initialState.peopleChoices[0].lunchOptionId);
-      expect(newState.peopleChoices[1].person.name).to.equal(initialState.peopleChoices[1].person.name);
+      expect(newState.peopleChoices[0].lunchOptionId)
+        .to.equal(initialState.peopleChoices[0].lunchOptionId);
+      expect(newState.peopleChoices[1].person.name)
+        .to.equal(initialState.peopleChoices[1].person.name);
     });
   });
 });

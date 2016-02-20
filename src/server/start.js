@@ -1,11 +1,11 @@
-require('dotenv').config({ path: '../ENV', silent: true });
+require('./environment-config');
 if (process.env.NODE_ENV !== 'production') {
   require('source-map-support').install();
 }
+const logger = require('./logger')('index.js');
 
-const logger = require('../../logger-config');
 const db = require('./repository/db');
-import lunchServer from './lunch-server';
+const lunchServer = require('./lunch-server');
 const serverPort = process.env.PORT || 3333;
 
 logger.info('Running migrations');

@@ -16,7 +16,7 @@ gulp.task('server:prod', () => {
       NODE_ENV: JSON.stringify('production'),
       DEBUG: 'lunch:*',
     },
-    script: 'out/server/index.js',
+    script: 'out/server/start.js',
     verbose: false,
     ignore: ['*'],
     watch: ['noop/'],
@@ -31,7 +31,7 @@ gulp.task('server:dev', () => {
       DEBUG: 'lunch:*',
     },
     delay: 10,
-    script: 'out/server/index.js',
+    script: 'out/server/start.js',
     ext: 'js',
     verbose: false,
     ignore: ['*'],
@@ -39,15 +39,13 @@ gulp.task('server:dev', () => {
   });
 });
 
-gulp.task('build', () => {
-  return gulp.src([
-    'src/server/**/*.js',
-    'src/shared/**/*.js',
-    'src/client/**/*.js',
-    'src/test/**/*.js',
-  ], { base: './src' })
-    .pipe(sourcemaps.init())
-    .pipe(babel())
-    .pipe(sourcemaps.write('.', sourceMapConfig))
-    .pipe(gulp.dest('out'));
-});
+gulp.task('build', () => gulp.src([
+  'src/server/**/*.js',
+  'src/shared/**/*.js',
+  'src/client/**/*.js',
+  'src/test/**/*.js',
+], { base: './src' })
+  .pipe(sourcemaps.init())
+  .pipe(babel())
+  .pipe(sourcemaps.write('.', sourceMapConfig))
+  .pipe(gulp.dest('out')));

@@ -7,7 +7,7 @@ function PersonSquare(props) {
   const url = person.imageUrl || 'http://png-4.findicons.com/files/icons/2770/ios_7_icons/512/user_male.png';
   return (
     <img {...props}
-      className={classNames('PersonSquare', { 'isFetching': !!isFetching })}
+      className={classNames('PersonSquare', { isFetching: !!isFetching })}
       alt={person.name}
       title={person.name}
       src={url}

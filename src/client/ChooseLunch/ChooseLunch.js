@@ -72,7 +72,10 @@ class ChooseLunch extends Component {
             optionName={optionName}
             peopleChoices={peopleChoices}
             user={user}
-            {...bindActionCreators({ addLunchOption, chooseLunchOption, enterOptionName, toggleNewOption }, dispatch)}
+            {...bindActionCreators(
+              { addLunchOption, chooseLunchOption, enterOptionName, toggleNewOption },
+              dispatch
+            )}
           />
           <Sidebar
             hasAuthorizedSplitwiseToken={hasAuthorizedSplitwiseToken}

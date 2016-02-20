@@ -1,6 +1,6 @@
 import { addLunchOption } from '../../shared/actionCreators/lunchActionCreators';
 import { Action } from '../../shared/constants/WeboscketMessageTypes';
-const logger = require('../../../logger-config');
+const logger = require('../logger')('onAddLunchOption');
 
 export default function onAddLunchOption(lunchOptionRepo, personChoiceRepo) {
   return (io, socket, action) => {
@@ -16,10 +16,15 @@ export default function onAddLunchOption(lunchOptionRepo, personChoiceRepo) {
     return Promise
       .all([addedLunchOption, updatedLunchChoice])
       .then(([lunchOption, personChoice]) => {
-        logger.info(`Updated personChoice for ${user.name} to lunchOptionId:${personChoice.lunchOptionId}`);
+        logger.info(
+          `Updated personChoice for ${user.name} to lunchOptionId:${personChoice.lunchOptionId}`
+        );
         // We must remove the meta.isServerAction or the clients will just send the action back
         // due to the serverActionMiddleware!
-        const newLunchOptionAction = { ...addLunchOption(user, lunchOption.name, lunchOption.id), meta: {} };
+        const newLunchOptionAction = {
+          ...addLunchOption(user, lunchOption.name, lunchOption.id),
+          meta: {},
+        };
         socket.broadcast.emit(Action, newLunchOptionAction);
       })
       .catch((err) => {

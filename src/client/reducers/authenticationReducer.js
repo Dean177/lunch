@@ -45,7 +45,10 @@ const authenticationReducer = createStateMergeReducer(initialState, {
     };
   },
 
-  [SplitwiseAuthToken](state, { payload: { hasAuthorizedSplitwiseToken, splitwiseAuthorizationLink } }) {
+  [SplitwiseAuthToken](
+    state,
+    { payload: { hasAuthorizedSplitwiseToken, splitwiseAuthorizationLink } }
+  ) {
     return { hasAuthorizedSplitwiseToken, splitwiseAuthorizationLink };
   },
 
