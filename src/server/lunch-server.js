@@ -1,17 +1,12 @@
-import express from 'express';
-import favicon from 'serve-favicon';
-import { Server } from 'http';
-import socketIo from 'socket.io';
-import path from 'path';
-
-import actionHandlers from './actionHandlers';
-import configureWebsocket from './websocketHandler';
+const express = require('express');
+const favicon = require('serve-favicon');
+const logger = require('./logger')('lunch-server');
+const path = require('path');
+const { Server } = require('http');
 
 const app = express();
-const logger = require('../../logger-config'); // ('lunch:express');
 
 app.use(favicon(`${__dirname}/favicon.ico`));
-logger.info(`Running in ${process.env.NODE_ENV}`);
 if (process.env.NODE_ENV === 'production') {
   const assetPath = path.normalize(path.join(__dirname, '../client'));
   logger.info(`Serving assets from ${assetPath}`);
@@ -22,7 +17,12 @@ if (process.env.NODE_ENV === 'production') {
   const webpackConfig = require('../../webpack.config.dev.js');
   const compiler = webpack(webpackConfig);
   logger.info('Serving assets from webpack');
-  app.use(require('webpack-dev-middleware')(compiler, { noInfo: true, publicPath: webpackConfig.output.publicPath }));
+  app.use(
+    require('webpack-dev-middleware')(
+      compiler,
+      { noInfo: true, publicPath: webpackConfig.output.publicPath }
+    )
+  );
   app.use(require('webpack-hot-middleware')(compiler, { noInfo: true }));
 }
 
@@ -33,7 +33,10 @@ app.get('/*', (req, res) => {
 });
 
 const lunchServer = new Server(app);
-const websockets = socketIo(lunchServer);
-configureWebsocket(websockets, actionHandlers);
 
-export default lunchServer;
+
+const actionHandlers = require('./actionHandlers');
+const configureWebsocket = require('./websocketHandler').default;
+configureWebsocket(lunchServer, actionHandlers);
+
+module.exports = lunchServer;

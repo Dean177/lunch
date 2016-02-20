@@ -1,8 +1,11 @@
 import * as PersonRepo from '../repository/PersonRepo';
-import { splitwiseAuthFailure, splitwiseAuthSuccess } from '../../shared/actionCreators/authActionCreator';
+import {
+  splitwiseAuthFailure,
+  splitwiseAuthSuccess,
+} from '../../shared/actionCreators/authActionCreator';
 import { Action } from '../../shared/constants/WeboscketMessageTypes';
 import { getSplitwiseUserApi } from '../getSplitwiseAuthApi';
-const logger = require('../../../logger-config');
+const logger = require('../logger')('onSplitwiseAuth');
 
 export default function onSplitwiseAuth(io, socket, action) {
   const { meta: { user } } = action;

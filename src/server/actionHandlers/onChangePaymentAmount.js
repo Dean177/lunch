@@ -1,6 +1,6 @@
 import * as PersonChoiceRepo from '../repository/PersonChoiceRepo';
 import { Action } from '../../shared/constants/WeboscketMessageTypes';
-const logger = require('../../../logger-config');
+const logger = require('../logger')('onChangePaymentAmount');
 
 
 export default function onChangePaymentAmount(io, socket, action) {

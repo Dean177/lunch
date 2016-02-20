@@ -32,7 +32,7 @@ export function splitwiseAuthToken(hasAuthedToken, authLink, userId) {
     payload: {
       hasAuthorizedSplitwiseToken: hasAuthedToken,
       userId,
-      splitwiseAuthorizationLink: authLink ? authLink : '',
+      splitwiseAuthorizationLink: authLink || '',
     },
   };
 }

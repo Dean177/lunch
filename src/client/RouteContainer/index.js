@@ -9,7 +9,10 @@ function RouteContainer(props) {
   const { isAuthenticated } = props.auth;
   return (
     <div>
-      <ReactCSSTransitionGroup transitionName='slide-up' transitionEnterTimeout={0} transitionLeaveTimeout={500}>
+      <ReactCSSTransitionGroup
+          transitionName='slide-up'
+          transitionEnterTimeout={0}
+          transitionLeaveTimeout={500}>
         {!isAuthenticated ? <LoadingScreen key='loading-screen'/> : null}
       </ReactCSSTransitionGroup>
       <div>{props.children}</div>

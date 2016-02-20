@@ -1,7 +1,7 @@
-import { v4 as uuid } from 'node-uuid';
 import getOptionChoicesMessage from './actionCreators/getOptionChoicesMessage';
 import { Action } from '../shared/constants/WeboscketMessageTypes';
-const logger = require('../../logger-config');// ('lunch:configureWebsockets');
+const logger = require('./logger')('websocketHandler');
+const socketIo = require('socket.io');
 
 export function validateActionFormat(action, onError) {
   if (!action.type || !action.payload || !action.meta || !action.meta.user) {
@@ -31,23 +31,20 @@ export function sendCurrentState(emitter) {
   });
 }
 
-export const getWebsocketHandler = (connections, getActionHandlerForSocket) => (websocket) => {
-  const socketId = uuid();
-  connections[socketId] = { websocket };
+export const getWebsocketHandler = (getActionHandlerForSocket) => (websocket) => {
   websocket.on('error', (err) => { logger.error(err); });
-  websocket.on('close', () => { delete connections[socketId]; });
   websocket.on(Action, getActionHandlerForSocket(websocket));
 
   sendCurrentState(websocket);
 };
 
-export default function configureWebsockets(websockets, actionHandlers) {
-  const connections = {};
+export default function configureWebsockets(lunchServer, actionHandlers) {
+  const websockets = socketIo(lunchServer, {});
   // Necessary because old lunchOptions & personChoices are pruned regularly
   setInterval(sendCurrentState.bind(this, websockets), 60 * 1000);
 
   const socketActionHandler = getSocketActionHandler(actionHandlers, websockets);
-  websockets.on('connection', getWebsocketHandler(connections, socketActionHandler));
+  websockets.on('connection', getWebsocketHandler(socketActionHandler));
 
   return websockets;
 }

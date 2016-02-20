@@ -41,10 +41,18 @@ const lunchReducer = createStateMergeReducer(initialState, {
     const existingPersonChoice = find(state.peopleChoices, comparator);
     let newPeopleChoices;
     if (!existingPersonChoice) {
-      const newPersonChoice = { person: payload.person, lunchOptionId: option ? option.id : payload.id };
+      const newPersonChoice = {
+        person: payload.person,
+        lunchOptionId: option ? option.id : payload.id,
+      };
+
       newPeopleChoices = [...state.peopleChoices, newPersonChoice];
     } else {
-      const newPersonChoice = { ...existingPersonChoice, lunchOptionId: option ? option.id : payload.id };
+      const newPersonChoice = {
+        ...existingPersonChoice,
+        lunchOptionId: option ? option.id : payload.id,
+      };
+
       newPeopleChoices = upsert(
         state.peopleChoices,
         comparator,
@@ -64,7 +72,11 @@ const lunchReducer = createStateMergeReducer(initialState, {
     const comparator = (pChoice) => (pChoice.person.id === id);
     const existingChoice = find(peopleChoices, comparator);
     return {
-      peopleChoices: upsert(peopleChoices, comparator, { ...existingChoice, person: { ...existingChoice.person, imageUrl: url } }),
+      peopleChoices: upsert(
+        peopleChoices,
+        comparator,
+        { ...existingChoice, person: { ...existingChoice.person, imageUrl: url } }
+      ),
     };
   },
 
@@ -72,7 +84,11 @@ const lunchReducer = createStateMergeReducer(initialState, {
     const comparator = (pChoice) => (pChoice.person.id === id);
     const existingChoice = find(peopleChoices, comparator);
     return {
-      peopleChoices: upsert(peopleChoices, comparator, { ...existingChoice, person: { ...existingChoice.person, name } }),
+      peopleChoices: upsert(
+        peopleChoices,
+        comparator,
+        { ...existingChoice, person: { ...existingChoice.person, name } }
+      ),
     };
   },
 
@@ -91,14 +107,17 @@ const lunchReducer = createStateMergeReducer(initialState, {
 
   [GoneToFetchLunch]({ peopleChoices }, { payload: { lunchOptionId } }) {
     const newChoices = {
-      peopleChoices: peopleChoices.filter(personChoice => personChoice.lunchOptionId !== lunchOptionId),
+      peopleChoices: peopleChoices.filter(
+        personChoice => personChoice.lunchOptionId !== lunchOptionId
+      ),
     };
 
     return newChoices;
   },
 
   [NotGettingLunch]({ peopleChoices }, { payload: { lunchOptionId }, meta: { user } }) {
-    const comparator = (personChoice) => (personChoice.lunchOptionId === lunchOptionId && personChoice.person.id === user.id);
+    const comparator = (pChoice) =>
+      (pChoice.lunchOptionId === lunchOptionId && pChoice.person.id === user.id);
     const existingChoice = find(peopleChoices, comparator);
     return {
       peopleChoices: upsert(peopleChoices, comparator, { ...existingChoice, isFetching: false }),
@@ -148,7 +167,11 @@ const lunchReducer = createStateMergeReducer(initialState, {
     if (!existingLunchOption) {
       newPeopleChoices = [...peopleChoices, { person, lunchOptionId }];
     } else {
-      newPeopleChoices = upsert(peopleChoices, comparator, { ...existingLunchOption, lunchOptionId });
+      newPeopleChoices = upsert(
+        peopleChoices,
+        comparator,
+        { ...existingLunchOption, lunchOptionId }
+      );
     }
 
     return { peopleChoices: newPeopleChoices };
@@ -163,7 +186,11 @@ const lunchReducer = createStateMergeReducer(initialState, {
     }
 
     return {
-      peopleChoices: upsert(peopleChoices, findUserById, { ...existingUserChoice, paymentAmount: amount }),
+      peopleChoices: upsert(
+        peopleChoices,
+        findUserById,
+        { ...existingUserChoice, paymentAmount: amount }
+      ),
     };
   },
 });
