@@ -1,4 +1,4 @@
-const logger = require('../../../logger-config');
+const logger = require('../logger')('onAuthenticateUser');
 import * as PersonRepo from '../repository/PersonRepo';
 import getSplitwiseAuthApi from '../getSplitwiseAuthApi';
 import {
@@ -13,7 +13,10 @@ const authApi = getSplitwiseAuthApi();
 const onNewAuth = (socket, user) => ({ token, secret }) => {
   logger.info('Received new splitwise api token for user: ', { token });
   return PersonRepo.updateSplitwiseAuth(user.id, token, secret).then((updatedAuth) => {
-    socket.emit(Action, splitwiseAuthToken(false, authApi.getUserAuthorisationUrl(updatedAuth.token), user.id));
+    socket.emit(
+      Action,
+      splitwiseAuthToken(false, authApi.getUserAuthorisationUrl(updatedAuth.token), user.id)
+    );
   });
 };
 
@@ -38,7 +41,7 @@ export default function onAuthenticateUser(io, socket, action) {
   logger.info(`User authenticating: ${user.name}`);
   return PersonRepo
     .findById(user.id)
-    .then((person) => person ? person : PersonRepo.add(user))
+    .then((person) => person || PersonRepo.add(user))
     .then((existingUser) => PersonRepo.findSplitwiseAuthByUserId(existingUser.id))
     .then((splitwiseAuth) => {
       if (!splitwiseAuth) {

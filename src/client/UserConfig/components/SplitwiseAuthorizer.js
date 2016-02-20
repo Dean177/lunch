@@ -41,6 +41,10 @@ export default class SplitwiseAuthorizer extends Component {
       </div>
     );
 
+    const confirmAuthClassName = classNames(
+      { 'fa fa-circle-o-notch fa-spin': isAuthorizing },
+      { hidden: !isAuthorizing }
+    );
     const howToAuth = (
       <div className='steps-wrapper'>
         <ol className='how-to-steps'>
@@ -52,8 +56,10 @@ export default class SplitwiseAuthorizer extends Component {
           </li>
           <li>
             <p>Then click here once you have authenticated with Splitwise</p>
-            <button className={classNames('btn btn-primary-outline', { 'disabled': isAuthorizing })} onClick={this.onAttemptSplitwiseAuth}>
-              Confirm auth <i className={classNames({ 'fa fa-circle-o-notch fa-spin': isAuthorizing }, { 'hidden': !isAuthorizing })} />
+            <button
+                className={classNames('btn btn-primary-outline', { disabled: isAuthorizing })}
+                onClick={this.onAttemptSplitwiseAuth}>
+              Confirm auth <i className={confirmAuthClassName} />
             </button>
           </li>
         </ol>

@@ -8,7 +8,7 @@ describe('upsert', () => {
   const donkey = { id: 3, name: 'donkey' };
   const echinda = { id: 4, name: 'echinda' };
 
-  it('Returns an array formed by replacing the first element matching the predicate with the supplied value', () => {
+  it('Replaces the first element matching the predicate with the supplied value', () => {
     const animals = [ant, camel, donkey];
     const replacedArray = upsert(animals, (animal) => animal.id === camel.id, bear);
 
