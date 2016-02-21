@@ -66,8 +66,9 @@ export default class LunchPicker extends Component {
       .map((personChoice) => {
         const { person, lunchOptionId } = personChoice;
         const chooserCount = this.getChooserCount(peopleChoices, person.id, lunchOptionId);
-        const xPos = squareDimension * chooserCount;
-        const yPos = squareDimension * this.getChoiceIndex(lunchOptions, lunchOptionId);
+        // The y position needs to account for the 10px margin
+        const xPos = (squareDimension + 10) * chooserCount;
+        const yPos = (squareDimension + 10) * this.getChoiceIndex(lunchOptions, lunchOptionId);
 
         return {
           ...personChoice,

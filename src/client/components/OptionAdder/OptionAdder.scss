@@ -2,7 +2,8 @@
 
 .OptionAdder {
   align-self: flex-end;
-  height: 4em;
+  margin-bottom: 10px;
+  height: 3.5em;
 
   .input-group-btn:last-child > .btn {
     box-shadow: none;
@@ -13,28 +14,28 @@
     float: right;
     padding: 1em;
     width: 3.5em;
+    height: 3.5em;
   }
 
   .AddOptionForm {
     float: right;
     display: flex;
     height: 100%;
-
-    padding-bottom:0.5em;
+    //padding-bottom: 0.5em;
 
     .option-input {
       border: none;
       box-shadow: $fine-box-shadow;
-      border-top-left-radius: 5px;
-      border-bottom-left-radius: 5px;
+      border-top-left-radius: $border-radius;
+      border-bottom-left-radius: $border-radius;
       padding-left: 0.5em;
     }
 
     .go-button {
       border: none;
       box-shadow: $fine-box-shadow;
-      border-top-right-radius: 5px;
-      border-bottom-right-radius: 5px;
+      border-top-right-radius: $border-radius;
+      border-bottom-right-radius: $border-radius;
       background-color: $green;
       color: white;
       padding-right: 1em;
