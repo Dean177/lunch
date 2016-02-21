@@ -23,7 +23,6 @@ describe('onAddLunchOption', () => {
   let socketMock;
 
   let addSpy;
-  let findByNameSpy;
   let LunchRepoMock;
 
   let updateLunchOptionIdSpy;
@@ -33,7 +32,7 @@ describe('onAddLunchOption', () => {
     socketMock = getSocketMock();
 
     addSpy = spy();
-    findByNameSpy = spy();
+    const findByNameSpy = spy();
     LunchRepoMock = getLunchRepoMock(addSpy, findByNameSpy);
 
     updateLunchOptionIdSpy = spy();
