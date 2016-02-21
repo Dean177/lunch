@@ -43,7 +43,7 @@ describe('createLocalStorageMergeReducer', () => {
   );
 
   it(
-    `Falls back to the initial state if localStorage doesn't match the shape`,
+    "Falls back to the initial state if localStorage doesn't match the shape",
     () => {
       const localStorage = mockLocalStorage();
       const localStorageState = { cKey: 'savedC' };

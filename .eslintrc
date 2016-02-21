@@ -12,12 +12,15 @@
   },
   "rules": {
     "eqeqeq": [2, "smart"],
-    "strict": 0,
+    "jsx-quotes": [1, "prefer-single"],
+    "newline-per-chained-call": 0,
+    "no-confusing-arrow": 0,
+    "react/jsx-boolean-value": [2, "always"],
     "react/jsx-closing-bracket-location": 0,
     "react/jsx-indent-props": 0,
     "react/jsx-quotes": 0,
-    "react/jsx-boolean-value": [2, "always"],
-    "jsx-quotes": [1, "prefer-single"],
-    "radix": 0
+    "react/jsx-space-before-closing": 0,
+    "radix": 0,
+    "strict": 0
   }
 }
