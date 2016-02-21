@@ -21,6 +21,7 @@
     "type": "git",
     "url": "git@github.com:Dean177/lunch.git"
   },
+  "private": true,
   "license": "ISC",
   "dependencies": {
     "babel": "6.5.2",
