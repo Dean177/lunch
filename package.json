@@ -38,7 +38,7 @@
     "babel-preset-react": "6.5.0",
     "babel-preset-stage-0": "6.5.0",
     "babel-register": "6.5.2",
-    "babel-runtime": "6.5.0",
+    "babel-runtime": "6.6.0",
     "chai": "3.5.0",
     "chai-spies": "0.7.1",
     "classnames": "2.2.3",
