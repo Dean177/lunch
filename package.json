@@ -55,7 +55,7 @@
     "extract-text-webpack-plugin": "1.0.1",
     "file-loader": "0.8.4",
     "font-awesome": "4.5.0",
-    "fs-extra": "0.26.5",
+    "fs-extra": "0.29.0",
     "gulp": "3.9.1",
     "gulp-babel": "6.1.2",
     "gulp-mocha": "2.1.3",
