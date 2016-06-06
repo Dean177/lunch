@@ -42,7 +42,7 @@
     "chai": "3.5.0",
     "chai-spies": "0.7.1",
     "classnames": "2.2.3",
-    "compression": "1.6.1",
+    "compression": "1.6.2",
     "css-loader": "0.23.1",
     "dirty-chai": "1.2.2",
     "dotenv": "2.0.0",
