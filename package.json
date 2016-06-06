@@ -74,7 +74,7 @@
     "null-loader": "0.1.1",
     "pg": "^4.4.4",
     "promise": "7.1.1",
-    "react": "0.14.7",
+    "react": "15.0.0",
     "react-addons-css-transition-group": "0.14.7",
     "react-addons-test-utils": "0.14.7",
     "react-autosuggest": "3.5.0",
