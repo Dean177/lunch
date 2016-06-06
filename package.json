@@ -86,7 +86,7 @@
     "react-router-redux": "4.0.0",
     "react-transform-catch-errors": "1.0.2",
     "react-transform-hmr": "1.0.2",
-    "redbox-react": "1.2.2",
+    "redbox-react": "1.2.5",
     "redux": "3.3.1",
     "redux-thunk": "^1.0.3",
     "rewire": "2.5.1",
